@@ -13,7 +13,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background: linear-gradient(135deg, #147067 0%, #22bbac 100%);
             color: white;
             height: 100vh;
             overflow: hidden;
@@ -35,6 +35,8 @@
             font-weight: 700;
             color: #fff;
         }
+
+
 
         .current-time {
             font-size: 24px;
@@ -59,7 +61,7 @@
             max-width: 1200px;
             width: 100%;
             text-align: center;
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            border: 3px solid #bb2232;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             opacity: 0;
             transform: translateY(30px);
@@ -75,14 +77,16 @@
             font-size: 72px;
             font-weight: 900;
             margin-bottom: 20px;
-            color: #fff;
+            color: #edc544;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
         .event-weekday {
             font-size: 32px;
             font-weight: 600;
             margin-bottom: 40px;
-            opacity: 0.8;
+            opacity: 0.9;
+            color: #f4dc8f;
         }
 
         .event-title-big {
@@ -97,7 +101,7 @@
             font-size: 36px;
             font-weight: 600;
             margin-bottom: 25px;
-            color: #ffd700;
+            color: #edc544;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -112,6 +116,7 @@
             align-items: center;
             justify-content: center;
             gap: 15px;
+            color: #abd075;
         }
 
         .event-description-big {
@@ -131,6 +136,8 @@
             margin-bottom: 20px;
             text-transform: uppercase;
             letter-spacing: 1px;
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
         }
 
         .icon {
@@ -144,9 +151,10 @@
             bottom: 0;
             left: 0;
             height: 6px;
-            background: #ffd700;
+            background: #edc544;
             border-radius: 3px;
             transition: width linear;
+            box-shadow: 0 2px 10px rgba(237, 197, 68, 0.5);
         }
 
         .tv-footer {
@@ -163,20 +171,22 @@
             text-align: center;
             font-size: 36px;
             opacity: 0.7;
+            color: #f4dc8f;
         }
 
         .loading {
             text-align: center;
             font-size: 36px;
             opacity: 0.7;
+            color: #f4dc8f;
         }
 
-        /* Kategoriefarben */
-        .gottesdienst { background-color: #f39c12; }
-        .kinder { background-color: #3498db; }
-        .senioren { background-color: #9b59b6; }
-        .jugend { background-color: #e74c3c; }
-        .sonstige { background-color: #27ae60; }
+        /* Kategoriefarben basierend auf Style-Guide */
+        .gottesdienst { background-color: #bb2232; } /* Logo-Rot */
+        .kinder { background-color: #22bbac; } /* Türkis */
+        .senioren { background-color: #70141e; } /* Dunkelrot */
+        .jugend { background-color: #edc544; color: #000; } /* Gelb mit schwarzer Schrift */
+        .sonstige { background-color: #677d46; } /* Grün */
 
         /* Animation für Seitenwechsel */
         @keyframes slideIn {
@@ -209,6 +219,54 @@
             animation: slideOut 0.8s ease-out;
         }
 
+        /* Manual Navigation */
+        .nav-buttons {
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            background: rgba(187, 34, 50, 0.8);
+            border: 2px solid #bb2232;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-btn:hover {
+            background: #bb2232;
+            transform: scale(1.05);
+        }
+
+        .nav-btn:active {
+            transform: scale(0.95);
+        }
+
+        .auto-play-btn {
+            background: rgba(237, 197, 68, 0.8);
+            border-color: #edc544;
+            color: #000;
+        }
+
+        .auto-play-btn:hover {
+            background: #edc544;
+        }
+
+        .auto-play-btn.playing {
+            background: #abd075;
+            border-color: #abd075;
+        }
+
         /* Responsive für kleinere TV-Displays */
         @media (max-width: 1366px) {
             .church-title { font-size: 28px; }
@@ -220,12 +278,30 @@
             .event-location-big { font-size: 22px; }
             .event-description-big { font-size: 20px; }
             .event-card { padding: 40px; }
+            
+            .nav-buttons {
+                bottom: 80px;
+            }
+            
+            .nav-btn {
+                padding: 12px 20px;
+                font-size: 16px;
+            }
+        }
+
+        /* Hide buttons on very small screens */
+        @media (max-width: 900px) {
+            .nav-buttons {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
     <div class="tv-header">
-        <div class="church-title">📅 Gemeindekalender</div>
+        <div class="church-title">
+            Gemeindekalender
+        </div>
         <div class="current-time" id="current-time"></div>
     </div>
 
@@ -234,26 +310,33 @@
             <div class="loading" id="loading">Lade Termine...</div>
         </div>
         <div class="progress-bar" id="progress-bar"></div>
+        
+        <div class="nav-buttons" id="nav-buttons" style="display: none;">
+            <button class="nav-btn" id="prev-btn">← Zurück</button>
+            <button class="nav-btn auto-play-btn" id="auto-play-btn">▶ Auto</button>
+            <button class="nav-btn" id="next-btn">Weiter →</button>
+        </div>
     </div>
 
     <div class="tv-footer">
         <div id="event-counter">Termine werden geladen...</div>
-        <div>🏠 Gemeinde Konkordia</div>
+        <div>🏠 Gemeinde in der Konkordia</div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/ical.js@1.5.0/build/ical.min.js"></script>
     <script>
         const calendars = [
-            { file: 'gottesdienst.ics', color: '#f39c12', category: 'gottesdienst', name: 'Gottesdienst' },
-            { file: 'kinder.ics', color: '#3498db', category: 'kinder', name: 'Kinder' },
-            { file: 'senioren.ics', color: '#9b59b6', category: 'senioren', name: 'Senioren' },
-            { file: 'jugend.ics', color: '#e74c3c', category: 'jugend', name: 'Jugend' },
-            { file: 'sonstige.ics', color: '#27ae60', category: 'sonstige', name: 'Sonstige' }
+            { file: 'gottesdienst.ics', color: '#bb2232', category: 'gottesdienst', name: 'Gottesdienst' },
+            { file: 'kinder.ics', color: '#22bbac', category: 'kinder', name: 'Kinder' },
+            { file: 'senioren.ics', color: '#70141e', category: 'senioren', name: 'Senioren' },
+            { file: 'jugend.ics', color: '#edc544', category: 'jugend', name: 'Jugend' },
+            { file: 'sonstige.ics', color: '#677d46', category: 'sonstige', name: 'Sonstige' }
         ];
 
         let currentEventIndex = 0;
         let allEvents = [];
         let rotationInterval;
+        let isAutoPlay = false;
         const ROTATION_TIME = 10000; // 10 Sekunden pro Event
 
         // Uhrzeit aktualisieren
@@ -376,7 +459,9 @@
             progressBar.style.transition = `width ${ROTATION_TIME}ms linear`;
             
             setTimeout(() => {
-                progressBar.style.width = '100%';
+                if (isAutoPlay) {
+                    progressBar.style.width = '100%';
+                }
             }, 50);
         }
 
@@ -391,7 +476,26 @@
                 currentEventIndex = (currentEventIndex + 1) % allEvents.length;
                 displayEvent(allEvents[currentEventIndex]);
                 updateEventCounter();
-                animateProgressBar();
+                if (isAutoPlay) {
+                    animateProgressBar();
+                }
+            }, 400);
+        }
+
+        // Vorheriges Event anzeigen
+        function showPrevEvent() {
+            if (allEvents.length === 0) return;
+
+            const card = document.getElementById('event-card');
+            card.classList.remove('active');
+
+            setTimeout(() => {
+                currentEventIndex = currentEventIndex === 0 ? allEvents.length - 1 : currentEventIndex - 1;
+                displayEvent(allEvents[currentEventIndex]);
+                updateEventCounter();
+                if (isAutoPlay) {
+                    animateProgressBar();
+                }
             }, 400);
         }
 
@@ -405,13 +509,27 @@
             }
         }
 
-        // Rotation starten
-        function startRotation() {
-            if (allEvents.length <= 1) return;
+        // Auto-Play starten/stoppen
+        function toggleAutoPlay() {
+            const btn = document.getElementById('auto-play-btn');
+            const progressBar = document.getElementById('progress-bar');
             
-            clearInterval(rotationInterval);
-            rotationInterval = setInterval(showNextEvent, ROTATION_TIME);
-            animateProgressBar();
+            if (isAutoPlay) {
+                clearInterval(rotationInterval);
+                isAutoPlay = false;
+                btn.textContent = '▶ Auto';
+                btn.classList.remove('playing');
+                progressBar.style.width = '0%';
+                progressBar.style.transition = 'none';
+            } else {
+                if (allEvents.length > 1) {
+                    isAutoPlay = true;
+                    btn.textContent = '⏸ Pause';
+                    btn.classList.add('playing');
+                    rotationInterval = setInterval(showNextEvent, ROTATION_TIME);
+                    animateProgressBar();
+                }
+            }
         }
 
         // Kalender laden
@@ -441,27 +559,44 @@
                     currentEventIndex = 0;
                     displayEvent(allEvents[0]);
                     updateEventCounter();
-                    startRotation();
+                    
+                    // Navigation anzeigen wenn Termine vorhanden
+                    document.getElementById('nav-buttons').style.display = 'flex';
                 } else {
                     card.innerHTML = '<div class="no-events">📅<br><br>Keine Termine in den nächsten 14 Tagen</div>';
                     card.classList.add('active');
                     updateEventCounter();
+                    document.getElementById('nav-buttons').style.display = 'none';
                 }
             } catch (error) {
                 console.error('Fehler beim Laden:', error);
                 card.innerHTML = '<div class="no-events">❌<br><br>Fehler beim Laden der Termine</div>';
                 card.classList.add('active');
+                document.getElementById('nav-buttons').style.display = 'none';
             }
         }
 
-        // Pausieren bei Hover (für Touchscreens)
-        document.getElementById('event-card').addEventListener('mouseenter', () => {
-            clearInterval(rotationInterval);
-        });
+        // Event Listeners
+        document.getElementById('next-btn').addEventListener('click', showNextEvent);
+        document.getElementById('prev-btn').addEventListener('click', showPrevEvent);
+        document.getElementById('auto-play-btn').addEventListener('click', toggleAutoPlay);
 
-        document.getElementById('event-card').addEventListener('mouseleave', () => {
-            if (allEvents.length > 1) {
-                startRotation();
+        // Keyboard Navigation
+        document.addEventListener('keydown', (e) => {
+            switch(e.key) {
+                case 'ArrowRight':
+                case ' ':
+                    e.preventDefault();
+                    showNextEvent();
+                    break;
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    showPrevEvent();
+                    break;
+                case 'Enter':
+                    e.preventDefault();
+                    toggleAutoPlay();
+                    break;
             }
         });
 
