@@ -396,8 +396,7 @@
             const processIcalData = (icalData, color) => { 
                 const now = new Date(); 
                 
-                // Berechne Start und Ende des aktuellen Monats
-                const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+                // Berechne Ende des aktuellen Monats (ab jetzt bis Monatsende)
                 const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
                 
                 const events = []; 
@@ -416,12 +415,14 @@
                             let next; 
                             while ((next = iterator.next()) && next.toJSDate() <= monthEnd) { 
                                 const occ = event.getOccurrenceDetails(next); 
-                                if (occ.startDate.toJSDate() >= monthStart && occ.startDate.toJSDate() <= monthEnd) {
+                                // Nur Termine ab jetzt bis Monatsende
+                                if (occ.startDate.toJSDate() >= now && occ.startDate.toJSDate() <= monthEnd) {
                                     addEvent(occ); 
                                 }
                             } 
                         } else { 
-                            if (event.startDate.toJSDate() >= monthStart && event.startDate.toJSDate() <= monthEnd) {
+                            // Nur Termine ab jetzt bis Monatsende
+                            if (event.startDate.toJSDate() >= now && event.startDate.toJSDate() <= monthEnd) {
                                 addEvent(event); 
                             }
                         } 
@@ -439,12 +440,12 @@
                 if (events.length === 0) { 
                     const now = new Date();
                     const currentMonth = now.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
-                    statusContainer.textContent = `Keine Termine im ${currentMonth} gefunden.`; 
+                    statusContainer.textContent = `Keine anstehenden Termine bis Ende ${currentMonth} gefunden.`; 
                     statusContainer.style.display = 'block'; 
                     return; 
                 } 
                 
-                // Da wir nur den aktuellen Monat anzeigen, brauchen wir nur einen Header
+                // Header für anstehende Termine
                 const now = new Date();
                 const currentMonth = now.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
                 const monthHeader = document.createElement('div');
