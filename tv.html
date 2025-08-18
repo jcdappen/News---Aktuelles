@@ -13,7 +13,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-            background: linear-gradient(135deg, #147067 0%, #22bbac 100%);
+            background: linear-gradient(135deg, #4d4d4d 0%, #999999 100%);
             color: white;
             height: 100vh;
             overflow: hidden;
@@ -181,12 +181,12 @@
             color: #f4dc8f;
         }
 
-        /* Kategoriefarben basierend auf Style-Guide */
-        .gottesdienst { background-color: #bb2232; } /* Logo-Rot */
-        .kinder { background-color: #22bbac; } /* Türkis */
-        .senioren { background-color: #70141e; } /* Dunkelrot */
-        .jugend { background-color: #edc544; color: #000; } /* Gelb mit schwarzer Schrift */
-        .sonstige { background-color: #677d46; } /* Grün */
+        /* Kategoriefarben - ursprüngliche Werte */
+        .gottesdienst { background-color: #f39c12; } /* Orange/Gold */
+        .kinder { background-color: #3498db; } /* Blau */
+        .senioren { background-color: #9b59b6; } /* Lila */
+        .jugend { background-color: #e74c3c; } /* Rot */
+        .sonstige { background-color: #27ae60; } /* Grün */
 
         /* Animation für Seitenwechsel */
         @keyframes slideIn {
@@ -219,53 +219,7 @@
             animation: slideOut 0.8s ease-out;
         }
 
-        /* Manual Navigation */
-        .nav-buttons {
-            position: absolute;
-            bottom: 100px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 20px;
-            z-index: 100;
-        }
-
-        .nav-btn {
-            background: rgba(187, 34, 50, 0.8);
-            border: 2px solid #bb2232;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 50px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-
-        .nav-btn:hover {
-            background: #bb2232;
-            transform: scale(1.05);
-        }
-
-        .nav-btn:active {
-            transform: scale(0.95);
-        }
-
-        .auto-play-btn {
-            background: rgba(237, 197, 68, 0.8);
-            border-color: #edc544;
-            color: #000;
-        }
-
-        .auto-play-btn:hover {
-            background: #edc544;
-        }
-
-        .auto-play-btn.playing {
-            background: #abd075;
-            border-color: #abd075;
-        }
+        /* Hide navigation - not needed for TV */
 
         /* Responsive für kleinere TV-Displays */
         @media (max-width: 1366px) {
@@ -291,9 +245,6 @@
 
         /* Hide buttons on very small screens */
         @media (max-width: 900px) {
-            .nav-buttons {
-                display: none;
-            }
         }
     </style>
 </head>
@@ -310,12 +261,6 @@
             <div class="loading" id="loading">Lade Termine...</div>
         </div>
         <div class="progress-bar" id="progress-bar"></div>
-        
-        <div class="nav-buttons" id="nav-buttons" style="display: none;">
-            <button class="nav-btn" id="prev-btn">← Zurück</button>
-            <button class="nav-btn auto-play-btn" id="auto-play-btn">▶ Auto</button>
-            <button class="nav-btn" id="next-btn">Weiter →</button>
-        </div>
     </div>
 
     <div class="tv-footer">
@@ -336,7 +281,6 @@
         let currentEventIndex = 0;
         let allEvents = [];
         let rotationInterval;
-        let isAutoPlay = false;
         const ROTATION_TIME = 10000; // 10 Sekunden pro Event
 
         // Uhrzeit aktualisieren
@@ -459,9 +403,7 @@
             progressBar.style.transition = `width ${ROTATION_TIME}ms linear`;
             
             setTimeout(() => {
-                if (isAutoPlay) {
-                    progressBar.style.width = '100%';
-                }
+                progressBar.style.width = '100%';
             }, 50);
         }
 
@@ -476,26 +418,7 @@
                 currentEventIndex = (currentEventIndex + 1) % allEvents.length;
                 displayEvent(allEvents[currentEventIndex]);
                 updateEventCounter();
-                if (isAutoPlay) {
-                    animateProgressBar();
-                }
-            }, 400);
-        }
-
-        // Vorheriges Event anzeigen
-        function showPrevEvent() {
-            if (allEvents.length === 0) return;
-
-            const card = document.getElementById('event-card');
-            card.classList.remove('active');
-
-            setTimeout(() => {
-                currentEventIndex = currentEventIndex === 0 ? allEvents.length - 1 : currentEventIndex - 1;
-                displayEvent(allEvents[currentEventIndex]);
-                updateEventCounter();
-                if (isAutoPlay) {
-                    animateProgressBar();
-                }
+                animateProgressBar();
             }, 400);
         }
 
@@ -509,27 +432,13 @@
             }
         }
 
-        // Auto-Play starten/stoppen
-        function toggleAutoPlay() {
-            const btn = document.getElementById('auto-play-btn');
-            const progressBar = document.getElementById('progress-bar');
+        // Rotation starten
+        function startRotation() {
+            if (allEvents.length <= 1) return;
             
-            if (isAutoPlay) {
-                clearInterval(rotationInterval);
-                isAutoPlay = false;
-                btn.textContent = '▶ Auto';
-                btn.classList.remove('playing');
-                progressBar.style.width = '0%';
-                progressBar.style.transition = 'none';
-            } else {
-                if (allEvents.length > 1) {
-                    isAutoPlay = true;
-                    btn.textContent = '⏸ Pause';
-                    btn.classList.add('playing');
-                    rotationInterval = setInterval(showNextEvent, ROTATION_TIME);
-                    animateProgressBar();
-                }
-            }
+            clearInterval(rotationInterval);
+            rotationInterval = setInterval(showNextEvent, ROTATION_TIME);
+            animateProgressBar();
         }
 
         // Kalender laden
@@ -559,46 +468,18 @@
                     currentEventIndex = 0;
                     displayEvent(allEvents[0]);
                     updateEventCounter();
-                    
-                    // Navigation anzeigen wenn Termine vorhanden
-                    document.getElementById('nav-buttons').style.display = 'flex';
+                    startRotation(); // Automatisch starten
                 } else {
                     card.innerHTML = '<div class="no-events">📅<br><br>Keine Termine in den nächsten 14 Tagen</div>';
                     card.classList.add('active');
                     updateEventCounter();
-                    document.getElementById('nav-buttons').style.display = 'none';
                 }
             } catch (error) {
                 console.error('Fehler beim Laden:', error);
                 card.innerHTML = '<div class="no-events">❌<br><br>Fehler beim Laden der Termine</div>';
                 card.classList.add('active');
-                document.getElementById('nav-buttons').style.display = 'none';
             }
         }
-
-        // Event Listeners
-        document.getElementById('next-btn').addEventListener('click', showNextEvent);
-        document.getElementById('prev-btn').addEventListener('click', showPrevEvent);
-        document.getElementById('auto-play-btn').addEventListener('click', toggleAutoPlay);
-
-        // Keyboard Navigation
-        document.addEventListener('keydown', (e) => {
-            switch(e.key) {
-                case 'ArrowRight':
-                case ' ':
-                    e.preventDefault();
-                    showNextEvent();
-                    break;
-                case 'ArrowLeft':
-                    e.preventDefault();
-                    showPrevEvent();
-                    break;
-                case 'Enter':
-                    e.preventDefault();
-                    toggleAutoPlay();
-                    break;
-            }
-        });
 
         // Initialisierung
         updateClock();
