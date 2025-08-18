@@ -395,9 +395,11 @@
 
             const processIcalData = (icalData, color) => { 
                 const now = new Date(); 
+                console.log('Aktueller Zeitpunkt:', now); // Debug-Log
                 
                 // Berechne Ende des aktuellen Monats (ab jetzt bis Monatsende)
                 const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
+                console.log('Monatsende:', monthEnd); // Debug-Log
                 
                 const events = []; 
                 try { 
@@ -407,29 +409,33 @@
                     vevents.forEach(vevent => { 
                         const event = new ICAL.Event(vevent); 
                         const addEvent = (e) => { 
-                            e.color = color; 
-                            events.push(e); 
+                            // Zusätzliche Prüfung: Nur Termine die WIRKLICH in der Zukunft liegen
+                            const eventStart = e.startDate.toJSDate();
+                            console.log('Prüfe Event:', e.summary, 'Start:', eventStart, 'Jetzt:', now, 'Zukunft?', eventStart >= now);
+                            
+                            if (eventStart >= now && eventStart <= monthEnd) {
+                                e.color = color; 
+                                events.push(e);
+                                console.log('Event hinzugefügt:', e.summary);
+                            } else {
+                                console.log('Event NICHT hinzugefügt:', e.summary, 'Grund: zu alt oder zu weit in der Zukunft');
+                            }
                         }; 
                         if (event.isRecurring()) { 
                             const iterator = event.iterator(); 
                             let next; 
                             while ((next = iterator.next()) && next.toJSDate() <= monthEnd) { 
                                 const occ = event.getOccurrenceDetails(next); 
-                                // Nur Termine ab jetzt bis Monatsende
-                                if (occ.startDate.toJSDate() >= now && occ.startDate.toJSDate() <= monthEnd) {
-                                    addEvent(occ); 
-                                }
+                                addEvent(occ); 
                             } 
                         } else { 
-                            // Nur Termine ab jetzt bis Monatsende
-                            if (event.startDate.toJSDate() >= now && event.startDate.toJSDate() <= monthEnd) {
-                                addEvent(event); 
-                            }
+                            addEvent(event); 
                         } 
                     }); 
                 } catch (e) { 
                     console.error(`Fehler beim Parsen von Kalenderdaten:`, e); 
                 } 
+                console.log('Finale Event-Liste:', events.length, 'Events'); // Debug-Log
                 return events; 
             };
 
