@@ -1,8 +1,4 @@
-} else {
-                    const card1 = document.getElementById('event-card-1');
-                    const card2 = document.getElementById('event-card-2');
-                    card1.innerHTML = '<div class="no-events">📅<br><br>Keine Termine und keine Info-Folien gefunden</div>';
-                    card2.innerHTML = '<div class="no-events"></div>';<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
@@ -51,23 +47,39 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 40px;
+            padding: 30px;
             position: relative;
+        }
+
+        .events-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            width: 100%;
+            max-width: 1400px;
+            height: 80%;
+            align-items: stretch;
         }
 
         .event-card {
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(20px);
-            border-radius: 24px;
-            padding: 60px;
-            max-width: 1200px;
-            width: 100%;
+            border-radius: 20px;
+            padding: 40px;
             text-align: center;
             border: 3px solid #bb2232;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
             opacity: 0;
             transform: translateY(30px);
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .event-card.active {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .event-card.slide-mode {
@@ -76,11 +88,28 @@
             border: none;
             padding: 0;
             box-shadow: none;
+            grid-column: 1 / -1;
+            width: 100%;
+            height: 100%;
         }
 
-        .event-card.active {
-            opacity: 1;
-            transform: translateY(0);
+        .empty-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.6;
+        }
+
+        .empty-message {
+            font-size: 24px;
+            color: rgba(255, 255, 255, 0.5);
+            font-style: italic;
         }
 
         .event-date-big {
@@ -196,19 +225,11 @@
         }
 
         /* Kategoriefarben - ursprüngliche Werte */
-        .gottesdienst { background-color: #f39c12; } /* Orange/Gold */
-        .kinder { background-color: #3498db; } /* Blau */
-        .senioren { background-color: #9b59b6; } /* Lila */
-        .jugend { background-color: #e74c3c; } /* Rot */
-        .sonstige { background-color: #27ae60; } /* Grün */
-
-        .slide-image {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
+        .gottesdienst { background-color: #f39c12; }
+        .kinder { background-color: #3498db; }
+        .senioren { background-color: #9b59b6; }
+        .jugend { background-color: #e74c3c; }
+        .sonstige { background-color: #27ae60; }
 
         .slide-container {
             display: flex;
@@ -216,57 +237,30 @@
             justify-content: center;
             width: 100%;
             height: 100%;
-            padding: 20px;
+            padding: 0;
         }
 
-        /* Animation für Seitenwechsel */
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(100px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+        .slide-image {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         }
-
-        @keyframes slideOut {
-            from {
-                opacity: 1;
-                transform: translateX(0);
-            }
-            to {
-                opacity: 0;
-                transform: translateX(-100px);
-            }
-        }
-
-        .slide-in {
-            animation: slideIn 0.8s ease-out;
-        }
-
-        .slide-out {
-            animation: slideOut 0.8s ease-out;
-        }
-
-        /* Hide navigation - not needed for TV */
 
         /* Responsive für kleinere TV-Displays */
         @media (max-width: 1366px) {
             .church-title { font-size: 28px; }
             .current-time { font-size: 20px; }
-            .event-date-big { font-size: 60px; }
-            .event-weekday { font-size: 28px; }
-            .event-title-big { font-size: 36px; }
-            .event-time-big { font-size: 28px; }
-            .event-location-big { font-size: 22px; }
-            .event-description-big { font-size: 20px; }
-            .event-card { padding: 40px; }
-        }
-
-        /* Hide buttons on very small screens */
-        @media (max-width: 900px) {
+            .event-date-big { font-size: 40px; }
+            .event-weekday { font-size: 18px; }
+            .event-title-big { font-size: 24px; }
+            .event-time-big { font-size: 20px; }
+            .event-location-big { font-size: 18px; }
+            .event-description-big { font-size: 16px; }
+            .event-card { padding: 30px; }
         }
     </style>
 </head>
@@ -311,8 +305,8 @@
         let allSlides = [];
         let rotationInterval;
         let showSlides = true;
-        const ROTATION_TIME = 15000; // 15 Sekunden für Events
-        const SLIDE_TIME = 10000; // 10 Sekunden für Slides
+        const ROTATION_TIME = 15000;
+        const SLIDE_TIME = 10000;
 
         // Uhrzeit aktualisieren
         function updateClock() {
@@ -372,8 +366,6 @@
         // Event anzeigen
         function displayEvent(event, cardId) {
             const card = document.getElementById(cardId);
-            
-            // Event-Modus aktivieren (mit Rahmen und Hintergrund)
             card.classList.remove('slide-mode');
             
             const item = event.item || event;
@@ -404,8 +396,12 @@
                 descriptionHTML = '<div class="event-description-big">' + shortDescription + '</div>';
             }
 
-            card.innerHTML = '<div class="category-badge ' + event.category + '">' + event.categoryName + '</div><div class="event-date-big">' + dayNumber + '</div><div class="event-weekday">' + dayName + ', ' + monthYear + '</div><div class="event-title-big">' + item.summary + '</div>' + timeHTML + locationHTML + descriptionHTML;
+            const badgeHTML = '<div class="category-badge ' + event.category + '">' + event.categoryName + '</div>';
+            const dateHTML = '<div class="event-date-big">' + dayNumber + '</div>';
+            const weekdayHTML = '<div class="event-weekday">' + dayName + ', ' + monthYear + '</div>';
+            const titleHTML = '<div class="event-title-big">' + item.summary + '</div>';
 
+            card.innerHTML = badgeHTML + dateHTML + weekdayHTML + titleHTML + timeHTML + locationHTML + descriptionHTML;
             card.classList.add('active');
         }
 
@@ -422,9 +418,8 @@
             const card1 = document.getElementById('event-card-1');
             const card2 = document.getElementById('event-card-2');
             
-            // Slide-Modus aktivieren (entfernt Rahmen und Hintergrund)
             card1.classList.add('slide-mode');
-            card2.style.display = 'none'; // Zweite Karte verstecken
+            card2.style.display = 'none';
             
             card1.innerHTML = '<div class="slide-container"><img src="' + slideUrl + '" alt="Info-Slide" class="slide-image" /></div>';
             card1.classList.add('active');
@@ -463,48 +458,42 @@
         }
 
         // Progress Bar animieren
-        function animateProgressBar(duration = ROTATION_TIME) {
+        function animateProgressBar(duration) {
             const progressBar = document.getElementById('progress-bar');
             
-            // Progress Bar zurücksetzen
             progressBar.style.transition = 'none';
             progressBar.style.width = '0%';
             
-            // Animation starten
             setTimeout(() => {
                 progressBar.style.transition = 'width ' + duration + 'ms linear';
                 progressBar.style.width = '100%';
             }, 100);
         }
 
-        // Nächsten Content anzeigen (Event-Paar oder Slide)
+        // Nächsten Content anzeigen
         function showNextContent() {
             const card1 = document.getElementById('event-card-1');
             const card2 = document.getElementById('event-card-2');
             
             card1.classList.remove('active');
             card2.classList.remove('active');
-            card2.style.display = 'block'; // Zweite Karte wieder anzeigen
+            card2.style.display = 'block';
 
             setTimeout(() => {
                 if (showSlides && allSlides.length > 0 && allEvents.length > 0) {
-                    // Zeige Slide
                     displaySlide(allSlides[currentSlideIndex]);
                     currentSlideIndex = (currentSlideIndex + 1) % allSlides.length;
                     showSlides = false;
                     updateEventCounter('slide');
                     
-                    // Progress Bar für Slide-Zeit
                     setTimeout(() => {
                         animateProgressBar(SLIDE_TIME);
                     }, 200);
                     
-                    // Nächster Wechsel nach Slide-Zeit
                     clearInterval(rotationInterval);
                     rotationInterval = setInterval(showNextContent, SLIDE_TIME);
                     
                 } else if (allEvents.length > 0) {
-                    // Zeige Event-Paar
                     const event1 = allEvents[currentEventIndex];
                     const event2 = allEvents[currentEventIndex + 1];
                     
@@ -520,17 +509,14 @@
                     showSlides = allSlides.length > 0;
                     updateEventCounter('event');
                     
-                    // Progress Bar für Event-Zeit
                     setTimeout(() => {
                         animateProgressBar(ROTATION_TIME);
                     }, 200);
                     
-                    // Nächster Wechsel nach Event-Zeit
                     clearInterval(rotationInterval);
                     rotationInterval = setInterval(showNextContent, ROTATION_TIME);
                     
                 } else {
-                    // Fallback - nur Slides
                     if (allSlides.length > 0) {
                         displaySlide(allSlides[currentSlideIndex]);
                         currentSlideIndex = (currentSlideIndex + 1) % allSlides.length;
@@ -548,7 +534,7 @@
         }
 
         // Event-Zähler aktualisieren
-        function updateEventCounter(type = 'event') {
+        function updateEventCounter(type) {
             const counter = document.getElementById('event-counter');
             
             if (type === 'slide') {
@@ -568,7 +554,6 @@
             
             clearInterval(rotationInterval);
             
-            // Erste Progress Bar sofort starten
             if (allEvents.length > 0) {
                 animateProgressBar(ROTATION_TIME);
                 rotationInterval = setInterval(showNextContent, ROTATION_TIME);
@@ -580,7 +565,8 @@
 
         // Kalender und Slides laden
         async function loadCalendar() {
-            const card = document.getElementById('event-card');
+            const card1 = document.getElementById('event-card-1');
+            const card2 = document.getElementById('event-card-2');
             
             try {
                 console.log('Lade Slides...');
@@ -610,7 +596,6 @@
                     currentSlideIndex = 0;
                     
                     if (allEvents.length > 0) {
-                        // Zeige erstes Event-Paar
                         const event1 = allEvents[0];
                         const event2 = allEvents[1];
                         
@@ -622,7 +607,7 @@
                             displayEmptyCard('event-card-2');
                         }
                         
-                        currentEventIndex = 2; // Nächstes Paar startet bei Index 2
+                        currentEventIndex = 2;
                         showSlides = allSlides.length > 0;
                         updateEventCounter('event');
                         
@@ -631,17 +616,20 @@
                         updateEventCounter('slide');
                     }
                     
-                    // Rotation und Progress Bar starten
                     startRotation();
                 } else {
-                    card.innerHTML = '<div class="no-events">📅<br><br>Keine Termine und keine Info-Folien gefunden</div>';
-                    card.classList.add('active');
-                    updateEventCounter();
+                    card1.innerHTML = '<div class="no-events">📅<br><br>Keine Termine und keine Info-Folien gefunden</div>';
+                    card2.innerHTML = '<div class="no-events"></div>';
+                    card1.classList.add('active');
+                    card2.classList.add('active');
+                    updateEventCounter('event');
                 }
             } catch (error) {
                 console.error('Fehler beim Laden:', error);
-                card.innerHTML = '<div class="no-events">❌<br><br>Fehler beim Laden der Inhalte</div>';
-                card.classList.add('active');
+                card1.innerHTML = '<div class="no-events">❌<br><br>Fehler beim Laden der Inhalte</div>';
+                card2.innerHTML = '<div class="no-events"></div>';
+                card1.classList.add('active');
+                card2.classList.add('active');
             }
         }
 
