@@ -1,4 +1,61 @@
-<!DOCTYPE html>
+// Slide anzeigen
+        function displaySlide(slideUrl) {
+            const card = document.getElementById('event-card');
+            
+            card.innerHTML = `
+                <div class="slide-container">
+                    <img src="${slideUrl}" alt="Info-Slide" class="slide-image" />
+                </div>
+            `;
+            
+            card.classList.add('active');
+        }        // Slides automatisch laden
+        async function loadSlides() {
+            try {
+                // Versuche verschiedene Standard-Slide-Namen zu laden
+                const possibleSlides = [
+                    'slide1.jpg', 'slide2.jpg', 'slide3.jpg', 'slide4.jpg', 'slide5.jpg',
+                    'slide1.jpeg', 'slide2.jpeg', 'slide3.jpeg', 'slide4.jpeg', 'slide5.jpeg',
+                    'folie1.jpg', 'folie2.jpg', 'folie3.jpg', 'folie4.jpg', 'folie5.jpg',
+                    'info1.jpg', 'info2.jpg', 'info3.jpg', 'info4.jpg', 'info5.jpg'
+                ];
+                
+                allSlides = [];
+                
+                for (const fileName of possibleSlides) {
+                    try {
+                        const response = await fetch(`slides/${fileName}`, { method: 'HEAD' });
+                        if (response.ok) {
+                            allSlides.push(`slides/${fileName}`);
+                            console.log(`Slide gefunden: ${fileName}`);
+                        }
+                    } catch (e) {
+                        // Datei existiert nicht - ignorieren
+                    }
+                }
+                
+                console.log(`${allSlides.length} Slides geladen:`, allSlides);
+                return allSlides.length > 0;
+            } catch (error) {
+                console.error('Fehler beim Laden der Slides:', error);
+                return false;
+            }
+        }        .slide-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .slide-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+        }<!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
@@ -279,9 +336,12 @@
         ];
 
         let currentEventIndex = 0;
+        let currentSlideIndex = 0;
         let allEvents = [];
+        let allSlides = [];
         let rotationInterval;
-        const ROTATION_TIME = 10000; // 10 Sekunden pro Event
+        let showSlides = true; // Wechsel zwischen Events und Slides
+        const ROTATION_TIME = 10000; // 10 Sekunden pro Event/Slide
 
         // Uhrzeit aktualisieren
         function updateClock() {
@@ -407,26 +467,46 @@
             }, 50);
         }
 
-        // Nächstes Event anzeigen
-        function showNextEvent() {
-            if (allEvents.length === 0) return;
-
+        // Nächsten Content anzeigen (Event oder Slide)
+        function showNextContent() {
             const card = document.getElementById('event-card');
             card.classList.remove('active');
 
             setTimeout(() => {
-                currentEventIndex = (currentEventIndex + 1) % allEvents.length;
-                displayEvent(allEvents[currentEventIndex]);
-                updateEventCounter();
+                // Zwischen Events und Slides wechseln
+                if (showSlides && allSlides.length > 0 && allEvents.length > 0) {
+                    // Zeige Slide
+                    displaySlide(allSlides[currentSlideIndex]);
+                    currentSlideIndex = (currentSlideIndex + 1) % allSlides.length;
+                    showSlides = false; // Nächstes Mal Event zeigen
+                    updateEventCounter('slide');
+                } else if (allEvents.length > 0) {
+                    // Zeige Event
+                    displayEvent(allEvents[currentEventIndex]);
+                    currentEventIndex = (currentEventIndex + 1) % allEvents.length;
+                    showSlides = allSlides.length > 0; // Nächstes Mal Slide zeigen (falls vorhanden)
+                    updateEventCounter('event');
+                } else {
+                    // Fallback - keine Events, nur Slides
+                    if (allSlides.length > 0) {
+                        displaySlide(allSlides[currentSlideIndex]);
+                        currentSlideIndex = (currentSlideIndex + 1) % allSlides.length;
+                        updateEventCounter('slide');
+                    }
+                }
+                
                 animateProgressBar();
             }, 400);
         }
 
         // Event-Zähler aktualisieren
-        function updateEventCounter() {
+        function updateEventCounter(type = 'event') {
             const counter = document.getElementById('event-counter');
-            if (allEvents.length > 0) {
-                counter.textContent = `Termin ${currentEventIndex + 1} von ${allEvents.length}`;
+            
+            if (type === 'slide') {
+                counter.textContent = `Info-Folie ${currentSlideIndex === 0 ? allSlides.length : currentSlideIndex} von ${allSlides.length}`;
+            } else if (allEvents.length > 0) {
+                counter.textContent = `Termin ${currentEventIndex === 0 ? allEvents.length : currentEventIndex} von ${allEvents.length}`;
             } else {
                 counter.textContent = 'Keine anstehenden Termine';
             }
@@ -434,18 +514,24 @@
 
         // Rotation starten
         function startRotation() {
-            if (allEvents.length <= 1) return;
+            if (allEvents.length === 0 && allSlides.length === 0) return;
             
             clearInterval(rotationInterval);
-            rotationInterval = setInterval(showNextEvent, ROTATION_TIME);
+            rotationInterval = setInterval(showNextContent, ROTATION_TIME);
             animateProgressBar();
         }
 
-        // Kalender laden
+        // Kalender und Slides laden
         async function loadCalendar() {
             const card = document.getElementById('event-card');
             
             try {
+                // Slides laden
+                console.log('Lade Slides...');
+                await loadSlides();
+                
+                // Kalender laden
+                console.log('Lade Kalender...');
                 const responses = await Promise.all(calendars.map(cal => 
                     fetch(cal.file, { cache: 'no-store' }).catch(() => ({ ok: false }))
                 ));
@@ -464,19 +550,30 @@
 
                 allEvents.sort((a, b) => a.startDate.toJSDate() - b.startDate.toJSDate());
 
-                if (allEvents.length > 0) {
+                // Content anzeigen
+                if (allEvents.length > 0 || allSlides.length > 0) {
                     currentEventIndex = 0;
-                    displayEvent(allEvents[0]);
-                    updateEventCounter();
-                    startRotation(); // Automatisch starten
+                    currentSlideIndex = 0;
+                    
+                    // Entscheide was zuerst gezeigt wird
+                    if (allEvents.length > 0) {
+                        displayEvent(allEvents[0]);
+                        showSlides = allSlides.length > 0; // Nächstes Mal Slide (falls vorhanden)
+                        updateEventCounter('event');
+                    } else if (allSlides.length > 0) {
+                        displaySlide(allSlides[0]);
+                        updateEventCounter('slide');
+                    }
+                    
+                    startRotation();
                 } else {
-                    card.innerHTML = '<div class="no-events">📅<br><br>Keine Termine in den nächsten 14 Tagen</div>';
+                    card.innerHTML = '<div class="no-events">📅<br><br>Keine Termine und keine Info-Folien gefunden</div>';
                     card.classList.add('active');
                     updateEventCounter();
                 }
             } catch (error) {
                 console.error('Fehler beim Laden:', error);
-                card.innerHTML = '<div class="no-events">❌<br><br>Fehler beim Laden der Termine</div>';
+                card.innerHTML = '<div class="no-events">❌<br><br>Fehler beim Laden der Inhalte</div>';
                 card.classList.add('active');
             }
         }
