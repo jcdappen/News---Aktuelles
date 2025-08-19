@@ -23,7 +23,7 @@
 
         .tv-header {
             background: rgba(0, 0, 0, 0.3);
-            padding: 20px 40px;
+            padding: 16px 40px; /* Reduziert von 20px */
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -53,17 +53,22 @@
         }
 
         .events-container {
+            display: -webkit-grid; /* Safari Fallback */
             display: grid;
+            -webkit-grid-template-columns: 1fr 1fr; /* Safari Fallback */
             grid-template-columns: 1fr 1fr;
             gap: 30px;
+            -webkit-gap: 30px; /* Safari Fallback */
             width: 100%;
             max-width: 1400px;
-            height: 75%;
+            height: 70%; /* Reduziert von 75% */
+            -webkit-align-items: stretch; /* Safari Fallback */
             align-items: stretch;
         }
 
         .event-card {
             background: rgba(255, 255, 255, 0.15);
+            -webkit-backdrop-filter: blur(20px); /* Safari Fallback */
             backdrop-filter: blur(20px);
             border-radius: 20px;
             padding: 40px;
@@ -71,24 +76,35 @@
             border: 3px solid #bb2232;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
             opacity: 0;
+            -webkit-transform: translateY(30px); /* Safari Fallback */
             transform: translateY(30px);
+            -webkit-transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); /* Safari Fallback */
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            display: -webkit-flex; /* Safari Fallback */
             display: flex;
+            -webkit-flex-direction: column; /* Safari Fallback */
             flex-direction: column;
+            -webkit-justify-content: center; /* Safari Fallback */
             justify-content: center;
+            min-height: 200px;
+            width: 100%; /* Safari Fix */
+            box-sizing: border-box; /* Safari Fix */
         }
 
         .event-card.active {
             opacity: 1;
+            -webkit-transform: translateY(0); /* Safari Fallback */
             transform: translateY(0);
         }
 
         .event-card.slide-mode {
             background: transparent;
+            -webkit-backdrop-filter: none; /* Safari Fallback */
             backdrop-filter: none;
             border: none;
             padding: 0;
             box-shadow: none;
+            -webkit-grid-column: 1 / -1; /* Safari Fallback */
             grid-column: 1 / -1;
             width: 100%;
             height: 100%;
@@ -203,11 +219,11 @@
 
         .tv-footer {
             background: rgba(0, 0, 0, 0.3);
-            padding: 15px 40px;
+            padding: 12px 40px; /* Reduziert von 15px */
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 18px;
+            font-size: 16px; /* Reduziert von 18px */
             opacity: 0.8;
         }
 
@@ -233,18 +249,21 @@
         .sonstige { background-color: #27ae60; }
 
         .slide-container {
+            display: -webkit-flex; /* Safari Fallback */
             display: flex;
+            -webkit-align-items: center; /* Safari Fallback */
             align-items: center;
+            -webkit-justify-content: center; /* Safari Fallback */
             justify-content: center;
             width: 100%;
             height: 100%;
-            padding: 20px;
+            padding: 40px;
             box-sizing: border-box;
         }
 
         .slide-image {
-            max-width: calc(100% - 40px);
-            max-height: calc(100% - 40px);
+            max-width: calc(100% - 80px);
+            max-height: calc(100% - 80px);
             width: auto;
             height: auto;
             object-fit: contain;
