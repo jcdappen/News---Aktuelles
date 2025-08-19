@@ -431,10 +431,9 @@
         async function loadSlides() {
             try {
                 const possibleSlides = [
-                    'slide1.jpg', 'slide2.jpg', 'slide3.jpg', 'slide4.jpg', 'slide5.jpg',
-                    'slide1.jpeg', 'slide2.jpeg', 'slide3.jpeg', 'slide4.jpeg', 'slide5.jpeg',
-                    'folie1.jpg', 'folie2.jpg', 'folie3.jpg', 'folie4.jpg', 'folie5.jpg',
-                    'info1.jpg', 'info2.jpg', 'info3.jpg', 'info4.jpg', 'info5.jpg'
+                    'slide1.jpg', 'slide2.jpg', 'slide3.jpg',
+                    'folie1.jpg', 'folie2.jpg', 'folie3.jpg',
+                    'info1.jpg', 'info2.jpg', 'info3.jpg'
                 ];
                 
                 allSlides = [];
@@ -444,14 +443,14 @@
                         const response = await fetch('slides/' + fileName, { method: 'HEAD' });
                         if (response.ok) {
                             allSlides.push('slides/' + fileName);
-                            console.log('Slide gefunden: ' + fileName);
+                            console.log('✅ Slide gefunden: ' + fileName);
                         }
                     } catch (e) {
-                        // Datei existiert nicht - ignorieren
+                        // Datei existiert nicht - stumm ignorieren
                     }
                 }
                 
-                console.log(allSlides.length + ' Slides geladen:', allSlides);
+                console.log('📸 Insgesamt ' + allSlides.length + ' Slides geladen:', allSlides);
                 return allSlides.length > 0;
             } catch (error) {
                 console.error('Fehler beim Laden der Slides:', error);
@@ -496,11 +495,19 @@
                     rotationInterval = setInterval(showNextContent, SLIDE_TIME);
                     
                 } else if (allEvents.length > 0) {
+                    // Debug-Info
+                    console.log('Zeige Event-Paar. CurrentIndex:', currentEventIndex, 'Total Events:', allEvents.length);
+                    
                     // Events anzeigen - immer 2 pro Seite
                     const event1 = allEvents[currentEventIndex];
-                    const event2 = allEvents[currentEventIndex + 1];
+                    const event2 = (currentEventIndex + 1 < allEvents.length) ? allEvents[currentEventIndex + 1] : null;
                     
-                    displayEvent(event1, 'event-card-1');
+                    console.log('Event1:', event1 ? event1.summary : 'null');
+                    console.log('Event2:', event2 ? event2.summary : 'null');
+                    
+                    if (event1) {
+                        displayEvent(event1, 'event-card-1');
+                    }
                     
                     if (event2) {
                         displayEvent(event2, 'event-card-2');
@@ -512,7 +519,10 @@
                     currentEventIndex += 2;
                     if (currentEventIndex >= allEvents.length) {
                         currentEventIndex = 0; // Von vorne beginnen
+                        console.log('Index zurückgesetzt auf 0');
                     }
+                    
+                    console.log('Neuer Index:', currentEventIndex);
                     
                     showSlides = allSlides.length > 0;
                     updateEventCounter('event');
@@ -548,9 +558,11 @@
             if (type === 'slide') {
                 counter.textContent = 'Info-Folie ' + (currentSlideIndex === 0 ? allSlides.length : currentSlideIndex) + ' von ' + allSlides.length;
             } else if (allEvents.length > 0) {
-                const currentPair = Math.floor(currentEventIndex / 2) + 1;
+                const currentPair = Math.floor((currentEventIndex - 2) / 2) + 1;
                 const totalPairs = Math.ceil(allEvents.length / 2);
-                counter.textContent = 'Termin-Paar ' + currentPair + ' von ' + totalPairs;
+                const displayPair = currentPair <= 0 ? totalPairs : currentPair;
+                counter.textContent = 'Termin-Paar ' + displayPair + ' von ' + totalPairs + ' (Events: ' + allEvents.length + ')';
+                console.log('Counter: Paar', displayPair, 'von', totalPairs, 'Index:', currentEventIndex);
             } else {
                 counter.textContent = 'Keine anstehenden Termine';
             }
@@ -577,10 +589,10 @@
             const card2 = document.getElementById('event-card-2');
             
             try {
-                console.log('Lade Slides...');
+                console.log('📅 Lade Slides...');
                 await loadSlides();
                 
-                console.log('Lade Kalender...');
+                console.log('📅 Lade Kalender...');
                 const responses = await Promise.all(calendars.map(cal => 
                     fetch(cal.file, { cache: 'no-store' }).catch(() => ({ ok: false }))
                 ));
@@ -598,24 +610,36 @@
                 });
 
                 allEvents.sort((a, b) => a.startDate.toJSDate() - b.startDate.toJSDate());
+                
+                console.log('📊 Alle Events sortiert. Anzahl:', allEvents.length);
+                allEvents.forEach((event, index) => {
+                    const item = event.item || event;
+                    console.log('Event ' + (index + 1) + ':', item.summary);
+                });
 
                 if (allEvents.length > 0 || allSlides.length > 0) {
                     currentEventIndex = 0;
                     currentSlideIndex = 0;
                     
                     if (allEvents.length > 0) {
+                        // Debug-Info
+                        console.log('Zeige erstes Event-Paar. Gesamte Events:', allEvents.length);
+                        
+                        // Zeige erstes Event-Paar
                         const event1 = allEvents[0];
-                        const event2 = allEvents[1];
+                        const event2 = allEvents.length > 1 ? allEvents[1] : null;
                         
                         displayEvent(event1, 'event-card-1');
                         
                         if (event2) {
+                            console.log('Zeige Event 1 und 2');
                             displayEvent(event2, 'event-card-2');
                         } else {
+                            console.log('Zeige Event 1 und leere Karte');
                             displayEmptyCard('event-card-2');
                         }
                         
-                        currentEventIndex = 2;
+                        currentEventIndex = 2; // Startet beim 3. Event für nächste Runde
                         showSlides = allSlides.length > 0;
                         updateEventCounter('event');
                         
