@@ -1,4 +1,8 @@
-<!DOCTYPE html>
+} else {
+                    const card1 = document.getElementById('event-card-1');
+                    const card2 = document.getElementById('event-card-2');
+                    card1.innerHTML = '<div class="no-events">📅<br><br>Keine Termine und keine Info-Folien gefunden</div>';
+                    card2.innerHTML = '<div class="no-events"></div>';<!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
@@ -80,66 +84,70 @@
         }
 
         .event-date-big {
-            font-size: 72px;
+            font-size: 48px;
             font-weight: 900;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             color: #edc544;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
         .event-weekday {
-            font-size: 32px;
+            font-size: 20px;
             font-weight: 600;
-            margin-bottom: 40px;
+            margin-bottom: 25px;
             opacity: 0.9;
             color: #f4dc8f;
         }
 
         .event-title-big {
-            font-size: 48px;
+            font-size: 28px;
             font-weight: 700;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             line-height: 1.2;
             color: #fff;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .event-time-big {
-            font-size: 36px;
+            font-size: 24px;
             font-weight: 600;
-            margin-bottom: 25px;
+            margin-bottom: 15px;
             color: #edc544;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 15px;
+            gap: 10px;
         }
 
         .event-location-big {
-            font-size: 28px;
-            margin-bottom: 25px;
+            font-size: 20px;
+            margin-bottom: 15px;
             opacity: 0.9;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 15px;
+            gap: 10px;
             color: #abd075;
         }
 
         .event-description-big {
-            font-size: 24px;
+            font-size: 18px;
             line-height: 1.4;
             opacity: 0.8;
-            max-width: 800px;
+            max-width: 100%;
             margin: 0 auto;
         }
 
         .category-badge {
             display: inline-block;
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-size: 20px;
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 16px;
             font-weight: 600;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             text-transform: uppercase;
             letter-spacing: 1px;
             color: white;
@@ -147,8 +155,8 @@
         }
 
         .icon {
-            width: 40px;
-            height: 40px;
+            width: 24px;
+            height: 24px;
             fill: currentColor;
         }
 
@@ -271,8 +279,13 @@
     </div>
 
     <div class="tv-content">
-        <div class="event-card" id="event-card">
-            <div class="loading" id="loading">Lade Termine...</div>
+        <div class="events-container" id="events-container">
+            <div class="event-card" id="event-card-1">
+                <div class="loading">Lade Termine...</div>
+            </div>
+            <div class="event-card" id="event-card-2">
+                <div class="loading"></div>
+            </div>
         </div>
         <div class="progress-bar" id="progress-bar"></div>
     </div>
@@ -298,7 +311,8 @@
         let allSlides = [];
         let rotationInterval;
         let showSlides = true;
-        const ROTATION_TIME = 10000;
+        const ROTATION_TIME = 15000; // 15 Sekunden für Events
+        const SLIDE_TIME = 10000; // 10 Sekunden für Slides
 
         // Uhrzeit aktualisieren
         function updateClock() {
@@ -356,8 +370,8 @@
         };
 
         // Event anzeigen
-        function displayEvent(event) {
-            const card = document.getElementById('event-card');
+        function displayEvent(event, cardId) {
+            const card = document.getElementById(cardId);
             
             // Event-Modus aktivieren (mit Rahmen und Hintergrund)
             card.classList.remove('slide-mode');
@@ -384,8 +398,8 @@
 
             let descriptionHTML = '';
             if (item.description) {
-                const shortDescription = item.description.length > 200 
-                    ? item.description.substring(0, 200) + '...' 
+                const shortDescription = item.description.length > 100 
+                    ? item.description.substring(0, 100) + '...' 
                     : item.description;
                 descriptionHTML = '<div class="event-description-big">' + shortDescription + '</div>';
             }
@@ -395,15 +409,25 @@
             card.classList.add('active');
         }
 
+        // Leere Karte anzeigen
+        function displayEmptyCard(cardId) {
+            const card = document.getElementById(cardId);
+            card.classList.remove('slide-mode');
+            card.innerHTML = '<div class="empty-message">Keine weiteren Termine</div>';
+            card.classList.add('active');
+        }
+
         // Slide anzeigen
         function displaySlide(slideUrl) {
-            const card = document.getElementById('event-card');
+            const card1 = document.getElementById('event-card-1');
+            const card2 = document.getElementById('event-card-2');
             
             // Slide-Modus aktivieren (entfernt Rahmen und Hintergrund)
-            card.classList.add('slide-mode');
+            card1.classList.add('slide-mode');
+            card2.style.display = 'none'; // Zweite Karte verstecken
             
-            card.innerHTML = '<div class="slide-container"><img src="' + slideUrl + '" alt="Info-Slide" class="slide-image" /></div>';
-            card.classList.add('active');
+            card1.innerHTML = '<div class="slide-container"><img src="' + slideUrl + '" alt="Info-Slide" class="slide-image" /></div>';
+            card1.classList.add('active');
         }
 
         // Slides automatisch laden
@@ -439,7 +463,7 @@
         }
 
         // Progress Bar animieren
-        function animateProgressBar() {
+        function animateProgressBar(duration = ROTATION_TIME) {
             const progressBar = document.getElementById('progress-bar');
             
             // Progress Bar zurücksetzen
@@ -448,39 +472,78 @@
             
             // Animation starten
             setTimeout(() => {
-                progressBar.style.transition = 'width ' + ROTATION_TIME + 'ms linear';
+                progressBar.style.transition = 'width ' + duration + 'ms linear';
                 progressBar.style.width = '100%';
             }, 100);
         }
 
-        // Nächsten Content anzeigen (Event oder Slide)
+        // Nächsten Content anzeigen (Event-Paar oder Slide)
         function showNextContent() {
-            const card = document.getElementById('event-card');
-            card.classList.remove('active');
+            const card1 = document.getElementById('event-card-1');
+            const card2 = document.getElementById('event-card-2');
+            
+            card1.classList.remove('active');
+            card2.classList.remove('active');
+            card2.style.display = 'block'; // Zweite Karte wieder anzeigen
 
             setTimeout(() => {
                 if (showSlides && allSlides.length > 0 && allEvents.length > 0) {
+                    // Zeige Slide
                     displaySlide(allSlides[currentSlideIndex]);
                     currentSlideIndex = (currentSlideIndex + 1) % allSlides.length;
                     showSlides = false;
                     updateEventCounter('slide');
+                    
+                    // Progress Bar für Slide-Zeit
+                    setTimeout(() => {
+                        animateProgressBar(SLIDE_TIME);
+                    }, 200);
+                    
+                    // Nächster Wechsel nach Slide-Zeit
+                    clearInterval(rotationInterval);
+                    rotationInterval = setInterval(showNextContent, SLIDE_TIME);
+                    
                 } else if (allEvents.length > 0) {
-                    displayEvent(allEvents[currentEventIndex]);
-                    currentEventIndex = (currentEventIndex + 1) % allEvents.length;
+                    // Zeige Event-Paar
+                    const event1 = allEvents[currentEventIndex];
+                    const event2 = allEvents[currentEventIndex + 1];
+                    
+                    displayEvent(event1, 'event-card-1');
+                    
+                    if (event2) {
+                        displayEvent(event2, 'event-card-2');
+                    } else {
+                        displayEmptyCard('event-card-2');
+                    }
+                    
+                    currentEventIndex = (currentEventIndex + 2) % allEvents.length;
                     showSlides = allSlides.length > 0;
                     updateEventCounter('event');
+                    
+                    // Progress Bar für Event-Zeit
+                    setTimeout(() => {
+                        animateProgressBar(ROTATION_TIME);
+                    }, 200);
+                    
+                    // Nächster Wechsel nach Event-Zeit
+                    clearInterval(rotationInterval);
+                    rotationInterval = setInterval(showNextContent, ROTATION_TIME);
+                    
                 } else {
+                    // Fallback - nur Slides
                     if (allSlides.length > 0) {
                         displaySlide(allSlides[currentSlideIndex]);
                         currentSlideIndex = (currentSlideIndex + 1) % allSlides.length;
                         updateEventCounter('slide');
+                        
+                        setTimeout(() => {
+                            animateProgressBar(SLIDE_TIME);
+                        }, 200);
+                        
+                        clearInterval(rotationInterval);
+                        rotationInterval = setInterval(showNextContent, SLIDE_TIME);
                     }
                 }
-                
-                // Progress Bar immer neu starten
-                setTimeout(() => {
-                    animateProgressBar();
-                }, 200);
             }, 400);
         }
 
@@ -491,7 +554,9 @@
             if (type === 'slide') {
                 counter.textContent = 'Info-Folie ' + (currentSlideIndex === 0 ? allSlides.length : currentSlideIndex) + ' von ' + allSlides.length;
             } else if (allEvents.length > 0) {
-                counter.textContent = 'Termin ' + (currentEventIndex === 0 ? allEvents.length : currentEventIndex) + ' von ' + allEvents.length;
+                const pairNumber = Math.ceil(currentEventIndex / 2);
+                const totalPairs = Math.ceil(allEvents.length / 2);
+                counter.textContent = 'Termin-Paar ' + (pairNumber === 0 ? totalPairs : pairNumber) + ' von ' + totalPairs;
             } else {
                 counter.textContent = 'Keine anstehenden Termine';
             }
@@ -504,10 +569,13 @@
             clearInterval(rotationInterval);
             
             // Erste Progress Bar sofort starten
-            animateProgressBar();
-            
-            // Dann Intervall für die weiteren
-            rotationInterval = setInterval(showNextContent, ROTATION_TIME);
+            if (allEvents.length > 0) {
+                animateProgressBar(ROTATION_TIME);
+                rotationInterval = setInterval(showNextContent, ROTATION_TIME);
+            } else {
+                animateProgressBar(SLIDE_TIME);
+                rotationInterval = setInterval(showNextContent, SLIDE_TIME);
+            }
         }
 
         // Kalender und Slides laden
@@ -542,9 +610,22 @@
                     currentSlideIndex = 0;
                     
                     if (allEvents.length > 0) {
-                        displayEvent(allEvents[0]);
+                        // Zeige erstes Event-Paar
+                        const event1 = allEvents[0];
+                        const event2 = allEvents[1];
+                        
+                        displayEvent(event1, 'event-card-1');
+                        
+                        if (event2) {
+                            displayEvent(event2, 'event-card-2');
+                        } else {
+                            displayEmptyCard('event-card-2');
+                        }
+                        
+                        currentEventIndex = 2; // Nächstes Paar startet bei Index 2
                         showSlides = allSlides.length > 0;
                         updateEventCounter('event');
+                        
                     } else if (allSlides.length > 0) {
                         displaySlide(allSlides[0]);
                         updateEventCounter('slide');
