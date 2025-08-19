@@ -66,6 +66,14 @@
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        .event-card.slide-mode {
+            background: transparent;
+            backdrop-filter: none;
+            border: none;
+            padding: 0;
+            box-shadow: none;
+        }
+
         .event-card.active {
             opacity: 1;
             transform: translateY(0);
@@ -350,6 +358,10 @@
         // Event anzeigen
         function displayEvent(event) {
             const card = document.getElementById('event-card');
+            
+            // Event-Modus aktivieren (mit Rahmen und Hintergrund)
+            card.classList.remove('slide-mode');
+            
             const item = event.item || event;
             const startDate = event.startDate.toJSDate();
             const endDate = event.endDate.toJSDate();
@@ -386,6 +398,10 @@
         // Slide anzeigen
         function displaySlide(slideUrl) {
             const card = document.getElementById('event-card');
+            
+            // Slide-Modus aktivieren (entfernt Rahmen und Hintergrund)
+            card.classList.add('slide-mode');
+            
             card.innerHTML = '<div class="slide-container"><img src="' + slideUrl + '" alt="Info-Slide" class="slide-image" /></div>';
             card.classList.add('active');
         }
@@ -425,12 +441,16 @@
         // Progress Bar animieren
         function animateProgressBar() {
             const progressBar = document.getElementById('progress-bar');
-            progressBar.style.width = '0%';
-            progressBar.style.transition = 'width ' + ROTATION_TIME + 'ms linear';
             
+            // Progress Bar zurücksetzen
+            progressBar.style.transition = 'none';
+            progressBar.style.width = '0%';
+            
+            // Animation starten
             setTimeout(() => {
+                progressBar.style.transition = 'width ' + ROTATION_TIME + 'ms linear';
                 progressBar.style.width = '100%';
-            }, 50);
+            }, 100);
         }
 
         // Nächsten Content anzeigen (Event oder Slide)
@@ -457,7 +477,10 @@
                     }
                 }
                 
-                animateProgressBar();
+                // Progress Bar immer neu starten
+                setTimeout(() => {
+                    animateProgressBar();
+                }, 200);
             }, 400);
         }
 
@@ -479,8 +502,12 @@
             if (allEvents.length === 0 && allSlides.length === 0) return;
             
             clearInterval(rotationInterval);
-            rotationInterval = setInterval(showNextContent, ROTATION_TIME);
+            
+            // Erste Progress Bar sofort starten
             animateProgressBar();
+            
+            // Dann Intervall für die weiteren
+            rotationInterval = setInterval(showNextContent, ROTATION_TIME);
         }
 
         // Kalender und Slides laden
@@ -523,6 +550,7 @@
                         updateEventCounter('slide');
                     }
                     
+                    // Rotation und Progress Bar starten
                     startRotation();
                 } else {
                     card.innerHTML = '<div class="no-events">📅<br><br>Keine Termine und keine Info-Folien gefunden</div>';
