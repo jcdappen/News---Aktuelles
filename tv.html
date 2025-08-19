@@ -1,61 +1,4 @@
-// Slide anzeigen
-        function displaySlide(slideUrl) {
-            const card = document.getElementById('event-card');
-            
-            card.innerHTML = `
-                <div class="slide-container">
-                    <img src="${slideUrl}" alt="Info-Slide" class="slide-image" />
-                </div>
-            `;
-            
-            card.classList.add('active');
-        }        // Slides automatisch laden
-        async function loadSlides() {
-            try {
-                // Versuche verschiedene Standard-Slide-Namen zu laden
-                const possibleSlides = [
-                    'slide1.jpg', 'slide2.jpg', 'slide3.jpg', 'slide4.jpg', 'slide5.jpg',
-                    'slide1.jpeg', 'slide2.jpeg', 'slide3.jpeg', 'slide4.jpeg', 'slide5.jpeg',
-                    'folie1.jpg', 'folie2.jpg', 'folie3.jpg', 'folie4.jpg', 'folie5.jpg',
-                    'info1.jpg', 'info2.jpg', 'info3.jpg', 'info4.jpg', 'info5.jpg'
-                ];
-                
-                allSlides = [];
-                
-                for (const fileName of possibleSlides) {
-                    try {
-                        const response = await fetch(`slides/${fileName}`, { method: 'HEAD' });
-                        if (response.ok) {
-                            allSlides.push(`slides/${fileName}`);
-                            console.log(`Slide gefunden: ${fileName}`);
-                        }
-                    } catch (e) {
-                        // Datei existiert nicht - ignorieren
-                    }
-                }
-                
-                console.log(`${allSlides.length} Slides geladen:`, allSlides);
-                return allSlides.length > 0;
-            } catch (error) {
-                console.error('Fehler beim Laden der Slides:', error);
-                return false;
-            }
-        }        .slide-image {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
-
-        .slide-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 100%;
-            padding: 20px;
-        }<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
@@ -92,8 +35,6 @@
             font-weight: 700;
             color: #fff;
         }
-
-
 
         .current-time {
             font-size: 24px;
@@ -245,6 +186,23 @@
         .jugend { background-color: #e74c3c; } /* Rot */
         .sonstige { background-color: #27ae60; } /* Grün */
 
+        .slide-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .slide-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+        }
+
         /* Animation für Seitenwechsel */
         @keyframes slideIn {
             from {
@@ -289,15 +247,6 @@
             .event-location-big { font-size: 22px; }
             .event-description-big { font-size: 20px; }
             .event-card { padding: 40px; }
-            
-            .nav-buttons {
-                bottom: 80px;
-            }
-            
-            .nav-btn {
-                padding: 12px 20px;
-                font-size: 16px;
-            }
         }
 
         /* Hide buttons on very small screens */
@@ -328,11 +277,11 @@
     <script src="https://cdn.jsdelivr.net/npm/ical.js@1.5.0/build/ical.min.js"></script>
     <script>
         const calendars = [
-            { file: 'gottesdienst.ics', color: '#bb2232', category: 'gottesdienst', name: 'Gottesdienst' },
-            { file: 'kinder.ics', color: '#22bbac', category: 'kinder', name: 'Kinder' },
-            { file: 'senioren.ics', color: '#70141e', category: 'senioren', name: 'Senioren' },
-            { file: 'jugend.ics', color: '#edc544', category: 'jugend', name: 'Jugend' },
-            { file: 'sonstige.ics', color: '#677d46', category: 'sonstige', name: 'Sonstige' }
+            { file: 'gottesdienst.ics', color: '#f39c12', category: 'gottesdienst', name: 'Gottesdienst' },
+            { file: 'kinder.ics', color: '#3498db', category: 'kinder', name: 'Kinder' },
+            { file: 'senioren.ics', color: '#9b59b6', category: 'senioren', name: 'Senioren' },
+            { file: 'jugend.ics', color: '#e74c3c', category: 'jugend', name: 'Jugend' },
+            { file: 'sonstige.ics', color: '#27ae60', category: 'sonstige', name: 'Sonstige' }
         ];
 
         let currentEventIndex = 0;
@@ -340,8 +289,8 @@
         let allEvents = [];
         let allSlides = [];
         let rotationInterval;
-        let showSlides = true; // Wechsel zwischen Events und Slides
-        const ROTATION_TIME = 10000; // 10 Sekunden pro Event/Slide
+        let showSlides = true;
+        const ROTATION_TIME = 10000;
 
         // Uhrzeit aktualisieren
         function updateClock() {
@@ -413,26 +362,12 @@
             if (!event.startDate.isDate) {
                 const startTime = startDate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
                 const endTime = endDate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
-                timeHTML = `
-                    <div class="event-time-big">
-                        <svg class="icon" viewBox="0 0 24 24">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
-                        </svg>
-                        ${startTime} - ${endTime} Uhr
-                    </div>
-                `;
+                timeHTML = '<div class="event-time-big"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg><div>' + startTime + ' - ' + endTime + ' Uhr</div></div>';
             }
 
             let locationHTML = '';
             if (item.location) {
-                locationHTML = `
-                    <div class="event-location-big">
-                        <svg class="icon" viewBox="0 0 24 24">
-                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5-2.5z"/>
-                        </svg>
-                        ${item.location}
-                    </div>
-                `;
+                locationHTML = '<div class="event-location-big"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5-2.5z"/></svg><div>' + item.location + '</div></div>';
             }
 
             let descriptionHTML = '';
@@ -440,27 +375,58 @@
                 const shortDescription = item.description.length > 200 
                     ? item.description.substring(0, 200) + '...' 
                     : item.description;
-                descriptionHTML = `<div class="event-description-big">${shortDescription}</div>`;
+                descriptionHTML = '<div class="event-description-big">' + shortDescription + '</div>';
             }
 
-            card.innerHTML = `
-                <div class="category-badge ${event.category}">${event.categoryName}</div>
-                <div class="event-date-big">${dayNumber}</div>
-                <div class="event-weekday">${dayName}, ${monthYear}</div>
-                <div class="event-title-big">${item.summary}</div>
-                ${timeHTML}
-                ${locationHTML}
-                ${descriptionHTML}
-            `;
+            card.innerHTML = '<div class="category-badge ' + event.category + '">' + event.categoryName + '</div><div class="event-date-big">' + dayNumber + '</div><div class="event-weekday">' + dayName + ', ' + monthYear + '</div><div class="event-title-big">' + item.summary + '</div>' + timeHTML + locationHTML + descriptionHTML;
 
             card.classList.add('active');
+        }
+
+        // Slide anzeigen
+        function displaySlide(slideUrl) {
+            const card = document.getElementById('event-card');
+            card.innerHTML = '<div class="slide-container"><img src="' + slideUrl + '" alt="Info-Slide" class="slide-image" /></div>';
+            card.classList.add('active');
+        }
+
+        // Slides automatisch laden
+        async function loadSlides() {
+            try {
+                const possibleSlides = [
+                    'slide1.jpg', 'slide2.jpg', 'slide3.jpg', 'slide4.jpg', 'slide5.jpg',
+                    'slide1.jpeg', 'slide2.jpeg', 'slide3.jpeg', 'slide4.jpeg', 'slide5.jpeg',
+                    'folie1.jpg', 'folie2.jpg', 'folie3.jpg', 'folie4.jpg', 'folie5.jpg',
+                    'info1.jpg', 'info2.jpg', 'info3.jpg', 'info4.jpg', 'info5.jpg'
+                ];
+                
+                allSlides = [];
+                
+                for (const fileName of possibleSlides) {
+                    try {
+                        const response = await fetch('slides/' + fileName, { method: 'HEAD' });
+                        if (response.ok) {
+                            allSlides.push('slides/' + fileName);
+                            console.log('Slide gefunden: ' + fileName);
+                        }
+                    } catch (e) {
+                        // Datei existiert nicht - ignorieren
+                    }
+                }
+                
+                console.log(allSlides.length + ' Slides geladen:', allSlides);
+                return allSlides.length > 0;
+            } catch (error) {
+                console.error('Fehler beim Laden der Slides:', error);
+                return false;
+            }
         }
 
         // Progress Bar animieren
         function animateProgressBar() {
             const progressBar = document.getElementById('progress-bar');
             progressBar.style.width = '0%';
-            progressBar.style.transition = `width ${ROTATION_TIME}ms linear`;
+            progressBar.style.transition = 'width ' + ROTATION_TIME + 'ms linear';
             
             setTimeout(() => {
                 progressBar.style.width = '100%';
@@ -473,21 +439,17 @@
             card.classList.remove('active');
 
             setTimeout(() => {
-                // Zwischen Events und Slides wechseln
                 if (showSlides && allSlides.length > 0 && allEvents.length > 0) {
-                    // Zeige Slide
                     displaySlide(allSlides[currentSlideIndex]);
                     currentSlideIndex = (currentSlideIndex + 1) % allSlides.length;
-                    showSlides = false; // Nächstes Mal Event zeigen
+                    showSlides = false;
                     updateEventCounter('slide');
                 } else if (allEvents.length > 0) {
-                    // Zeige Event
                     displayEvent(allEvents[currentEventIndex]);
                     currentEventIndex = (currentEventIndex + 1) % allEvents.length;
-                    showSlides = allSlides.length > 0; // Nächstes Mal Slide zeigen (falls vorhanden)
+                    showSlides = allSlides.length > 0;
                     updateEventCounter('event');
                 } else {
-                    // Fallback - keine Events, nur Slides
                     if (allSlides.length > 0) {
                         displaySlide(allSlides[currentSlideIndex]);
                         currentSlideIndex = (currentSlideIndex + 1) % allSlides.length;
@@ -504,9 +466,9 @@
             const counter = document.getElementById('event-counter');
             
             if (type === 'slide') {
-                counter.textContent = `Info-Folie ${currentSlideIndex === 0 ? allSlides.length : currentSlideIndex} von ${allSlides.length}`;
+                counter.textContent = 'Info-Folie ' + (currentSlideIndex === 0 ? allSlides.length : currentSlideIndex) + ' von ' + allSlides.length;
             } else if (allEvents.length > 0) {
-                counter.textContent = `Termin ${currentEventIndex === 0 ? allEvents.length : currentEventIndex} von ${allEvents.length}`;
+                counter.textContent = 'Termin ' + (currentEventIndex === 0 ? allEvents.length : currentEventIndex) + ' von ' + allEvents.length;
             } else {
                 counter.textContent = 'Keine anstehenden Termine';
             }
@@ -526,11 +488,9 @@
             const card = document.getElementById('event-card');
             
             try {
-                // Slides laden
                 console.log('Lade Slides...');
                 await loadSlides();
                 
-                // Kalender laden
                 console.log('Lade Kalender...');
                 const responses = await Promise.all(calendars.map(cal => 
                     fetch(cal.file, { cache: 'no-store' }).catch(() => ({ ok: false }))
@@ -550,15 +510,13 @@
 
                 allEvents.sort((a, b) => a.startDate.toJSDate() - b.startDate.toJSDate());
 
-                // Content anzeigen
                 if (allEvents.length > 0 || allSlides.length > 0) {
                     currentEventIndex = 0;
                     currentSlideIndex = 0;
                     
-                    // Entscheide was zuerst gezeigt wird
                     if (allEvents.length > 0) {
                         displayEvent(allEvents[0]);
-                        showSlides = allSlides.length > 0; // Nächstes Mal Slide (falls vorhanden)
+                        showSlides = allSlides.length > 0;
                         updateEventCounter('event');
                     } else if (allSlides.length > 0) {
                         displaySlide(allSlides[0]);
