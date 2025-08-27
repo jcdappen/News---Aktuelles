@@ -1,0 +1,542 @@
+<!-- START: ALLES AB HIER KOPIEREN -->
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iCal Kalender-Widget - Kommender Monat</title>
+    <style>
+        *, *::before, *::after { 
+            box-sizing: border-box; 
+        }
+        
+        :root { 
+            --primary-bg: transparent;
+            --widget-bg: transparent;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-color: #2d3748;
+            --text-light: #4a5568;
+            --accent-color: #3182ce;
+            --border-color: rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 8px 25px 0 rgba(0, 0, 0, 0.12);
+            --border-radius: 0px;
+            --border-radius-sm: 0px;
+        }
+        
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+            background: var(--primary-bg);
+            min-height: 100vh;
+            margin: 0; 
+            padding: 0; 
+            overflow-wrap: break-word;
+            overflow-x: hidden;
+        }
+        
+        #ical-widget-container {
+            max-width: 100%;
+            margin: 0;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            background: var(--widget-bg);
+            border: none;
+            box-shadow: none;
+            overflow: hidden;
+        }
+        
+        #ical-calendar-widget { 
+            padding: 0;
+        }
+        
+        .month-header { 
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            padding: 16px 24px; 
+            font-size: 18px; 
+            font-weight: 700; 
+            color: var(--text-color); 
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            letter-spacing: 0.5px;
+        }
+        
+        #calendar-list {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .calendar-event { 
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+        
+        .calendar-event:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .event-summary { 
+            display: flex; 
+            align-items: stretch; 
+            cursor: pointer; 
+            transition: all 0.3s ease;
+            min-height: 80px;
+            padding: 0;
+        }
+        
+        .event-summary:hover { 
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .event-summary:active {
+            transform: scale(0.98);
+        }
+        
+        .event-date { 
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            color: var(--text-color); 
+            text-align: center; 
+            width: 90px; 
+            min-width: 90px;
+            padding: 20px 16px; 
+            flex-shrink: 0; 
+            display: flex; 
+            flex-direction: column;
+            align-items: center; 
+            justify-content: center; 
+            font-size: 32px; 
+            font-weight: 700; 
+            letter-spacing: -1px;
+            border-right: 1px solid var(--border-color);
+        }
+        
+        .event-info { 
+            flex-grow: 1; 
+            padding: 24px 28px; 
+            display: flex; 
+            align-items: center; 
+            border-left-width: 4px; 
+            border-left-style: solid;
+            position: relative;
+        }
+        
+        .event-title { 
+            font-size: 18px; 
+            font-weight: 600;
+            color: var(--text-color);
+            line-height: 1.4;
+        }
+        
+        .event-details { 
+            max-height: 0; 
+            overflow: hidden; 
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                       padding 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            padding: 0 32px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .calendar-event.active .event-details { 
+            max-height: 600px; 
+            padding: 28px 32px 32px 32px;
+        }
+        
+        .detail-item { 
+            display: flex; 
+            align-items: flex-start; 
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: var(--text-light);
+            line-height: 1.5;
+        }
+        
+        .detail-item:last-child { 
+            margin-bottom: 0; 
+        }
+        
+        .detail-item svg { 
+            width: 22px; 
+            height: 22px; 
+            margin-right: 18px; 
+            fill: var(--accent-color); 
+            flex-shrink: 0; 
+            margin-top: 2px;
+            opacity: 0.8;
+        }
+        
+        .detail-link a { 
+            display: inline-block; 
+            background: var(--accent-color);
+            color: white; 
+            padding: 14px 24px; 
+            border-radius: 6px; 
+            text-decoration: none; 
+            font-weight: 600; 
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px 0 rgba(49, 130, 206, 0.3);
+        }
+        
+        .detail-link a:hover { 
+            background: #2c5aa0;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px 0 rgba(49, 130, 206, 0.4);
+        }
+        
+        .detail-link a:active {
+            transform: translateY(0);
+        }
+        
+        #calendar-status { 
+            padding: 40px 24px; 
+            text-align: center; 
+            color: var(--text-light);
+            font-size: 18px;
+            line-height: 1.6;
+        }
+        
+        /* Mobile Optimierungen */
+        @media (max-width: 768px) {
+            #ical-widget-container {
+                border-radius: 0px;
+            }
+            
+            .month-header {
+                padding: 12px 16px;
+                font-size: 16px;
+            }
+            
+            #calendar-list {
+                padding: 12px;
+                gap: 12px;
+            }
+            
+            .event-summary {
+                min-height: 70px;
+            }
+            
+            .event-date {
+                width: 70px;
+                min-width: 70px;
+                padding: 16px 12px;
+                font-size: 28px;
+            }
+            
+            .event-info {
+                padding: 20px;
+            }
+            
+            .event-title {
+                font-size: 16px;
+            }
+            
+            .event-details {
+                padding: 0 20px;
+            }
+            
+            .calendar-event.active .event-details {
+                padding: 24px 20px 28px 20px;
+            }
+            
+            .detail-item {
+                font-size: 15px;
+                margin-bottom: 16px;
+            }
+            
+            .detail-item svg {
+                width: 20px;
+                height: 20px;
+                margin-right: 16px;
+            }
+            
+            .detail-link a {
+                padding: 12px 20px;
+                font-size: 15px;
+            }
+            
+            #calendar-status {
+                padding: 30px 16px;
+                font-size: 16px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            #ical-widget-container {
+                border-radius: 0px;
+            }
+            
+            .month-header {
+                padding: 10px 12px;
+                font-size: 15px;
+            }
+            
+            #calendar-list {
+                padding: 8px;
+                gap: 10px;
+            }
+            
+            .event-summary {
+                min-height: 60px;
+            }
+            
+            .event-date {
+                width: 60px;
+                min-width: 60px;
+                padding: 12px 8px;
+                font-size: 24px;
+            }
+            
+            .event-info {
+                padding: 16px;
+            }
+            
+            .event-title {
+                font-size: 15px;
+            }
+            
+            .event-details {
+                padding: 0 16px;
+            }
+            
+            .calendar-event.active .event-details {
+                padding: 20px 16px 24px 16px;
+            }
+            
+            .detail-item {
+                font-size: 14px;
+                margin-bottom: 14px;
+            }
+            
+            .detail-link a {
+                padding: 10px 18px;
+                font-size: 14px;
+            }
+        }
+        
+        /* Touch-optimierte Hover-Effekte */
+        @media (hover: none) and (pointer: coarse) {
+            .event-summary:hover {
+                background: transparent;
+            }
+            
+            .calendar-event:hover {
+                transform: none;
+                box-shadow: var(--shadow);
+            }
+            
+            .detail-link a:hover {
+                transform: none;
+                background: var(--accent-color);
+                box-shadow: 0 2px 8px 0 rgba(49, 130, 206, 0.3);
+            }
+        }
+        
+        /* Verbesserte Touch-Targets */
+        .event-summary {
+            min-height: 44px; /* iOS Empfehlung für Touch-Targets */
+        }
+        
+        .detail-link a {
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Focus-Styles für Accessibility */
+        .event-summary:focus {
+            outline: 2px solid var(--accent-color);
+            outline-offset: 2px;
+        }
+        
+        .detail-link a:focus {
+            outline: 2px solid rgba(255, 255, 255, 0.8);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div id="ical-widget-container">
+        <div id="ical-calendar-widget">
+            <div id="calendar-list"></div>
+            <div id="calendar-status"></div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/ical.js@1.5.0/build/ical.min.js"></script>
+    <script>
+        (function() {
+            // --- HIER IST DIE ZENTRALE KONFIGURATION MIT IHREN WUNSCHFARBEN ---
+            const calendars = [
+                { file: 'gottesdienst.ics', color: '#f39c12' }, // Warmes Orange
+                { file: 'kinder.ics',         color: '#3498db' }, // Blau
+                { file: 'senioren.ics',       color: '#9b59b6' }, // Lila
+                { file: 'jugend.ics',         color: '#e74c3c' }, // Rot
+                { file: 'sonstige.ics',       color: '#27ae60' }  // Grün
+            ];
+
+            const listContainer = document.getElementById('calendar-list');
+            const statusContainer = document.getElementById('calendar-status');
+
+            const processIcalData = (icalData, color) => { 
+                const now = new Date(); 
+                
+                // Berechne Start und Ende des NÄCHSTEN Monats
+                const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1); // Erster Tag nächster Monat
+                const nextMonthEnd = new Date(now.getFullYear(), now.getMonth() + 2, 0, 23, 59, 59); // Letzter Tag nächster Monat
+                
+                console.log('Kommender Monat Start:', nextMonth);
+                console.log('Kommender Monat Ende:', nextMonthEnd);
+                
+                const events = []; 
+                try { 
+                    const jcalData = ICAL.parse(icalData); 
+                    const vcalendar = new ICAL.Component(jcalData); 
+                    const vevents = vcalendar.getAllSubcomponents('vevent'); 
+                    vevents.forEach(vevent => { 
+                        const event = new ICAL.Event(vevent); 
+                        const addEvent = (e) => { 
+                            const eventStart = e.startDate.toJSDate();
+                            // Prüfe ob Event im nächsten Monat liegt
+                            if (eventStart >= nextMonth && eventStart <= nextMonthEnd) {
+                                e.color = color; 
+                                events.push(e);
+                                console.log('Event hinzugefügt für nächsten Monat:', e.summary);
+                            }
+                        }; 
+                        if (event.isRecurring()) { 
+                            const iterator = event.iterator(); 
+                            let next; 
+                            // Iteriere bis zum Ende des nächsten Monats
+                            while ((next = iterator.next()) && next.toJSDate() <= nextMonthEnd) { 
+                                const occ = event.getOccurrenceDetails(next); 
+                                addEvent(occ); 
+                            } 
+                        } else { 
+                            addEvent(event); 
+                        } 
+                    }); 
+                } catch (e) { 
+                    console.error('Fehler beim Parsen von Kalenderdaten:', e); 
+                } 
+                console.log('Events für nächsten Monat:', events.length, 'Events');
+                return events; 
+            };
+
+            const renderCalendar = (events) => { 
+                listContainer.innerHTML = ''; 
+                statusContainer.style.display = 'none'; 
+                
+                if (events.length === 0) { 
+                    const nextMonth = new Date();
+                    nextMonth.setMonth(nextMonth.getMonth() + 1);
+                    const nextMonthName = nextMonth.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
+                    statusContainer.textContent = `Keine Termine im ${nextMonthName} gefunden.`; 
+                    statusContainer.style.display = 'block'; 
+                    return; 
+                } 
+                
+                // Header für nächsten Monat
+                const nextMonth = new Date();
+                nextMonth.setMonth(nextMonth.getMonth() + 1);
+                const nextMonthName = nextMonth.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
+                const monthHeader = document.createElement('div');
+                monthHeader.className = 'month-header';
+                monthHeader.textContent = nextMonthName;
+                listContainer.appendChild(monthHeader);
+                
+                events.forEach(event => { 
+                    const startDate = event.startDate.toJSDate(); 
+                    const eventWrapper = document.createElement('div'); 
+                    eventWrapper.className = 'calendar-event'; 
+                    const item = event.item || event; 
+                    const endDate = event.endDate.toJSDate(); 
+                    const color = event.color; 
+                    let detailsHTML = ''; 
+                    if (!event.startDate.isDate) { 
+                        const options = { hour: '2-digit', minute: '2-digit' }; 
+                        detailsHTML += '<div class="detail-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg><div>' + startDate.toLocaleTimeString('de-DE', options) + ' - ' + endDate.toLocaleTimeString('de-DE', options) + ' Uhr</div></div>'; 
+                    } 
+                    if (item.location) { 
+                        detailsHTML += '<div class="detail-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5-2.5z"/></svg><div>' + item.location + '</div></div>'; 
+                    } 
+                    if (item.description) { 
+                        detailsHTML += '<div class="detail-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zM4 6h16v2H4V6zm16 12H4V10h16v8z"/></svg><div>' + item.description.replace(/\n/g, '<br>') + '</div></div>'; 
+                    } 
+                    if (item.url) { 
+                        detailsHTML += '<div class="detail-item detail-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg><a href="' + item.url + '" target="_blank" rel="noopener noreferrer">Mehr Infos / Anmeldung</a></div>'; 
+                    } 
+                    eventWrapper.innerHTML = '<div class="event-summary" tabindex="0" role="button" aria-expanded="false"><div class="event-date">' + startDate.getDate() + '</div><div class="event-info" style="border-left-color: ' + color + ';"><span class="event-title">' + item.summary + '</span></div></div><div class="event-details">' + (detailsHTML || '<div class="detail-item">Keine weiteren Informationen vorhanden.</div>') + '</div>'; 
+                    listContainer.appendChild(eventWrapper); 
+                }); 
+                addEventListeners(); 
+            };
+            
+            const addEventListeners = () => { 
+                listContainer.querySelectorAll('.event-summary').forEach(summary => { 
+                    const toggleEvent = () => {
+                        const eventWrapper = summary.closest('.calendar-event'); 
+                        listContainer.querySelectorAll('.calendar-event.active').forEach(activeEvent => { 
+                            if (activeEvent !== eventWrapper) { 
+                                activeEvent.classList.remove('active');
+                                activeEvent.querySelector('.event-summary').setAttribute('aria-expanded', 'false');
+                            } 
+                        }); 
+                        const isActive = eventWrapper.classList.toggle('active');
+                        summary.setAttribute('aria-expanded', isActive);
+                    };
+                    
+                    summary.addEventListener('click', toggleEvent);
+                    summary.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            toggleEvent();
+                        }
+                    });
+                }); 
+            };
+            
+            async function initCalendar() {
+                statusContainer.textContent = 'Lade Termine für kommenden Monat...';
+                statusContainer.style.display = 'block';
+                try {
+                    const responses = await Promise.all(calendars.map(cal => fetch(cal.file, { cache: 'no-store' })));
+                    const textPromises = responses.map(res => res.ok ? res.text() : '');
+                    const icalDatas = await Promise.all(textPromises);
+                    let allEvents = [];
+                    icalDatas.forEach((data, index) => { 
+                        if (data) { 
+                            const color = calendars[index].color; 
+                            const events = processIcalData(data, color); 
+                            allEvents = allEvents.concat(events); 
+                        } 
+                    });
+                    allEvents.sort((a, b) => a.startDate.toJSDate() - b.startDate.toJSDate());
+                    renderCalendar(allEvents);
+                } catch (error) {
+                    console.error('Fehler beim Laden der Kalenderdaten:', error);
+                    statusContainer.textContent = 'Fehler: Termine konnten nicht geladen werden.';
+                }
+            }
+            initCalendar();
+        })();
+    </script>
+</body>
+</html>
+<!-- ENDE: ALLES BIS HIER KOPIEREN -->
