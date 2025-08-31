@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iCal Kalender-Widget</title>
+    <title>iCal Kalender-Widget - Kommender Monat</title>
     <style>
         *, *::before, *::after { 
             box-sizing: border-box; 
@@ -396,20 +396,21 @@
 
             const processIcalData = (icalData, color) => { 
                 const now = new Date(); 
-                console.log('Aktueller Zeitpunkt:', now);
                 
                 // Prüfe ob wir ab dem 28. sind
                 const currentDay = now.getDate();
-                let monthEnd;
+                let monthStart, monthEnd;
                 
                 if (currentDay >= 28) {
-                    // Ab 28. zeige auch nächsten Monat
-                    monthEnd = new Date(now.getFullYear(), now.getMonth() + 2, 0, 23, 59, 59);
-                    console.log('Ab 28.: Zeige bis Ende nächsten Monats:', monthEnd);
+                    // Ab 28.: Zeige nächsten und übernächsten Monat
+                    monthStart = new Date(now.getFullYear(), now.getMonth() + 1, 1); // Nächster Monat Start
+                    monthEnd = new Date(now.getFullYear(), now.getMonth() + 3, 0, 23, 59, 59); // Übernächster Monat Ende
+                    console.log('Ab 28.: Zeige nächsten + übernächsten Monat:', monthStart, 'bis', monthEnd);
                 } else {
-                    // Bis 27.: Nur aktueller Monat
-                    monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
-                    console.log('Bis 27.: Zeige nur aktuellen Monat:', monthEnd);
+                    // Bis 27.: Nur nächster Monat
+                    monthStart = new Date(now.getFullYear(), now.getMonth() + 1, 1); // Nächster Monat Start
+                    monthEnd = new Date(now.getFullYear(), now.getMonth() + 2, 0, 23, 59, 59); // Nächster Monat Ende
+                    console.log('Bis 27.: Zeige nur nächsten Monat:', monthStart, 'bis', monthEnd);
                 }
                 
                 const events = []; 
@@ -421,19 +422,17 @@
                         const event = new ICAL.Event(vevent); 
                         const addEvent = (e) => { 
                             const eventStart = e.startDate.toJSDate();
-                            console.log('Prüfe Event:', e.summary, 'Start:', eventStart, 'Jetzt:', now, 'Zukunft?', eventStart >= now);
-                            
-                            if (eventStart >= now && eventStart <= monthEnd) {
+                            // Prüfe ob Event im gewünschten Zeitraum liegt
+                            if (eventStart >= monthStart && eventStart <= monthEnd) {
                                 e.color = color; 
                                 events.push(e);
-                                console.log('Event hinzugefügt:', e.summary);
-                            } else {
-                                console.log('Event NICHT hinzugefügt:', e.summary, 'Grund: zu alt oder zu weit in der Zukunft');
+                                console.log('Event hinzugefügt für nächsten Monat:', e.summary);
                             }
                         }; 
                         if (event.isRecurring()) { 
                             const iterator = event.iterator(); 
                             let next; 
+                            // Iteriere bis zum Ende des Zeitraums
                             while ((next = iterator.next()) && next.toJSDate() <= monthEnd) { 
                                 const occ = event.getOccurrenceDetails(next); 
                                 addEvent(occ); 
@@ -445,7 +444,7 @@
                 } catch (e) { 
                     console.error('Fehler beim Parsen von Kalenderdaten:', e); 
                 } 
-                console.log('Finale Event-Liste:', events.length, 'Events');
+                console.log('Events für nächsten Monat:', events.length, 'Events');
                 return events; 
             };
 
@@ -459,15 +458,18 @@
                     let monthText;
                     
                     if (currentDay >= 28) {
-                        const currentMonth = now.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
                         const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
                         const nextMonthName = nextMonth.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
-                        monthText = currentMonth + ' und ' + nextMonthName;
+                        const monthAfterNext = new Date(now.getFullYear(), now.getMonth() + 2, 1);
+                        const monthAfterNextName = monthAfterNext.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
+                        monthText = nextMonthName + ' und ' + monthAfterNextName;
                     } else {
-                        monthText = 'Ende ' + now.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
+                        const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+                        const nextMonthName = nextMonth.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
+                        monthText = nextMonthName;
                     }
                     
-                    statusContainer.textContent = 'Keine anstehenden Termine bis ' + monthText + ' gefunden.'; 
+                    statusContainer.textContent = 'Keine Termine im ' + monthText + ' gefunden.'; 
                     statusContainer.style.display = 'block'; 
                     return; 
                 } 
@@ -478,12 +480,14 @@
                 let headerText;
                 
                 if (currentDay >= 28) {
-                    const currentMonth = now.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
                     const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
                     const nextMonthName = nextMonth.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
-                    headerText = currentMonth + ' / ' + nextMonthName;
+                    const monthAfterNext = new Date(now.getFullYear(), now.getMonth() + 2, 1);
+                    const monthAfterNextName = monthAfterNext.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
+                    headerText = nextMonthName + ' / ' + monthAfterNextName;
                 } else {
-                    headerText = now.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
+                    const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+                    headerText = nextMonth.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
                 }
                 
                 const monthHeader = document.createElement('div');
@@ -549,7 +553,7 @@
             };
             
             async function initCalendar() {
-                statusContainer.textContent = 'Lade Termine...';
+                statusContainer.textContent = 'Lade Termine für kommenden Monat...';
                 statusContainer.style.display = 'block';
                 try {
                     const responses = await Promise.all(calendars.map(cal => fetch(cal.file, { cache: 'no-store' })));
