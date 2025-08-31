@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iCal Kalender-Widget - Kommender Monat</title>
+    <title>iCal Kalender-Widget</title>
     <style>
         *, *::before, *::after { 
             box-sizing: border-box; 
@@ -396,13 +396,21 @@
 
             const processIcalData = (icalData, color) => { 
                 const now = new Date(); 
+                console.log('Aktueller Zeitpunkt:', now);
                 
-                // Berechne Start und Ende des NÄCHSTEN Monats
-                const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1); // Erster Tag nächster Monat
-                const nextMonthEnd = new Date(now.getFullYear(), now.getMonth() + 2, 0, 23, 59, 59); // Letzter Tag nächster Monat
+                // Prüfe ob wir ab dem 28. sind
+                const currentDay = now.getDate();
+                let monthEnd;
                 
-                console.log('Kommender Monat Start:', nextMonth);
-                console.log('Kommender Monat Ende:', nextMonthEnd);
+                if (currentDay >= 28) {
+                    // Ab 28. zeige auch nächsten Monat
+                    monthEnd = new Date(now.getFullYear(), now.getMonth() + 2, 0, 23, 59, 59);
+                    console.log('Ab 28.: Zeige bis Ende nächsten Monats:', monthEnd);
+                } else {
+                    // Bis 27.: Nur aktueller Monat
+                    monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
+                    console.log('Bis 27.: Zeige nur aktuellen Monat:', monthEnd);
+                }
                 
                 const events = []; 
                 try { 
@@ -413,18 +421,20 @@
                         const event = new ICAL.Event(vevent); 
                         const addEvent = (e) => { 
                             const eventStart = e.startDate.toJSDate();
-                            // Prüfe ob Event im nächsten Monat liegt
-                            if (eventStart >= nextMonth && eventStart <= nextMonthEnd) {
+                            console.log('Prüfe Event:', e.summary, 'Start:', eventStart, 'Jetzt:', now, 'Zukunft?', eventStart >= now);
+                            
+                            if (eventStart >= now && eventStart <= monthEnd) {
                                 e.color = color; 
                                 events.push(e);
-                                console.log('Event hinzugefügt für nächsten Monat:', e.summary);
+                                console.log('Event hinzugefügt:', e.summary);
+                            } else {
+                                console.log('Event NICHT hinzugefügt:', e.summary, 'Grund: zu alt oder zu weit in der Zukunft');
                             }
                         }; 
                         if (event.isRecurring()) { 
                             const iterator = event.iterator(); 
                             let next; 
-                            // Iteriere bis zum Ende des nächsten Monats
-                            while ((next = iterator.next()) && next.toJSDate() <= nextMonthEnd) { 
+                            while ((next = iterator.next()) && next.toJSDate() <= monthEnd) { 
                                 const occ = event.getOccurrenceDetails(next); 
                                 addEvent(occ); 
                             } 
@@ -435,7 +445,7 @@
                 } catch (e) { 
                     console.error('Fehler beim Parsen von Kalenderdaten:', e); 
                 } 
-                console.log('Events für nächsten Monat:', events.length, 'Events');
+                console.log('Finale Event-Liste:', events.length, 'Events');
                 return events; 
             };
 
@@ -444,21 +454,41 @@
                 statusContainer.style.display = 'none'; 
                 
                 if (events.length === 0) { 
-                    const nextMonth = new Date();
-                    nextMonth.setMonth(nextMonth.getMonth() + 1);
-                    const nextMonthName = nextMonth.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
-                    statusContainer.textContent = `Keine Termine im ${nextMonthName} gefunden.`; 
+                    const now = new Date();
+                    const currentDay = now.getDate();
+                    let monthText;
+                    
+                    if (currentDay >= 28) {
+                        const currentMonth = now.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
+                        const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+                        const nextMonthName = nextMonth.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
+                        monthText = currentMonth + ' und ' + nextMonthName;
+                    } else {
+                        monthText = 'Ende ' + now.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
+                    }
+                    
+                    statusContainer.textContent = 'Keine anstehenden Termine bis ' + monthText + ' gefunden.'; 
                     statusContainer.style.display = 'block'; 
                     return; 
                 } 
                 
-                // Header für nächsten Monat
-                const nextMonth = new Date();
-                nextMonth.setMonth(nextMonth.getMonth() + 1);
-                const nextMonthName = nextMonth.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
+                // Header je nach Datum
+                const now = new Date();
+                const currentDay = now.getDate();
+                let headerText;
+                
+                if (currentDay >= 28) {
+                    const currentMonth = now.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
+                    const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+                    const nextMonthName = nextMonth.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
+                    headerText = currentMonth + ' / ' + nextMonthName;
+                } else {
+                    headerText = now.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
+                }
+                
                 const monthHeader = document.createElement('div');
                 monthHeader.className = 'month-header';
-                monthHeader.textContent = nextMonthName;
+                monthHeader.textContent = headerText;
                 listContainer.appendChild(monthHeader);
                 
                 events.forEach(event => { 
@@ -468,6 +498,12 @@
                     const item = event.item || event; 
                     const endDate = event.endDate.toJSDate(); 
                     const color = event.color; 
+                    
+                    // Datum im Format DD.MM
+                    const day = String(startDate.getDate()).padStart(2, '0');
+                    const month = String(startDate.getMonth() + 1).padStart(2, '0');
+                    const dateDisplay = day + '.' + month;
+                    
                     let detailsHTML = ''; 
                     if (!event.startDate.isDate) { 
                         const options = { hour: '2-digit', minute: '2-digit' }; 
@@ -482,7 +518,7 @@
                     if (item.url) { 
                         detailsHTML += '<div class="detail-item detail-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg><a href="' + item.url + '" target="_blank" rel="noopener noreferrer">Mehr Infos / Anmeldung</a></div>'; 
                     } 
-                    eventWrapper.innerHTML = '<div class="event-summary" tabindex="0" role="button" aria-expanded="false"><div class="event-date">' + startDate.getDate() + '</div><div class="event-info" style="border-left-color: ' + color + ';"><span class="event-title">' + item.summary + '</span></div></div><div class="event-details">' + (detailsHTML || '<div class="detail-item">Keine weiteren Informationen vorhanden.</div>') + '</div>'; 
+                    eventWrapper.innerHTML = '<div class="event-summary" tabindex="0" role="button" aria-expanded="false"><div class="event-date">' + dateDisplay + '</div><div class="event-info" style="border-left-color: ' + color + ';"><span class="event-title">' + item.summary + '</span></div></div><div class="event-details">' + (detailsHTML || '<div class="detail-item">Keine weiteren Informationen vorhanden.</div>') + '</div>'; 
                     listContainer.appendChild(eventWrapper); 
                 }); 
                 addEventListeners(); 
@@ -513,7 +549,7 @@
             };
             
             async function initCalendar() {
-                statusContainer.textContent = 'Lade Termine für kommenden Monat...';
+                statusContainer.textContent = 'Lade Termine...';
                 statusContainer.style.display = 'block';
                 try {
                     const responses = await Promise.all(calendars.map(cal => fetch(cal.file, { cache: 'no-store' })));
