@@ -396,11 +396,21 @@
 
             const processIcalData = (icalData, color) => { 
                 const now = new Date(); 
-                console.log('Aktueller Zeitpunkt:', now); // Debug-Log
+                console.log('Aktueller Zeitpunkt:', now);
                 
-                // Berechne Ende des aktuellen Monats (ab jetzt bis Monatsende)
-                const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
-                console.log('Monatsende:', monthEnd); // Debug-Log
+                // Prüfe ob wir ab dem 28. sind
+                const currentDay = now.getDate();
+                let monthEnd;
+                
+                if (currentDay >= 28) {
+                    // Ab 28. zeige auch nächsten Monat
+                    monthEnd = new Date(now.getFullYear(), now.getMonth() + 2, 0, 23, 59, 59);
+                    console.log('Ab 28.: Zeige bis Ende nächsten Monats:', monthEnd);
+                } else {
+                    // Bis 27.: Nur aktueller Monat
+                    monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
+                    console.log('Bis 27.: Zeige nur aktuellen Monat:', monthEnd);
+                }
                 
                 const events = []; 
                 try { 
@@ -410,7 +420,6 @@
                     vevents.forEach(vevent => { 
                         const event = new ICAL.Event(vevent); 
                         const addEvent = (e) => { 
-                            // Zusätzliche Prüfung: Nur Termine die WIRKLICH in der Zukunft liegen
                             const eventStart = e.startDate.toJSDate();
                             console.log('Prüfe Event:', e.summary, 'Start:', eventStart, 'Jetzt:', now, 'Zukunft?', eventStart >= now);
                             
@@ -436,7 +445,7 @@
                 } catch (e) { 
                     console.error('Fehler beim Parsen von Kalenderdaten:', e); 
                 } 
-                console.log('Finale Event-Liste:', events.length, 'Events'); // Debug-Log
+                console.log('Finale Event-Liste:', events.length, 'Events');
                 return events; 
             };
 
@@ -446,18 +455,40 @@
                 
                 if (events.length === 0) { 
                     const now = new Date();
-                    const currentMonth = now.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
-                    statusContainer.textContent = 'Keine anstehenden Termine bis Ende ' + currentMonth + ' gefunden.'; 
+                    const currentDay = now.getDate();
+                    let monthText;
+                    
+                    if (currentDay >= 28) {
+                        const currentMonth = now.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
+                        const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+                        const nextMonthName = nextMonth.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
+                        monthText = currentMonth + ' und ' + nextMonthName;
+                    } else {
+                        monthText = 'Ende ' + now.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
+                    }
+                    
+                    statusContainer.textContent = 'Keine anstehenden Termine bis ' + monthText + ' gefunden.'; 
                     statusContainer.style.display = 'block'; 
                     return; 
                 } 
                 
-                // Header für anstehende Termine
+                // Header je nach Datum
                 const now = new Date();
-                const currentMonth = now.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
+                const currentDay = now.getDate();
+                let headerText;
+                
+                if (currentDay >= 28) {
+                    const currentMonth = now.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
+                    const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+                    const nextMonthName = nextMonth.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
+                    headerText = currentMonth + ' / ' + nextMonthName;
+                } else {
+                    headerText = now.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
+                }
+                
                 const monthHeader = document.createElement('div');
                 monthHeader.className = 'month-header';
-                monthHeader.textContent = currentMonth;
+                monthHeader.textContent = headerText;
                 listContainer.appendChild(monthHeader);
                 
                 events.forEach(event => { 
