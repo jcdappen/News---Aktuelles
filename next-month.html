@@ -110,16 +110,27 @@
             text-align: center; 
             width: 90px; 
             min-width: 90px;
-            padding: 20px 16px; 
+            padding: 16px 16px; 
             flex-shrink: 0; 
             display: flex; 
             flex-direction: column;
             align-items: center; 
             justify-content: center; 
+            border-right: 1px solid var(--border-color);
+        }
+        
+        .date-day {
             font-size: 32px; 
             font-weight: 700; 
             letter-spacing: -1px;
-            border-right: 1px solid var(--border-color);
+            line-height: 1;
+        }
+        
+        .date-month {
+            font-size: 14px;
+            font-weight: 400;
+            margin-top: 2px;
+            opacity: 0.8;
         }
         
         .event-info { 
@@ -229,8 +240,15 @@
             .event-date {
                 width: 70px;
                 min-width: 70px;
-                padding: 16px 12px;
+                padding: 14px 12px;
+            }
+            
+            .date-day {
                 font-size: 28px;
+            }
+            
+            .date-month {
+                font-size: 12px;
             }
             
             .event-info {
@@ -293,8 +311,15 @@
             .event-date {
                 width: 60px;
                 min-width: 60px;
-                padding: 12px 8px;
+                padding: 10px 8px;
+            }
+            
+            .date-day {
                 font-size: 24px;
+            }
+            
+            .date-month {
+                font-size: 11px;
             }
             
             .event-info {
@@ -402,10 +427,10 @@
                 let monthStart, monthEnd;
                 
                 if (currentDay >= 28) {
-                    // Ab 28.: Zeige nächsten und übernächsten Monat
-                    monthStart = new Date(now.getFullYear(), now.getMonth() + 1, 1); // Nächster Monat Start
+                    // Ab 28.: Zeige nur übernächsten Monat (nicht mehr den nächsten)
+                    monthStart = new Date(now.getFullYear(), now.getMonth() + 2, 1); // Übernächster Monat Start
                     monthEnd = new Date(now.getFullYear(), now.getMonth() + 3, 0, 23, 59, 59); // Übernächster Monat Ende
-                    console.log('Ab 28.: Zeige nächsten + übernächsten Monat:', monthStart, 'bis', monthEnd);
+                    console.log('Ab 28.: Zeige nur übernächsten Monat:', monthStart, 'bis', monthEnd);
                 } else {
                     // Bis 27.: Nur nächster Monat
                     monthStart = new Date(now.getFullYear(), now.getMonth() + 1, 1); // Nächster Monat Start
@@ -458,11 +483,9 @@
                     let monthText;
                     
                     if (currentDay >= 28) {
-                        const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-                        const nextMonthName = nextMonth.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
                         const monthAfterNext = new Date(now.getFullYear(), now.getMonth() + 2, 1);
                         const monthAfterNextName = monthAfterNext.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
-                        monthText = nextMonthName + ' und ' + monthAfterNextName;
+                        monthText = monthAfterNextName;
                     } else {
                         const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
                         const nextMonthName = nextMonth.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
@@ -480,11 +503,8 @@
                 let headerText;
                 
                 if (currentDay >= 28) {
-                    const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-                    const nextMonthName = nextMonth.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
                     const monthAfterNext = new Date(now.getFullYear(), now.getMonth() + 2, 1);
-                    const monthAfterNextName = monthAfterNext.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
-                    headerText = nextMonthName + ' / ' + monthAfterNextName;
+                    headerText = monthAfterNext.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
                 } else {
                     const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
                     headerText = nextMonth.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
@@ -503,10 +523,9 @@
                     const endDate = event.endDate.toJSDate(); 
                     const color = event.color; 
                     
-                    // Datum im Format DD.MM
+                    // Datum getrennt in Tag und Monat
                     const day = String(startDate.getDate()).padStart(2, '0');
-                    const month = String(startDate.getMonth() + 1).padStart(2, '0');
-                    const dateDisplay = day + '.' + month;
+                    const monthShort = startDate.toLocaleString('de-DE', { month: 'short' }).toUpperCase();
                     
                     let detailsHTML = ''; 
                     if (!event.startDate.isDate) { 
@@ -522,7 +541,7 @@
                     if (item.url) { 
                         detailsHTML += '<div class="detail-item detail-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg><a href="' + item.url + '" target="_blank" rel="noopener noreferrer">Mehr Infos / Anmeldung</a></div>'; 
                     } 
-                    eventWrapper.innerHTML = '<div class="event-summary" tabindex="0" role="button" aria-expanded="false"><div class="event-date">' + dateDisplay + '</div><div class="event-info" style="border-left-color: ' + color + ';"><span class="event-title">' + item.summary + '</span></div></div><div class="event-details">' + (detailsHTML || '<div class="detail-item">Keine weiteren Informationen vorhanden.</div>') + '</div>'; 
+                    eventWrapper.innerHTML = '<div class="event-summary" tabindex="0" role="button" aria-expanded="false"><div class="event-date"><div class="date-day">' + day + '</div><div class="date-month">' + monthShort + '</div></div><div class="event-info" style="border-left-color: ' + color + ';"><span class="event-title">' + item.summary + '</span></div></div><div class="event-details">' + (detailsHTML || '<div class="detail-item">Keine weiteren Informationen vorhanden.</div>') + '</div>'; 
                     listContainer.appendChild(eventWrapper); 
                 }); 
                 addEventListeners(); 
