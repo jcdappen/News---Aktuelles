@@ -102,7 +102,7 @@
             -webkit-backdrop-filter: none;
             backdrop-filter: none;
             border: none;
-            padding: 10px; /* Reduziert von 0 auf 10px für minimalen Rand */
+            padding: 0; /* Kein Padding - maximale Größe */
             box-shadow: none;
             -webkit-grid-column: 1 / -1;
             grid-column: 1 / -1;
@@ -257,19 +257,19 @@
             justify-content: center;
             width: 100%;
             height: 100%;
-            padding: 5px; /* Reduziert von 40px auf 5px */
+            padding: 0; /* Kein Padding für maximale Größe */
             box-sizing: border-box;
         }
 
         .slide-image {
-            /* Größere Slides - nutzt fast den ganzen verfügbaren Platz */
-            max-width: calc(100% - 10px); /* Reduziert von 80px auf 10px */
-            max-height: calc(100% - 10px); /* Reduziert von 80px auf 10px */
+            /* Maximale Größe - nutzt den kompletten verfügbaren Platz */
+            max-width: 100%;
+            max-height: 100%;
             width: auto;
             height: auto;
             object-fit: contain;
-            border-radius: 12px; /* Etwas reduziert von 16px */
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); /* Stärkerer Schatten für bessere Sichtbarkeit */
+            border-radius: 8px; /* Etwas kleinerer Radius für schärferen Look */
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5); /* Stärkerer Schatten für bessere Sichtbarkeit */
         }
 
         /* Responsive für kleinere TV-Displays */
@@ -284,15 +284,15 @@
             .event-description-big { font-size: 16px; }
             .event-card { padding: 30px; }
             
-            /* Slides bleiben auch bei kleineren Displays groß */
+            /* Slides bleiben auch bei kleineren Displays maximal groß */
             .slide-container {
-                padding: 3px;
+                padding: 0;
             }
             
             .slide-image {
-                max-width: calc(100% - 6px);
-                max-height: calc(100% - 6px);
-                border-radius: 10px;
+                max-width: 100%;
+                max-height: 100%;
+                border-radius: 6px;
             }
         }
     </style>
