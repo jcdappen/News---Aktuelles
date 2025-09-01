@@ -23,7 +23,7 @@
 
         .tv-header {
             background: rgba(0, 0, 0, 0.3);
-            padding: 16px 40px; /* Reduziert von 20px */
+            padding: 16px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -53,22 +53,22 @@
         }
 
         .events-container {
-            display: -webkit-grid; /* Safari Fallback */
+            display: -webkit-grid;
             display: grid;
-            -webkit-grid-template-columns: 1fr 1fr; /* Safari Fallback */
+            -webkit-grid-template-columns: 1fr 1fr;
             grid-template-columns: 1fr 1fr;
             gap: 30px;
-            -webkit-gap: 30px; /* Safari Fallback */
+            -webkit-gap: 30px;
             width: 100%;
             max-width: 1400px;
-            height: 70%; /* Reduziert von 75% */
-            -webkit-align-items: stretch; /* Safari Fallback */
+            height: 70%;
+            -webkit-align-items: stretch;
             align-items: stretch;
         }
 
         .event-card {
             background: rgba(255, 255, 255, 0.15);
-            -webkit-backdrop-filter: blur(20px); /* Safari Fallback */
+            -webkit-backdrop-filter: blur(20px);
             backdrop-filter: blur(20px);
             border-radius: 20px;
             padding: 40px;
@@ -76,35 +76,35 @@
             border: 3px solid #bb2232;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
             opacity: 0;
-            -webkit-transform: translateY(30px); /* Safari Fallback */
+            -webkit-transform: translateY(30px);
             transform: translateY(30px);
-            -webkit-transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); /* Safari Fallback */
+            -webkit-transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            display: -webkit-flex; /* Safari Fallback */
+            display: -webkit-flex;
             display: flex;
-            -webkit-flex-direction: column; /* Safari Fallback */
+            -webkit-flex-direction: column;
             flex-direction: column;
-            -webkit-justify-content: center; /* Safari Fallback */
+            -webkit-justify-content: center;
             justify-content: center;
             min-height: 200px;
-            width: 100%; /* Safari Fix */
-            box-sizing: border-box; /* Safari Fix */
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .event-card.active {
             opacity: 1;
-            -webkit-transform: translateY(0); /* Safari Fallback */
+            -webkit-transform: translateY(0);
             transform: translateY(0);
         }
 
         .event-card.slide-mode {
             background: transparent;
-            -webkit-backdrop-filter: none; /* Safari Fallback */
+            -webkit-backdrop-filter: none;
             backdrop-filter: none;
             border: none;
-            padding: 0;
+            padding: 10px; /* Reduziert von 0 auf 10px für minimalen Rand */
             box-shadow: none;
-            -webkit-grid-column: 1 / -1; /* Safari Fallback */
+            -webkit-grid-column: 1 / -1;
             grid-column: 1 / -1;
             width: 100%;
             height: 100%;
@@ -219,11 +219,11 @@
 
         .tv-footer {
             background: rgba(0, 0, 0, 0.3);
-            padding: 12px 40px; /* Reduziert von 15px */
+            padding: 12px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 16px; /* Reduziert von 18px */
+            font-size: 16px;
             opacity: 0.8;
         }
 
@@ -241,7 +241,7 @@
             color: #f4dc8f;
         }
 
-        /* Kategoriefarben - ursprüngliche Werte */
+        /* Kategoriefarben */
         .gottesdienst { background-color: #f39c12; }
         .kinder { background-color: #3498db; }
         .senioren { background-color: #9b59b6; }
@@ -249,26 +249,27 @@
         .sonstige { background-color: #27ae60; }
 
         .slide-container {
-            display: -webkit-flex; /* Safari Fallback */
+            display: -webkit-flex;
             display: flex;
-            -webkit-align-items: center; /* Safari Fallback */
+            -webkit-align-items: center;
             align-items: center;
-            -webkit-justify-content: center; /* Safari Fallback */
+            -webkit-justify-content: center;
             justify-content: center;
             width: 100%;
             height: 100%;
-            padding: 40px;
+            padding: 5px; /* Reduziert von 40px auf 5px */
             box-sizing: border-box;
         }
 
         .slide-image {
-            max-width: calc(100% - 80px);
-            max-height: calc(100% - 80px);
+            /* Größere Slides - nutzt fast den ganzen verfügbaren Platz */
+            max-width: calc(100% - 10px); /* Reduziert von 80px auf 10px */
+            max-height: calc(100% - 10px); /* Reduziert von 80px auf 10px */
             width: auto;
             height: auto;
             object-fit: contain;
-            border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            border-radius: 12px; /* Etwas reduziert von 16px */
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); /* Stärkerer Schatten für bessere Sichtbarkeit */
         }
 
         /* Responsive für kleinere TV-Displays */
@@ -282,6 +283,17 @@
             .event-location-big { font-size: 18px; }
             .event-description-big { font-size: 16px; }
             .event-card { padding: 30px; }
+            
+            /* Slides bleiben auch bei kleineren Displays groß */
+            .slide-container {
+                padding: 3px;
+            }
+            
+            .slide-image {
+                max-width: calc(100% - 6px);
+                max-height: calc(100% - 6px);
+                border-radius: 10px;
+            }
         }
     </style>
 </head>
@@ -417,12 +429,11 @@
                 descriptionHTML = '<div class="event-description-big">' + shortDescription + '</div>';
             }
 
-            const badgeHTML = '<div class="category-badge ' + event.category + '">' + event.categoryName + '</div>';
             const dateHTML = '<div class="event-date-big">' + dayNumber + '</div>';
             const weekdayHTML = '<div class="event-weekday">' + dayName + ', ' + monthYear + '</div>';
             const titleHTML = '<div class="event-title-big">' + item.summary + '</div>';
 
-            card.innerHTML = badgeHTML + dateHTML + weekdayHTML + titleHTML + timeHTML + locationHTML + descriptionHTML;
+            card.innerHTML = dateHTML + weekdayHTML + titleHTML + timeHTML + locationHTML + descriptionHTML;
             card.classList.add('active');
         }
 
@@ -430,7 +441,7 @@
         function displayEmptyCard(cardId) {
             const card = document.getElementById(cardId);
             card.classList.remove('slide-mode');
-            card.innerHTML = '<div class="empty-message">Keine weiteren Termine</div>';
+            card.innerHTML = '<div class="empty-card"><div class="empty-message">Keine weiteren Termine</div></div>';
             card.classList.add('active');
         }
 
@@ -514,10 +525,8 @@
                     rotationInterval = setInterval(showNextContent, SLIDE_TIME);
                     
                 } else if (allEvents.length > 0) {
-                    // Debug-Info
                     console.log('Zeige Event-Paar. CurrentIndex:', currentEventIndex, 'Total Events:', allEvents.length);
                     
-                    // Events anzeigen - immer 2 pro Seite
                     const event1 = allEvents[currentEventIndex];
                     const event2 = (currentEventIndex + 1 < allEvents.length) ? allEvents[currentEventIndex + 1] : null;
                     
@@ -534,10 +543,9 @@
                         displayEmptyCard('event-card-2');
                     }
                     
-                    // Index um 2 erhöhen und prüfen ob wir am Ende sind
                     currentEventIndex += 2;
                     if (currentEventIndex >= allEvents.length) {
-                        currentEventIndex = 0; // Von vorne beginnen
+                        currentEventIndex = 0;
                         console.log('Index zurückgesetzt auf 0');
                     }
                     
@@ -641,10 +649,8 @@
                     currentSlideIndex = 0;
                     
                     if (allEvents.length > 0) {
-                        // Debug-Info
                         console.log('Zeige erstes Event-Paar. Gesamte Events:', allEvents.length);
                         
-                        // Zeige erstes Event-Paar
                         const event1 = allEvents[0];
                         const event2 = allEvents.length > 1 ? allEvents[1] : null;
                         
@@ -658,7 +664,7 @@
                             displayEmptyCard('event-card-2');
                         }
                         
-                        currentEventIndex = 2; // Startet beim 3. Event für nächste Runde
+                        currentEventIndex = 2;
                         showSlides = allSlides.length > 0;
                         updateEventCounter('event');
                         
