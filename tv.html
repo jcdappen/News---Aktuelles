@@ -62,14 +62,15 @@
         }
 
         .event-card {
-            background: rgba(255, 255, 255, 0.15);
-            -webkit-backdrop-filter: blur(20px);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
+            /* Hintergrund, Blur, Rahmen und Schatten entfernt */
+            background: transparent;
+            -webkit-backdrop-filter: none;
+            backdrop-filter: none;
+            border-radius: 0; /* Keine Rundung */
             padding: 60px; /* Mehr Padding für größeren Termin */
             text-align: center;
-            border: 3px solid #bb2232;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            border: none; /* Kein Rahmen */
+            box-shadow: none; /* Kein Schatten */
             opacity: 0;
             -webkit-transform: translateY(30px);
             transform: translateY(30px);
@@ -221,12 +222,12 @@
             color: #f4dc8f;
         }
 
-        /* Kategoriefarben */
-        .gottesdienst { background-color: #f39c12; }
-        .kinder { background-color: #3498db; }
-        .senioren { background-color: #9b59b6; }
-        .jugend { background-color: #e74c3c; }
-        .sonstige { background-color: #27ae60; }
+        /* Kategoriefarben (können bei transparentem Hintergrund weniger auffallen) */
+        .gottesdienst { color: #f39c12; }
+        .kinder { color: #3498db; }
+        .senioren { color: #9b59b6; }
+        .jugend { color: #e74c3c; }
+        .sonstige { color: #27ae60; }
 
         .slide-container {
             display: -webkit-flex;
