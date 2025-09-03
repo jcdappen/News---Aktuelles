@@ -866,7 +866,7 @@
                             currentSlideIndex = 0;
                             
                             if (allEvents.length > 0) {
-                                console.log('Zeige ersten Termin. Gesamte Events:', allEvents.length);
+                                console.log('✅ Zeige ersten Termin. Gesamte Events:', allEvents.length);
                                 
                                 var event1 = allEvents[0];
                                 displayEvent(event1, 'event-card-1');
@@ -874,7 +874,10 @@
                                 currentEventIndex = 1;
                                 updateEventCounter('event');
                                 
+                                console.log('🎯 Events werden priorisiert');
+                                
                             } else if (allSlides.length > 0) {
+                                console.log('📸 Keine Events - zeige erste Slide');
                                 displaySlide(allSlides[0]);
                                 updateEventCounter('slide');
                             }
