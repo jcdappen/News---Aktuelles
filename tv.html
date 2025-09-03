@@ -12,7 +12,7 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
             background: linear-gradient(135deg, #4d4d4d 0%, #999999 100%);
             color: white;
             height: 100vh;
@@ -54,7 +54,7 @@
 
         .events-container {
             width: 100%;
-            max-width: 1000px;
+            max-width: 1000px; /* Breiter für den einzelnen Termin */
             height: 70%;
             display: flex;
             align-items: center;
@@ -63,28 +63,39 @@
 
         .event-card {
             background: rgba(255, 255, 255, 0.15);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
             border-radius: 20px;
-            padding: 60px;
+            padding: 60px; /* Mehr Padding für größeren Termin */
             text-align: center;
             border: 3px solid #bb2232;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
             opacity: 0;
+            -webkit-transform: translateY(30px);
             transform: translateY(30px);
-            transition: all 0.8s ease-in-out;
+            -webkit-transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            display: -webkit-flex;
             display: flex;
+            -webkit-flex-direction: column;
             flex-direction: column;
+            -webkit-justify-content: center;
             justify-content: center;
             width: 100%;
             max-height: 100%;
+            box-sizing: border-box;
         }
 
         .event-card.active {
             opacity: 1;
+            -webkit-transform: translateY(0);
             transform: translateY(0);
         }
 
         .event-card.slide-mode {
             background: transparent;
+            -webkit-backdrop-filter: none;
+            backdrop-filter: none;
             border: none;
             padding: 0;
             box-shadow: none;
@@ -94,6 +105,7 @@
 
         .empty-card {
             background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 60px;
             text-align: center;
@@ -105,13 +117,13 @@
         }
 
         .empty-message {
-            font-size: 32px;
+            font-size: 32px; /* Größerer Text für den einzelnen Display */
             color: rgba(255, 255, 255, 0.5);
             font-style: italic;
         }
 
         .event-date-big {
-            font-size: 80px;
+            font-size: 80px; /* Noch größer für Single-Display */
             font-weight: 900;
             margin-bottom: 25px;
             color: #edc544;
@@ -119,7 +131,7 @@
         }
 
         .event-weekday {
-            font-size: 28px;
+            font-size: 28px; /* Größer */
             font-weight: 600;
             margin-bottom: 40px;
             opacity: 0.9;
@@ -127,7 +139,7 @@
         }
 
         .event-title-big {
-            font-size: 36px;
+            font-size: 36px; /* Größer */
             font-weight: 700;
             margin-bottom: 30px;
             line-height: 1.2;
@@ -139,35 +151,29 @@
         }
 
         .event-time-big {
-            font-size: 32px;
+            font-size: 32px; /* Größer */
             font-weight: 600;
             margin-bottom: 25px;
             color: #edc544;
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .event-time-big .icon {
-            margin-right: 15px;
+            gap: 15px;
         }
 
         .event-location-big {
-            font-size: 26px;
+            font-size: 26px; /* Größer */
             margin-bottom: 25px;
             opacity: 0.9;
             display: flex;
             align-items: center;
             justify-content: center;
+            gap: 15px;
             color: #abd075;
         }
 
-        .event-location-big .icon {
-            margin-right: 15px;
-        }
-
         .event-description-big {
-            font-size: 22px;
+            font-size: 22px; /* Größer */
             line-height: 1.4;
             opacity: 0.8;
             max-width: 100%;
@@ -175,11 +181,9 @@
         }
 
         .icon {
-            width: 32px;
+            width: 32px; /* Größere Icons */
             height: 32px;
             fill: currentColor;
-            display: inline-block;
-            vertical-align: middle;
         }
 
         .progress-bar {
@@ -205,25 +209,36 @@
 
         .no-events {
             text-align: center;
-            font-size: 48px;
+            font-size: 48px; /* Größer für Single-Display */
             opacity: 0.7;
             color: #f4dc8f;
         }
 
         .loading {
             text-align: center;
-            font-size: 48px;
+            font-size: 48px; /* Größer für Single-Display */
             opacity: 0.7;
             color: #f4dc8f;
         }
 
+        /* Kategoriefarben */
+        .gottesdienst { background-color: #f39c12; }
+        .kinder { background-color: #3498db; }
+        .senioren { background-color: #9b59b6; }
+        .jugend { background-color: #e74c3c; }
+        .sonstige { background-color: #27ae60; }
+
         .slide-container {
+            display: -webkit-flex;
             display: flex;
+            -webkit-align-items: center;
             align-items: center;
+            -webkit-justify-content: center;
             justify-content: center;
             width: 100%;
             height: 100%;
             padding: 0;
+            box-sizing: border-box;
         }
 
         .slide-image {
@@ -231,10 +246,12 @@
             max-height: 100%;
             width: auto;
             height: auto;
+            object-fit: contain;
             border-radius: 8px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
         }
 
+        /* Responsive für kleinere TV-Displays */
         @media (max-width: 1366px) {
             .church-title { font-size: 28px; }
             .current-time { font-size: 20px; }
@@ -247,17 +264,6 @@
             .event-card { padding: 50px; }
             .icon { width: 28px; height: 28px; }
             .no-events, .loading { font-size: 36px; }
-        }
-
-        @media (min-width: 1920px) {
-            .church-title { font-size: 42px; }
-            .current-time { font-size: 28px; }
-            .event-date-big { font-size: 96px; }
-            .event-weekday { font-size: 32px; }
-            .event-title-big { font-size: 42px; }
-            .event-time-big { font-size: 36px; }
-            .event-location-big { font-size: 30px; }
-            .event-description-big { font-size: 26px; }
         }
     </style>
 </head>
@@ -283,179 +289,9 @@
         <div>🏠 Gemeinde in der Konkordia</div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/ical.js@1.5.0/build/ical.min.js"></script>
     <script>
-        // Promise Polyfill für sehr alte Browser/Silk Versionen
-        if (typeof Promise === 'undefined') {
-            window.Promise = function(executor) {
-                var self = this;
-                this.state = 'pending';
-                this.value = undefined;
-                this.handlers = [];
-
-                function resolve(result) {
-                    if (self.state === 'pending') {
-                        self.state = 'fulfilled';
-                        self.value = result;
-                        self.handlers.forEach(handle);
-                        self.handlers = null;
-                    }
-                }
-
-                function reject(error) {
-                    if (self.state === 'pending') {
-                        self.state = 'rejected';
-                        self.value = error;
-                        self.handlers.forEach(handle);
-                        self.handlers = null;
-                    }
-                }
-
-                function handle(handler) {
-                    if (self.state === 'pending') {
-                        self.handlers.push(handler);
-                    } else {
-                        if (self.state === 'fulfilled' && typeof handler.onFulfilled === 'function') {
-                            handler.onFulfilled(self.value);
-                        }
-                        if (self.state === 'rejected' && typeof handler.onRejected === 'function') {
-                            handler.onRejected(self.value);
-                        }
-                    }
-                }
-
-                this.then = function(onFulfilled, onRejected) {
-                    return new Promise(function(resolve, reject) {
-                        handle({
-                            onFulfilled: function(result) {
-                                try {
-                                    resolve(onFulfilled ? onFulfilled(result) : result);
-                                } catch (ex) {
-                                    reject(ex);
-                                }
-                            },
-                            onRejected: function(error) {
-                                try {
-                                    resolve(onRejected ? onRejected(error) : error);
-                                } catch (ex) {
-                                    reject(ex);
-                                }
-                            }
-                        });
-                    });
-                };
-
-                executor(resolve, reject);
-            };
-
-            Promise.all = function(promises) {
-                return new Promise(function(resolve, reject) {
-                    var results = [];
-                    var completed = 0;
-                    
-                    if (promises.length === 0) {
-                        resolve(results);
-                        return;
-                    }
-                    
-                    promises.forEach(function(promise, index) {
-                        promise.then(function(value) {
-                            results[index] = value;
-                            completed++;
-                            if (completed === promises.length) {
-                                resolve(results);
-                            }
-                        }).catch ? promise.catch(reject) : reject(promise);
-                    });
-                });
-            };
-        }
-
-        // Array.forEach Polyfill
-        if (!Array.prototype.forEach) {
-            Array.prototype.forEach = function(callback, thisArg) {
-                for (var i = 0; i < this.length; i++) {
-                    callback.call(thisArg, this[i], i, this);
-                }
-            };
-        }
-        function parseSimpleICal(icalData) {
-            console.log('📋 Parse iCal - Daten-Länge:', icalData.length);
-            
-            var events = [];
-            var lines = icalData.split(/\r?\n/);
-            var currentEvent = null;
-            
-            for (var i = 0; i < lines.length; i++) {
-                var line = lines[i].trim();
-                
-                if (line === 'BEGIN:VEVENT') {
-                    currentEvent = {};
-                    console.log('🎫 Neues Event gefunden');
-                } else if (line === 'END:VEVENT' && currentEvent) {
-                    if (currentEvent.summary && currentEvent.dtstart) {
-                        events.push(currentEvent);
-                        console.log('✅ Event hinzugefügt:', currentEvent.summary);
-                    }
-                    currentEvent = null;
-                } else if (currentEvent && line.includes(':')) {
-                    var colonIndex = line.indexOf(':');
-                    var key = line.substring(0, colonIndex);
-                    var value = line.substring(colonIndex + 1);
-                    
-                    // Entferne Parameter aus dem Key
-                    if (key.includes(';')) {
-                        key = key.substring(0, key.indexOf(';'));
-                    }
-                    
-                    key = key.toLowerCase();
-                    
-                    if (key === 'summary') {
-                        currentEvent.summary = value;
-                    } else if (key === 'dtstart') {
-                        currentEvent.dtstart = value;
-                    } else if (key === 'dtend') {
-                        currentEvent.dtend = value;
-                    } else if (key === 'location') {
-                        currentEvent.location = value;
-                    } else if (key === 'description') {
-                        currentEvent.description = value;
-                    }
-                }
-            }
-            
-            console.log('📊 Gefundene Raw-Events:', events.length);
-            return events;
-        }
-        
-        // Datum parsen (vereinfacht)
-        function parseICalDate(dateString) {
-            // Format: YYYYMMDDTHHMMSS oder YYYYMMDD
-            if (!dateString) return null;
-            
-            // Entferne Zeitzone-Info
-            dateString = dateString.replace(/Z$/, '').replace(/T.*$/, '');
-            
-            if (dateString.length >= 8) {
-                var year = parseInt(dateString.substring(0, 4));
-                var month = parseInt(dateString.substring(4, 6)) - 1; // Monate sind 0-basiert
-                var day = parseInt(dateString.substring(6, 8));
-                
-                var hour = 0, minute = 0;
-                if (dateString.length > 8) {
-                    var timeString = dateString.substring(9);
-                    if (timeString.length >= 4) {
-                        hour = parseInt(timeString.substring(0, 2));
-                        minute = parseInt(timeString.substring(2, 4));
-                    }
-                }
-                
-                return new Date(year, month, day, hour, minute);
-            }
-            
-            return null;
-        }
-
-        var calendars = [
+        const calendars = [
             { file: 'gottesdienst.ics', color: '#f39c12', category: 'gottesdienst', name: 'Gottesdienst' },
             { file: 'kinder.ics', color: '#3498db', category: 'kinder', name: 'Kinder' },
             { file: 'senioren.ics', color: '#9b59b6', category: 'senioren', name: 'Senioren' },
@@ -463,233 +299,186 @@
             { file: 'sonstige.ics', color: '#27ae60', category: 'sonstige', name: 'Sonstige' }
         ];
 
-        var currentEventIndex = 0;
-        var currentSlideIndex = 0;
-        var allEvents = [];
-        var allSlides = [];
-        var rotationInterval;
-        var showSlides = true;
-        var ROTATION_TIME = 15000;
-        var SLIDE_TIME = 10000;
+        let currentEventIndex = 0;
+        let currentSlideIndex = 0;
+        let allEvents = [];
+        let allSlides = [];
+        let rotationInterval;
+        let showSlides = true;
+        const ROTATION_TIME = 15000;
+        const SLIDE_TIME = 10000;
 
+        // Uhrzeit aktualisieren
         function updateClock() {
-            var now = new Date();
-            var options = {
+            const now = new Date();
+            const timeString = now.toLocaleString('de-DE', {
                 weekday: 'long',
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric',
                 hour: '2-digit',
                 minute: '2-digit'
-            };
-            
-            var timeString;
-            try {
-                timeString = now.toLocaleString('de-DE', options);
-            } catch (e) {
-                timeString = now.toLocaleDateString('de-DE') + ' ' + now.toLocaleTimeString('de-DE');
-            }
-            
-            var timeElement = document.getElementById('current-time');
-            if (timeElement) {
-                timeElement.textContent = timeString;
-            }
+            });
+            document.getElementById('current-time').textContent = timeString;
         }
 
-        function processIcalData(icalData, color, category, name) {
-            console.log('🔍 Verarbeite iCal für:', name);
-            
-            var now = new Date();
-            var twoWeeksFromNow = new Date();
+        // Events verarbeiten
+        const processIcalData = (icalData, color, category, name) => {
+            const now = new Date();
+            const twoWeeksFromNow = new Date();
             twoWeeksFromNow.setDate(now.getDate() + 14);
-            
-            var rawEvents = parseSimpleICal(icalData);
-            var events = [];
-            
-            rawEvents.forEach(function(rawEvent) {
-                var startDate = parseICalDate(rawEvent.dtstart);
-                var endDate = parseICalDate(rawEvent.dtend);
+
+            const events = [];
+            try {
+                const jcalData = ICAL.parse(icalData);
+                const vcalendar = new ICAL.Component(jcalData);
+                const vevents = vcalendar.getAllSubcomponents('vevent');
                 
-                if (startDate && startDate >= now && startDate <= twoWeeksFromNow) {
-                    var event = {
-                        summary: rawEvent.summary,
-                        startDate: startDate,
-                        endDate: endDate || startDate,
-                        location: rawEvent.location,
-                        description: rawEvent.description,
-                        color: color,
-                        category: category,
-                        categoryName: name,
-                        isAllDay: rawEvent.dtstart && rawEvent.dtstart.indexOf('T') === -1
+                vevents.forEach(vevent => {
+                    const event = new ICAL.Event(vevent);
+                    const addEvent = (e) => {
+                        const eventStart = e.startDate.toJSDate();
+                        if (eventStart >= now && eventStart <= twoWeeksFromNow) {
+                            e.color = color;
+                            e.category = category;
+                            e.categoryName = name;
+                            events.push(e);
+                        }
                     };
                     
-                    events.push(event);
-                    console.log('✅ Event verarbeitet:', event.summary, 'am', startDate);
-                }
-            });
-            
-            console.log('📊 Events für', name + ':', events.length);
+                    if (event.isRecurring()) {
+                        const iterator = event.iterator();
+                        let next;
+                        while ((next = iterator.next()) && next.toJSDate() <= twoWeeksFromNow) {
+                            const occ = event.getOccurrenceDetails(next);
+                            addEvent(occ);
+                        }
+                    } else {
+                        addEvent(event);
+                    }
+                });
+            } catch (e) {
+                console.error('Fehler beim Parsen:', e);
+            }
             return events;
-        }
+        };
 
+        // Event anzeigen
         function displayEvent(event, cardId) {
-            var card = document.getElementById(cardId);
-            if (!card) return;
+            const card = document.getElementById(cardId);
+            card.classList.remove('slide-mode');
             
-            card.className = card.className.replace('slide-mode', '').trim();
-            
-            var startDate = event.startDate;
-            var endDate = event.endDate;
+            const item = event.item || event;
+            const startDate = event.startDate.toJSDate();
+            const endDate = event.endDate.toJSDate();
 
-            var dayName = startDate.toLocaleDateString('de-DE', { weekday: 'long' });
-            var dayNumber = startDate.getDate();
-            var monthYear = startDate.toLocaleDateString('de-DE', { month: 'long', year: 'numeric' });
+            const dayName = startDate.toLocaleDateString('de-DE', { weekday: 'long' });
+            const dayNumber = startDate.getDate();
+            const monthYear = startDate.toLocaleDateString('de-DE', { month: 'long', year: 'numeric' });
 
-            var timeHTML = '';
-            if (!event.isAllDay) {
-                var startTime = startDate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
-                var endTime = endDate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+            let timeHTML = '';
+            if (!event.startDate.isDate) {
+                const startTime = startDate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+                const endTime = endDate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
                 timeHTML = '<div class="event-time-big"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg><div>' + startTime + ' - ' + endTime + ' Uhr</div></div>';
             }
 
-            var locationHTML = '';
-            if (event.location) {
-                locationHTML = '<div class="event-location-big"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5-2.5z"/></svg><div>' + event.location + '</div></div>';
+            let locationHTML = '';
+            if (item.location) {
+                locationHTML = '<div class="event-location-big"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5-2.5z"/></svg><div>' + item.location + '</div></div>';
             }
 
-            var descriptionHTML = '';
-            if (event.description) {
-                var shortDescription = event.description.length > 150 
-                    ? event.description.substring(0, 150) + '...' 
-                    : event.description;
+            let descriptionHTML = '';
+            if (item.description) {
+                const shortDescription = item.description.length > 150 
+                    ? item.description.substring(0, 150) + '...' 
+                    : item.description;
                 descriptionHTML = '<div class="event-description-big">' + shortDescription + '</div>';
             }
 
-            var dateHTML = '<div class="event-date-big">' + dayNumber + '</div>';
-            var weekdayHTML = '<div class="event-weekday">' + dayName + ', ' + monthYear + '</div>';
-            var titleHTML = '<div class="event-title-big">' + event.summary + '</div>';
+            const dateHTML = '<div class="event-date-big">' + dayNumber + '</div>';
+            const weekdayHTML = '<div class="event-weekday">' + dayName + ', ' + monthYear + '</div>';
+            const titleHTML = '<div class="event-title-big">' + item.summary + '</div>';
 
             card.innerHTML = dateHTML + weekdayHTML + titleHTML + timeHTML + locationHTML + descriptionHTML;
-            
-            if (card.className.indexOf('active') === -1) {
-                card.className += ' active';
-            }
+            card.classList.add('active');
         }
 
+        // Leere Karte anzeigen
         function displayEmptyCard(cardId) {
-            var card = document.getElementById(cardId);
-            if (!card) return;
-            
-            card.className = card.className.replace('slide-mode', '').trim();
+            const card = document.getElementById(cardId);
+            card.classList.remove('slide-mode');
             card.innerHTML = '<div class="empty-card"><div class="empty-message">Keine anstehenden Termine</div></div>';
-            
-            if (card.className.indexOf('active') === -1) {
-                card.className += ' active';
-            }
+            card.classList.add('active');
         }
 
+        // Slide anzeigen
         function displaySlide(slideUrl) {
-            var card1 = document.getElementById('event-card-1');
-            if (!card1) return;
+            const card1 = document.getElementById('event-card-1');
             
-            if (card1.className.indexOf('slide-mode') === -1) {
-                card1.className += ' slide-mode';
-            }
-            
+            card1.classList.add('slide-mode');
             card1.innerHTML = '<div class="slide-container"><img src="' + slideUrl + '" alt="Info-Slide" class="slide-image" /></div>';
-            
-            if (card1.className.indexOf('active') === -1) {
-                card1.className += ' active';
-            }
+            card1.classList.add('active');
         }
 
-        function loadSlides() {
-            var possibleSlides = [
-                'slide1.jpg', 'slide2.jpg', 'slide3.jpg',
-                'folie1.jpg', 'folie2.jpg', 'folie3.jpg',
-                'info1.jpg', 'info2.jpg', 'info3.jpg'
-            ];
-            
-            allSlides = [];
-            var checkCount = 0;
-            
-            possibleSlides.forEach(function(fileName) {
-                var xhr = new XMLHttpRequest();
-                xhr.open('HEAD', 'slides/' + fileName, true);
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === 4) {
-                        checkCount++;
-                        if (xhr.status === 200) {
+        // Slides automatisch laden
+        async function loadSlides() {
+            try {
+                const possibleSlides = [
+                    'slide1.jpg', 'slide2.jpg', 'slide3.jpg',
+                    'folie1.jpg', 'folie2.jpg', 'folie3.jpg',
+                    'info1.jpg', 'info2.jpg', 'info3.jpg'
+                ];
+                
+                allSlides = [];
+                
+                for (const fileName of possibleSlides) {
+                    try {
+                        const response = await fetch('slides/' + fileName, { method: 'HEAD' });
+                        if (response.ok) {
                             allSlides.push('slides/' + fileName);
                             console.log('✅ Slide gefunden: ' + fileName);
                         }
-                        
-                        if (checkCount === possibleSlides.length) {
-                            console.log('📸 Insgesamt ' + allSlides.length + ' Slides geladen');
-                        }
+                    } catch (e) {
+                        // Datei existiert nicht - stumm ignorieren
                     }
-                };
-                xhr.onerror = function() {
-                    checkCount++;
-                    if (checkCount === possibleSlides.length) {
-                        console.log('📸 Slide-Check abgeschlossen');
-                    }
-                };
-                xhr.send();
-            });
+                }
+                
+                console.log('📸 Insgesamt ' + allSlides.length + ' Slides geladen:', allSlides);
+                return allSlides.length > 0;
+            } catch (error) {
+                console.error('Fehler beim Laden der Slides:', error);
+                return false;
+            }
         }
 
-        function fetchCalendarFile(url) {
-            return new Promise(function(resolve, reject) {
-                console.log('🌐 Lade Kalender:', url);
-                var xhr = new XMLHttpRequest();
-                xhr.open('GET', url, true);
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === 4) {
-                        if (xhr.status === 200) {
-                            console.log('✅ Kalender geladen:', url);
-                            resolve(xhr.responseText);
-                        } else {
-                            console.warn('❌ Kalender nicht gefunden:', url, '- Status:', xhr.status);
-                            resolve('');
-                        }
-                    }
-                };
-                xhr.onerror = function() {
-                    console.error('❌ Netzwerkfehler beim Laden:', url);
-                    resolve('');
-                };
-                xhr.send();
-            });
-        }
-
+        // Progress Bar animieren
         function animateProgressBar(duration) {
-            var progressBar = document.getElementById('progress-bar');
-            if (!progressBar) return;
+            const progressBar = document.getElementById('progress-bar');
             
             progressBar.style.transition = 'none';
             progressBar.style.width = '0%';
             
-            setTimeout(function() {
+            setTimeout(() => {
                 progressBar.style.transition = 'width ' + duration + 'ms linear';
                 progressBar.style.width = '100%';
             }, 100);
         }
 
+        // Nächsten Content anzeigen
         function showNextContent() {
-            var card1 = document.getElementById('event-card-1');
-            if (!card1) return;
+            const card1 = document.getElementById('event-card-1');
             
-            card1.className = card1.className.replace('active', '').trim();
+            card1.classList.remove('active');
 
-            setTimeout(function() {
+            setTimeout(() => {
                 if (showSlides && allSlides.length > 0 && allEvents.length > 0) {
                     displaySlide(allSlides[currentSlideIndex]);
                     currentSlideIndex = (currentSlideIndex + 1) % allSlides.length;
                     showSlides = false;
                     updateEventCounter('slide');
                     
-                    setTimeout(function() {
+                    setTimeout(() => {
                         animateProgressBar(SLIDE_TIME);
                     }, 200);
                     
@@ -699,7 +488,7 @@
                 } else if (allEvents.length > 0) {
                     console.log('Zeige Event. CurrentIndex:', currentEventIndex, 'Total Events:', allEvents.length);
                     
-                    var event = allEvents[currentEventIndex];
+                    const event = allEvents[currentEventIndex];
                     console.log('Event:', event ? event.summary : 'null');
                     
                     if (event) {
@@ -714,7 +503,7 @@
                     showSlides = allSlides.length > 0;
                     updateEventCounter('event');
                     
-                    setTimeout(function() {
+                    setTimeout(() => {
                         animateProgressBar(ROTATION_TIME);
                     }, 200);
                     
@@ -727,7 +516,7 @@
                         currentSlideIndex = (currentSlideIndex + 1) % allSlides.length;
                         updateEventCounter('slide');
                         
-                        setTimeout(function() {
+                        setTimeout(() => {
                             animateProgressBar(SLIDE_TIME);
                         }, 200);
                         
@@ -738,14 +527,14 @@
             }, 400);
         }
 
+        // Event-Zähler aktualisieren
         function updateEventCounter(type) {
-            var counter = document.getElementById('event-counter');
-            if (!counter) return;
+            const counter = document.getElementById('event-counter');
             
             if (type === 'slide') {
                 counter.textContent = 'Info-Folie ' + (currentSlideIndex === 0 ? allSlides.length : currentSlideIndex) + ' von ' + allSlides.length;
             } else if (allEvents.length > 0) {
-                var displayIndex = currentEventIndex === 0 ? allEvents.length : currentEventIndex;
+                const displayIndex = currentEventIndex === 0 ? allEvents.length : currentEventIndex;
                 counter.textContent = 'Termin ' + displayIndex + ' von ' + allEvents.length;
                 console.log('Counter: Event', displayIndex, 'von', allEvents.length, 'Index:', currentEventIndex);
             } else {
@@ -753,78 +542,69 @@
             }
         }
 
+        // Rotation starten
         function startRotation() {
             if (allEvents.length === 0 && allSlides.length === 0) return;
             
             clearInterval(rotationInterval);
             
             if (allEvents.length > 0) {
-                console.log('🎯 Starte Event-Rotation mit', allEvents.length, 'Events');
                 animateProgressBar(ROTATION_TIME);
                 rotationInterval = setInterval(showNextContent, ROTATION_TIME);
-            } else if (allSlides.length > 0) {
-                console.log('📸 Starte Slide-Rotation mit', allSlides.length, 'Slides');
+            } else {
                 animateProgressBar(SLIDE_TIME);
                 rotationInterval = setInterval(showNextContent, SLIDE_TIME);
             }
         }
 
-        function loadCalendar() {
-            var card1 = document.getElementById('event-card-1');
-            if (!card1) return;
+        // Kalender und Slides laden
+        async function loadCalendar() {
+            const card1 = document.getElementById('event-card-1');
             
-            console.log('📅 Starte Kalender-Laden (ohne externe Bibliotheken)');
-            loadSlides();
-            
-            var fetchPromises = [];
-            calendars.forEach(function(cal) {
-                fetchPromises.push(fetchCalendarFile(cal.file));
-            });
-            
-            Promise.all(fetchPromises).then(function(icalDatas) {
-                console.log('📋 Alle iCal-Daten erhalten');
+            try {
+                console.log('📅 Lade Slides...');
+                await loadSlides();
+                
+                console.log('📅 Lade Kalender...');
+                const responses = await Promise.all(calendars.map(cal => 
+                    fetch(cal.file, { cache: 'no-store' }).catch(() => ({ ok: false }))
+                ));
+                
+                const textPromises = responses.map(res => res.ok ? res.text() : '');
+                const icalDatas = await Promise.all(textPromises);
                 
                 allEvents = [];
-                
-                icalDatas.forEach(function(data, index) {
-                    var cal = calendars[index];
-                    console.log('🔄 Verarbeite Kalender:', cal.name, '- Hat Daten:', !!data);
-                    
-                    if (data && data.trim() !== '') {
-                        var events = processIcalData(data, cal.color, cal.category, cal.name);
+                icalDatas.forEach((data, index) => {
+                    if (data) {
+                        const cal = calendars[index];
+                        const events = processIcalData(data, cal.color, cal.category, cal.name);
                         allEvents = allEvents.concat(events);
-                    } else {
-                        console.warn('⚠️ Keine Daten für Kalender:', cal.name);
                     }
                 });
 
-                allEvents.sort(function(a, b) {
-                    return a.startDate.getTime() - b.startDate.getTime();
+                allEvents.sort((a, b) => a.startDate.toJSDate() - b.startDate.toJSDate());
+                
+                console.log('📊 Alle Events sortiert. Anzahl:', allEvents.length);
+                allEvents.forEach((event, index) => {
+                    const item = event.item || event;
+                    console.log('Event ' + (index + 1) + ':', item.summary);
                 });
-                
-                console.log('📊 Finale Event-Liste:', allEvents.length, 'Events');
-                
-                if (allEvents.length > 0) {
-                    console.log('🎉 EVENTS GEFUNDEN! Anzahl:', allEvents.length);
-                    allEvents.forEach(function(event, index) {
-                        console.log('Event ' + (index + 1) + ':', event.summary, '- Datum:', event.startDate);
-                    });
-                }
 
                 if (allEvents.length > 0 || allSlides.length > 0) {
                     currentEventIndex = 0;
                     currentSlideIndex = 0;
                     
                     if (allEvents.length > 0) {
-                        console.log('✅ Zeige ersten Termin');
+                        console.log('Zeige ersten Termin. Gesamte Events:', allEvents.length);
                         
-                        displayEvent(allEvents[0], 'event-card-1');
-                        currentEventIndex = 1;
+                        const event1 = allEvents[0];
+                        displayEvent(event1, 'event-card-1');
+                        
+                        currentEventIndex = 1; // Nächster Event beim nächsten Durchlauf
                         showSlides = allSlides.length > 0;
                         updateEventCounter('event');
                         
                     } else if (allSlides.length > 0) {
-                        console.log('📸 Keine Events - zeige erste Slide');
                         displaySlide(allSlides[0]);
                         updateEventCounter('slide');
                     }
@@ -832,37 +612,23 @@
                     startRotation();
                 } else {
                     card1.innerHTML = '<div class="no-events">📅<br><br>Keine Termine und keine Info-Folien gefunden</div>';
-                    if (card1.className.indexOf('active') === -1) {
-                        card1.className += ' active';
-                    }
+                    card1.classList.add('active');
                     updateEventCounter('event');
                 }
-            }).catch(function(error) {
+            } catch (error) {
                 console.error('Fehler beim Laden:', error);
                 card1.innerHTML = '<div class="no-events">❌<br><br>Fehler beim Laden der Inhalte</div>';
-                if (card1.className.indexOf('active') === -1) {
-                    card1.className += ' active';
-                }
-            });
-        }
-
-        function init() {
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', function() {
-                    updateClock();
-                    setInterval(updateClock, 1000);
-                    loadCalendar();
-                    setInterval(loadCalendar, 5 * 60 * 1000);
-                });
-            } else {
-                updateClock();
-                setInterval(updateClock, 1000);
-                loadCalendar();
-                setInterval(loadCalendar, 5 * 60 * 1000);
+                card1.classList.add('active');
             }
         }
 
-        init();
+        // Initialisierung
+        updateClock();
+        setInterval(updateClock, 1000);
+        loadCalendar();
+
+        // Alle 5 Minuten neu laden
+        setInterval(loadCalendar, 5 * 60 * 1000);
     </script>
 </body>
 </html>
