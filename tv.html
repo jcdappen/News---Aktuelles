@@ -47,196 +47,141 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 30px;
             position: relative;
             overflow: hidden;
-            flex-direction: column; /* Erlaubt zwei Events untereinander */
-            gap: 20px; /* Abstand zwischen den Events */
         }
 
         .events-container {
             width: 100%;
-            max-width: 1200px; /* Breiter für die Anzeige */
+            max-width: 1200px;
             height: 100%;
-            display: flex;
-            flex-direction: column; /* Für zwei Events untereinander */
-            justify-content: center;
-            align-items: center;
-            gap: 20px; /* Abstand zwischen den Event-Items */
-        }
-
-        .event-card-wrapper { /* Wrapper für ein Paar von Event-Items */
-            width: 100%;
             display: flex;
             flex-direction: column;
             gap: 20px;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            align-items: center;
+            justify-content: center;
         }
 
-        .event-card-wrapper.active {
+        .event-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            width: 100%;
+            max-width: 1000px;
+            padding: 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease;
+            color: #333;
+            overflow: hidden;
+        }
+
+        .event-card.active {
             opacity: 1;
             transform: translateY(0);
         }
 
-        .event-item {
-            background: rgba(255, 255, 255, 0.1); /* Leichter Hintergrund für bessere Lesbarkeit */
-            backdrop-filter: blur(10px);
-            border-radius: 12px;
-            padding: 30px;
-            display: flex;
-            align-items: flex-start; /* Datum und Details oben ausrichten */
+        .event-card.slide-mode {
+            background: transparent;
+            border: none;
+            padding: 0;
+            box-shadow: none;
             width: 100%;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-            position: relative;
+            height: 100%;
+            max-width: none;
         }
 
-        .event-date-box {
-            flex-shrink: 0;
-            width: 120px; /* Feste Breite für das Datum */
-            text-align: center;
-            padding-right: 30px;
-            border-right: 2px solid #5895E2; /* Blaue Linie wie im Beispiel */
-            position: relative;
-            margin-right: 30px;
+        /* Horizontales Layout wie im Foto */
+        .event-content {
+            display: flex;
+            align-items: stretch;
+            min-height: 120px;
         }
 
-        .event-date-box::before { /* Vertikale Linie links vom Datum */
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 6px; /* Dicke der Linie */
-            background-color: #5895E2; /* Farbe der Linie */
-            border-top-left-radius: 6px;
-            border-bottom-left-radius: 6px;
+        .event-date-section {
+            background: #f8f9fa;
+            border-right: 3px solid #28a745;
+            padding: 20px;
+            min-width: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
-
-        .event-day-number {
-            font-size: 64px;
+        .event-date-day {
+            font-size: 36px;
             font-weight: 900;
-            color: #5895E2; /* Blau für den Tag */
+            color: #333;
             line-height: 1;
         }
 
-        .event-month-short {
-            font-size: 20px;
+        .event-date-month {
+            font-size: 14px;
             font-weight: 600;
+            color: #666;
             text-transform: uppercase;
-            color: #ffffff;
-            opacity: 0.8;
-            margin-top: 5px;
+            margin-top: 2px;
         }
 
-        .event-details {
-            flex-grow: 1;
-            padding-left: 0; /* Abstand wird durch margin-right in date-box gegeben */
+        .event-info-section {
+            flex: 1;
+            padding: 20px 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .event-title {
-            font-size: 32px;
+            font-size: 24px;
             font-weight: 700;
-            color: #fff;
-            margin-bottom: 20px;
+            color: #333;
+            margin-bottom: 12px;
             line-height: 1.2;
         }
 
-        .event-detail-row {
+        .event-time {
             display: flex;
             align-items: center;
-            gap: 15px;
-            font-size: 22px;
-            margin-bottom: 12px;
-            color: #e0e0e0;
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 8px;
         }
 
-        .event-detail-row:last-child {
-            margin-bottom: 0;
+        .event-time .icon {
+            width: 18px;
+            height: 18px;
+            margin-right: 8px;
+            fill: #666;
         }
 
-        .event-detail-row svg {
-            flex-shrink: 0;
-            width: 28px;
-            height: 28px;
-            fill: #a0a0a0; /* Icon-Farbe */
+        .event-location {
+            display: flex;
+            align-items: center;
+            color: #666;
+            font-size: 16px;
         }
 
-        /* Override for Slide mode */
-        .slide-mode .event-item {
-            background: transparent;
-            backdrop-filter: none;
-            border-radius: 0;
-            padding: 0;
-            box-shadow: none;
-            display: block;
-            text-align: center;
-            height: 100%;
-        }
-        .slide-mode .event-date-box, .slide-mode .event-details {
-            display: none;
+        .event-location .icon {
+            width: 18px;
+            height: 18px;
+            margin-right: 8px;
+            fill: #666;
         }
 
         .empty-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 60px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 40px;
             text-align: center;
-            border: 2px dashed rgba(255, 255, 255, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0.6;
-            width: 100%;
-            height: 100%;
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.7);
         }
 
         .empty-message {
-            font-size: 32px;
-            color: rgba(255, 255, 255, 0.5);
+            font-size: 24px;
             font-style: italic;
-        }
-
-        .icon {
-            width: 32px;
-            height: 32px;
-            fill: currentColor;
-        }
-
-        .progress-bar {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            height: 6px;
-            background: #5895E2; /* Blau für Fortschrittsbalken */
-            border-radius: 3px;
-            transition: width linear;
-            box-shadow: 0 2px 10px rgba(88, 149, 226, 0.5);
-        }
-
-        .tv-footer {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 12px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 16px;
-            opacity: 0.8;
-        }
-
-        .no-events, .loading {
-            text-align: center;
-            font-size: 48px;
-            opacity: 0.7;
-            color: #f4dc8f;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .slide-container {
@@ -246,7 +191,6 @@
             width: 100%;
             height: 100%;
             padding: 0;
-            box-sizing: border-box;
         }
 
         .slide-image {
@@ -259,18 +203,60 @@
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
         }
 
-        /* Responsive für kleinere TV-Displays */
+        .progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 6px;
+            background: #edc544;
+            border-radius: 3px;
+            transition: width linear;
+            box-shadow: 0 2px 10px rgba(237, 197, 68, 0.5);
+        }
+
+        .tv-footer {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 12px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+            opacity: 0.8;
+        }
+
+        .no-events {
+            text-align: center;
+            font-size: 36px;
+            opacity: 0.7;
+            color: #f4dc8f;
+        }
+
+        .loading {
+            text-align: center;
+            font-size: 36px;
+            opacity: 0.7;
+            color: #f4dc8f;
+        }
+
+        /* Responsive */
         @media (max-width: 1366px) {
             .church-title { font-size: 28px; }
             .current-time { font-size: 20px; }
-            .event-day-number { font-size: 54px; }
-            .event-month-short { font-size: 18px; }
-            .event-title { font-size: 28px; margin-bottom: 15px; }
-            .event-detail-row { font-size: 20px; margin-bottom: 10px; }
-            .event-detail-row svg { width: 24px; height: 24px; }
-            .event-item { padding: 25px; }
-            .event-date-box { width: 100px; padding-right: 25px; margin-right: 25px; }
-            .no-events, .loading { font-size: 36px; }
+            .event-date-day { font-size: 28px; }
+            .event-title { font-size: 20px; }
+            .event-time, .event-location { font-size: 14px; }
+            .event-content { min-height: 100px; }
+            .event-date-section { min-width: 100px; padding: 16px; }
+            .event-info-section { padding: 16px 20px; }
+        }
+
+        @media (min-width: 1920px) {
+            .church-title { font-size: 42px; }
+            .current-time { font-size: 28px; }
+            .event-date-day { font-size: 44px; }
+            .event-title { font-size: 28px; }
+            .event-time, .event-location { font-size: 18px; }
+            .event-content { min-height: 140px; }
         }
     </style>
 </head>
@@ -284,9 +270,7 @@
 
     <div class="tv-content">
         <div class="events-container" id="events-container">
-            <div class="event-card-wrapper" id="event-card-wrapper-1">
-                <div class="loading">Lade Termine...</div>
-            </div>
+            <div class="loading">Lade Termine...</div>
         </div>
         <div class="progress-bar" id="progress-bar"></div>
     </div>
@@ -299,14 +283,14 @@
     <script src="https://cdn.jsdelivr.net/npm/ical.js@1.5.0/build/ical.min.js"></script>
     <script>
         const calendars = [
-            { file: 'gottesdienst.ics', color: '#f39c12', category: 'gottesdienst', name: 'Gottesdienst' },
-            { file: 'kinder.ics', color: '#3498db', category: 'kinder', name: 'Kinder' },
-            { file: 'senioren.ics', color: '#9b59b6', category: 'senioren', name: 'Senioren' },
-            { file: 'jugend.ics', color: '#e74c3c', category: 'jugend', name: 'Jugend' },
-            { file: 'sonstige.ics', color: '#27ae60', category: 'sonstige', name: 'Sonstige' }
+            { file: 'gottesdienst.ics', color: '#28a745', category: 'gottesdienst', name: 'Gottesdienst' },
+            { file: 'kinder.ics', color: '#007bff', category: 'kinder', name: 'Kinder' },
+            { file: 'senioren.ics', color: '#6f42c1', category: 'senioren', name: 'Senioren' },
+            { file: 'jugend.ics', color: '#dc3545', category: 'jugend', name: 'Jugend' },
+            { file: 'sonstige.ics', color: '#28a745', category: 'sonstige', name: 'Sonstige' }
         ];
 
-        let currentEventIndex = 0; // Index für das erste Event des Paares
+        let currentPage = 0;
         let currentSlideIndex = 0;
         let allEvents = [];
         let allSlides = [];
@@ -314,9 +298,8 @@
         let showSlides = true;
         const ROTATION_TIME = 15000;
         const SLIDE_TIME = 10000;
-        const EVENTS_PER_PAGE = 2; // Anzahl der Termine pro Seite
+        const EVENTS_PER_PAGE = 3;
 
-        // Uhrzeit aktualisieren
         function updateClock() {
             const now = new Date();
             const timeString = now.toLocaleString('de-DE', {
@@ -330,12 +313,10 @@
             document.getElementById('current-time').textContent = timeString;
         }
 
-        // Events verarbeiten
         const processIcalData = (icalData, color, category, name) => {
             const now = new Date();
             const twoWeeksFromNow = new Date();
             twoWeeksFromNow.setDate(now.getDate() + 14);
-            twoWeeksFromNow.setHours(23, 59, 59, 999); // Bis Ende des Tages in 2 Wochen
 
             const events = [];
             try {
@@ -345,54 +326,25 @@
                 
                 vevents.forEach(vevent => {
                     const event = new ICAL.Event(vevent);
-                    // Standardmäßig auf 00:00:00 setzen, wenn es ein ganztägiger Event ist,
-                    // damit der Vergleich `eventStart >= now` für heutige ganztägige Events funktioniert
-                    const eventStartRaw = event.startDate.toJSDate();
-                    const eventEndRaw = event.endDate.toJSDate();
-
-                    const addEvent = (e, originalEvent) => {
-                        const start = e.startDate.toJSDate();
-                        const end = e.endDate.toJSDate();
-
-                        // Für ganztägige Events: Überprüfen, ob der Tag im Bereich liegt
-                        // Für zeitgebundene Events: Überprüfen, ob die Startzeit im Bereich liegt
-                        const isAllDay = e.startDate.isDate; // Prüft, ob nur Datum, nicht Datum und Zeit
-                        
-                        let relevantStart = isAllDay ? new Date(start.getFullYear(), start.getMonth(), start.getDate()) : start;
-                        
-                        if (relevantStart >= now && relevantStart <= twoWeeksFromNow) {
-                            // Kopiere den Event und füge zusätzliche Eigenschaften hinzu
-                            const eventCopy = { ...originalEvent,
-                                startDate: e.startDate,
-                                endDate: e.endDate,
-                                summary: originalEvent.summary,
-                                location: originalEvent.location,
-                                description: originalEvent.description,
-                                color: color,
-                                category: category,
-                                categoryName: name
-                            };
-                            events.push(eventCopy);
+                    const addEvent = (e) => {
+                        const eventStart = e.startDate.toJSDate();
+                        if (eventStart >= now && eventStart <= twoWeeksFromNow) {
+                            e.color = color;
+                            e.category = category;
+                            e.categoryName = name;
+                            events.push(e);
                         }
                     };
                     
                     if (event.isRecurring()) {
                         const iterator = event.iterator();
                         let next;
-                        // Loop durch die Wiederholungen, bis sie außerhalb des Zwei-Wochen-Fensters liegen
-                        while ((next = iterator.next())) {
+                        while ((next = iterator.next()) && next.toJSDate() <= twoWeeksFromNow) {
                             const occ = event.getOccurrenceDetails(next);
-                            const occStart = occ.startDate.toJSDate();
-                            const relevantOccStart = occ.startDate.isDate ? new Date(occStart.getFullYear(), occStart.getMonth(), occStart.getDate()) : occStart;
-
-                            if (relevantOccStart > twoWeeksFromNow) {
-                                break; // Wiederholungen sind zu weit in der Zukunft
-                            }
-                            addEvent(occ, event); // Pass original event to get summary, location, description
+                            addEvent(occ);
                         }
                     } else {
-                        // Einmaliges Event
-                        addEvent(event, event);
+                        addEvent(event);
                     }
                 });
             } catch (e) {
@@ -401,12 +353,274 @@
             return events;
         };
 
-        // HTML für ein einzelnes Event generieren
-        function generateEventHtml(event) {
-            if (!event) return '';
+        function displayEventPage(pageEvents) {
+            const container = document.getElementById('events-container');
+            container.innerHTML = '';
 
-            const startDate = event.startDate.toJSDate();
-            const endDate = event.endDate.toJSDate();
+            pageEvents.forEach(event => {
+                const item = event.item || event;
+                const startDate = event.startDate.toJSDate();
+                const endDate = event.endDate.toJSDate();
 
-            const dayNumber = startDate.getDate();
-            const monthShort = startDate.toLocaleDateString('de-
+                const dayNumber = startDate.getDate();
+                const monthName = startDate.toLocaleDateString('de-DE', { month: 'short' }).toUpperCase();
+
+                let timeHTML = '';
+                if (!event.startDate.isDate) {
+                    const startTime = startDate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+                    const endTime = endDate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+                    timeHTML = `
+                        <div class="event-time">
+                            <svg class="icon" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                            </svg>
+                            ${startTime} - ${endTime} Uhr
+                        </div>
+                    `;
+                }
+
+                let locationHTML = '';
+                if (item.location) {
+                    locationHTML = `
+                        <div class="event-location">
+                            <svg class="icon" viewBox="0 0 24 24">
+                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5-2.5z"/>
+                            </svg>
+                            ${item.location}
+                        </div>
+                    `;
+                }
+
+                const eventCard = document.createElement('div');
+                eventCard.className = 'event-card';
+                eventCard.innerHTML = `
+                    <div class="event-content">
+                        <div class="event-date-section" style="border-right-color: ${event.color}">
+                            <div class="event-date-day">${dayNumber}</div>
+                            <div class="event-date-month">${monthName}</div>
+                        </div>
+                        <div class="event-info-section">
+                            <div class="event-title">${item.summary}</div>
+                            ${timeHTML}
+                            ${locationHTML}
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(eventCard);
+
+                setTimeout(() => {
+                    eventCard.classList.add('active');
+                }, 100 * container.children.length);
+            });
+        }
+
+        function displayEmptyPage() {
+            const container = document.getElementById('events-container');
+            container.innerHTML = '<div class="empty-card"><div class="empty-message">Keine anstehenden Termine</div></div>';
+        }
+
+        function displaySlide(slideUrl) {
+            const container = document.getElementById('events-container');
+            container.innerHTML = `
+                <div class="event-card slide-mode active">
+                    <div class="slide-container">
+                        <img src="${slideUrl}" alt="Info-Slide" class="slide-image" />
+                    </div>
+                </div>
+            `;
+        }
+
+        async function loadSlides() {
+            try {
+                const possibleSlides = [
+                    'slide1.jpg', 'slide2.jpg', 'slide3.jpg',
+                    'folie1.jpg', 'folie2.jpg', 'folie3.jpg',
+                    'info1.jpg', 'info2.jpg', 'info3.jpg'
+                ];
+                
+                allSlides = [];
+                
+                for (const fileName of possibleSlides) {
+                    try {
+                        const response = await fetch('slides/' + fileName, { method: 'HEAD' });
+                        if (response.ok) {
+                            allSlides.push('slides/' + fileName);
+                            console.log('✅ Slide gefunden: ' + fileName);
+                        }
+                    } catch (e) {
+                        // Datei existiert nicht - stumm ignorieren
+                    }
+                }
+                
+                console.log('📸 Insgesamt ' + allSlides.length + ' Slides geladen:', allSlides);
+                return allSlides.length > 0;
+            } catch (error) {
+                console.error('Fehler beim Laden der Slides:', error);
+                return false;
+            }
+        }
+
+        function animateProgressBar(duration) {
+            const progressBar = document.getElementById('progress-bar');
+            
+            progressBar.style.transition = 'none';
+            progressBar.style.width = '0%';
+            
+            setTimeout(() => {
+                progressBar.style.transition = 'width ' + duration + 'ms linear';
+                progressBar.style.width = '100%';
+            }, 100);
+        }
+
+        function showNextContent() {
+            // Fade out current content
+            const container = document.getElementById('events-container');
+            const cards = container.querySelectorAll('.event-card');
+            cards.forEach(card => card.classList.remove('active'));
+
+            setTimeout(() => {
+                if (showSlides && allSlides.length > 0 && allEvents.length > 0) {
+                    displaySlide(allSlides[currentSlideIndex]);
+                    currentSlideIndex = (currentSlideIndex + 1) % allSlides.length;
+                    showSlides = false;
+                    updateEventCounter('slide');
+                    
+                    setTimeout(() => {
+                        animateProgressBar(SLIDE_TIME);
+                    }, 200);
+                    
+                    clearInterval(rotationInterval);
+                    rotationInterval = setInterval(showNextContent, SLIDE_TIME);
+                    
+                } else if (allEvents.length > 0) {
+                    const totalPages = Math.ceil(allEvents.length / EVENTS_PER_PAGE);
+                    const startIndex = currentPage * EVENTS_PER_PAGE;
+                    const endIndex = Math.min(startIndex + EVENTS_PER_PAGE, allEvents.length);
+                    const pageEvents = allEvents.slice(startIndex, endIndex);
+                    
+                    displayEventPage(pageEvents);
+                    
+                    currentPage = (currentPage + 1) % totalPages;
+                    showSlides = allSlides.length > 0;
+                    updateEventCounter('event');
+                    
+                    setTimeout(() => {
+                        animateProgressBar(ROTATION_TIME);
+                    }, 200);
+                    
+                    clearInterval(rotationInterval);
+                    rotationInterval = setInterval(showNextContent, ROTATION_TIME);
+                    
+                } else {
+                    if (allSlides.length > 0) {
+                        displaySlide(allSlides[currentSlideIndex]);
+                        currentSlideIndex = (currentSlideIndex + 1) % allSlides.length;
+                        updateEventCounter('slide');
+                        
+                        setTimeout(() => {
+                            animateProgressBar(SLIDE_TIME);
+                        }, 200);
+                        
+                        clearInterval(rotationInterval);
+                        rotationInterval = setInterval(showNextContent, SLIDE_TIME);
+                    } else {
+                        displayEmptyPage();
+                    }
+                }
+            }, 400);
+        }
+
+        function updateEventCounter(type) {
+            const counter = document.getElementById('event-counter');
+            
+            if (type === 'slide') {
+                counter.textContent = 'Info-Folie ' + (currentSlideIndex === 0 ? allSlides.length : currentSlideIndex) + ' von ' + allSlides.length;
+            } else if (allEvents.length > 0) {
+                const totalPages = Math.ceil(allEvents.length / EVENTS_PER_PAGE);
+                const displayPage = currentPage === 0 ? totalPages : currentPage;
+                counter.textContent = 'Seite ' + displayPage + ' von ' + totalPages + ' (' + allEvents.length + ' Termine)';
+            } else {
+                counter.textContent = 'Keine anstehenden Termine';
+            }
+        }
+
+        function startRotation() {
+            if (allEvents.length === 0 && allSlides.length === 0) return;
+            
+            clearInterval(rotationInterval);
+            
+            if (allEvents.length > 0) {
+                animateProgressBar(ROTATION_TIME);
+                rotationInterval = setInterval(showNextContent, ROTATION_TIME);
+            } else {
+                animateProgressBar(SLIDE_TIME);
+                rotationInterval = setInterval(showNextContent, SLIDE_TIME);
+            }
+        }
+
+        async function loadCalendar() {
+            try {
+                console.log('📅 Lade Slides...');
+                await loadSlides();
+                
+                console.log('📅 Lade Kalender...');
+                const responses = await Promise.all(calendars.map(cal => 
+                    fetch(cal.file, { cache: 'no-store' }).catch(() => ({ ok: false }))
+                ));
+                
+                const textPromises = responses.map(res => res.ok ? res.text() : '');
+                const icalDatas = await Promise.all(textPromises);
+                
+                allEvents = [];
+                icalDatas.forEach((data, index) => {
+                    if (data) {
+                        const cal = calendars[index];
+                        const events = processIcalData(data, cal.color, cal.category, cal.name);
+                        allEvents = allEvents.concat(events);
+                    }
+                });
+
+                allEvents.sort((a, b) => a.startDate.toJSDate() - b.startDate.toJSDate());
+                
+                console.log('📊 Alle Events sortiert. Anzahl:', allEvents.length);
+
+                if (allEvents.length > 0 || allSlides.length > 0) {
+                    currentPage = 0;
+                    currentSlideIndex = 0;
+                    
+                    if (allEvents.length > 0) {
+                        const pageEvents = allEvents.slice(0, EVENTS_PER_PAGE);
+                        displayEventPage(pageEvents);
+                        
+                        currentPage = 1;
+                        showSlides = allSlides.length > 0;
+                        updateEventCounter('event');
+                        
+                    } else if (allSlides.length > 0) {
+                        displaySlide(allSlides[0]);
+                        updateEventCounter('slide');
+                    }
+                    
+                    startRotation();
+                } else {
+                    displayEmptyPage();
+                    updateEventCounter('event');
+                }
+            } catch (error) {
+                console.error('Fehler beim Laden:', error);
+                const container = document.getElementById('events-container');
+                container.innerHTML = '<div class="no-events">❌<br><br>Fehler beim Laden der Inhalte</div>';
+            }
+        }
+
+        // Initialisierung
+        updateClock();
+        setInterval(updateClock, 1000);
+        loadCalendar();
+
+        // Alle 5 Minuten neu laden
+        setInterval(loadCalendar, 5 * 60 * 1000);
+    </script>
+</body>
+</html>
