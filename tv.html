@@ -824,6 +824,19 @@
             loadSlides().then(function() {
                 console.log('📅 Lade Kalender...');
                 
+                // Debug: Prüfe ob ICAL.js geladen ist
+                if (typeof ICAL === 'undefined') {
+                    console.error('❌ ICAL.js ist nicht geladen!');
+                    card1.innerHTML = '<div class="no-events">❌<br><br>ICAL.js Bibliothek nicht verfügbar</div>';
+                    if (card1.className.indexOf('active') === -1) {
+                        card1.className += ' active';
+                    }
+                    return;
+                }
+                
+                console.log('✅ ICAL.js ist verfügbar');
+                console.log('🔄 Lade', calendars.length, 'Kalender-Dateien...');
+                
                 var fetchPromises = [];
                 calendars.forEach(function(cal) {
                     fetchPromises.push(fetchCalendarFile(cal.file));
