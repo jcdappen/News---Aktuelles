@@ -12,20 +12,31 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            font-family: Arial, sans-serif; /* Silk-kompatible Schrift */
             background: linear-gradient(135deg, #4d4d4d 0%, #999999 100%);
             color: white;
             height: 100vh;
             overflow: hidden;
+            display: -webkit-box; /* Silk Fallback */
+            display: -webkit-flex; /* Silk Fallback */
             display: flex;
+            -webkit-box-orient: vertical; /* Silk Fallback */
+            -webkit-box-direction: normal; /* Silk Fallback */
+            -webkit-flex-direction: column; /* Silk Fallback */
             flex-direction: column;
         }
 
         .tv-header {
             background: rgba(0, 0, 0, 0.3);
             padding: 16px 40px;
+            display: -webkit-box; /* Silk Fallback */
+            display: -webkit-flex; /* Silk Fallback */
             display: flex;
+            -webkit-box-pack: justify; /* Silk Fallback */
+            -webkit-justify-content: space-between; /* Silk Fallback */
             justify-content: space-between;
+            -webkit-box-align: center; /* Silk Fallback */
+            -webkit-align-items: center; /* Silk Fallback */
             align-items: center;
             border-bottom: 2px solid rgba(255, 255, 255, 0.2);
         }
@@ -43,9 +54,17 @@
         }
 
         .tv-content {
+            -webkit-box-flex: 1; /* Silk Fallback */
+            -webkit-flex: 1; /* Silk Fallback */
             flex: 1;
+            display: -webkit-box; /* Silk Fallback */
+            display: -webkit-flex; /* Silk Fallback */
             display: flex;
+            -webkit-box-align: center; /* Silk Fallback */
+            -webkit-align-items: center; /* Silk Fallback */
             align-items: center;
+            -webkit-box-pack: center; /* Silk Fallback */
+            -webkit-justify-content: center; /* Silk Fallback */
             justify-content: center;
             padding: 20px;
             position: relative;
@@ -54,48 +73,54 @@
 
         .events-container {
             width: 100%;
-            max-width: 1000px; /* Breiter für den einzelnen Termin */
+            max-width: 1000px;
             height: 70%;
+            display: -webkit-box; /* Silk Fallback */
+            display: -webkit-flex; /* Silk Fallback */
             display: flex;
+            -webkit-box-align: center; /* Silk Fallback */
+            -webkit-align-items: center; /* Silk Fallback */
             align-items: center;
+            -webkit-box-pack: center; /* Silk Fallback */
+            -webkit-justify-content: center; /* Silk Fallback */
             justify-content: center;
         }
 
         .event-card {
             background: rgba(255, 255, 255, 0.15);
-            -webkit-backdrop-filter: blur(20px);
-            backdrop-filter: blur(20px);
+            /* Kein backdrop-filter für Silk */
             border-radius: 20px;
-            padding: 60px; /* Mehr Padding für größeren Termin */
+            padding: 60px;
             text-align: center;
             border: 3px solid #bb2232;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
             opacity: 0;
-            -webkit-transform: translateY(30px);
+            -webkit-transform: translateY(30px); /* Silk Fallback */
             transform: translateY(30px);
-            -webkit-transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            display: -webkit-flex;
+            -webkit-transition: all 0.8s ease-in-out; /* Silk vereinfacht */
+            transition: all 0.8s ease-in-out;
+            display: -webkit-box; /* Silk Fallback */
+            display: -webkit-flex; /* Silk Fallback */
             display: flex;
-            -webkit-flex-direction: column;
+            -webkit-box-orient: vertical; /* Silk Fallback */
+            -webkit-box-direction: normal; /* Silk Fallback */
+            -webkit-flex-direction: column; /* Silk Fallback */
             flex-direction: column;
-            -webkit-justify-content: center;
+            -webkit-box-pack: center; /* Silk Fallback */
+            -webkit-justify-content: center; /* Silk Fallback */
             justify-content: center;
             width: 100%;
             max-height: 100%;
-            box-sizing: border-box;
         }
 
         .event-card.active {
             opacity: 1;
-            -webkit-transform: translateY(0);
+            -webkit-transform: translateY(0); /* Silk Fallback */
             transform: translateY(0);
         }
 
         .event-card.slide-mode {
             background: transparent;
-            -webkit-backdrop-filter: none;
-            backdrop-filter: none;
             border: none;
             padding: 0;
             box-shadow: none;
@@ -105,25 +130,30 @@
 
         .empty-card {
             background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 60px;
             text-align: center;
             border: 2px dashed rgba(255, 255, 255, 0.2);
+            display: -webkit-box; /* Silk Fallback */
+            display: -webkit-flex; /* Silk Fallback */
             display: flex;
+            -webkit-box-align: center; /* Silk Fallback */
+            -webkit-align-items: center; /* Silk Fallback */
             align-items: center;
+            -webkit-box-pack: center; /* Silk Fallback */
+            -webkit-justify-content: center; /* Silk Fallback */
             justify-content: center;
             opacity: 0.6;
         }
 
         .empty-message {
-            font-size: 32px; /* Größerer Text für den einzelnen Display */
+            font-size: 32px;
             color: rgba(255, 255, 255, 0.5);
             font-style: italic;
         }
 
         .event-date-big {
-            font-size: 80px; /* Noch größer für Single-Display */
+            font-size: 80px;
             font-weight: 900;
             margin-bottom: 25px;
             color: #edc544;
@@ -131,7 +161,7 @@
         }
 
         .event-weekday {
-            font-size: 28px; /* Größer */
+            font-size: 28px;
             font-weight: 600;
             margin-bottom: 40px;
             opacity: 0.9;
@@ -139,41 +169,65 @@
         }
 
         .event-title-big {
-            font-size: 36px; /* Größer */
+            font-size: 36px;
             font-weight: 700;
             margin-bottom: 30px;
             line-height: 1.2;
             color: #fff;
             min-height: 80px;
+            display: -webkit-box; /* Silk Fallback */
+            display: -webkit-flex; /* Silk Fallback */
             display: flex;
+            -webkit-box-align: center; /* Silk Fallback */
+            -webkit-align-items: center; /* Silk Fallback */
             align-items: center;
+            -webkit-box-pack: center; /* Silk Fallback */
+            -webkit-justify-content: center; /* Silk Fallback */
             justify-content: center;
         }
 
         .event-time-big {
-            font-size: 32px; /* Größer */
+            font-size: 32px;
             font-weight: 600;
             margin-bottom: 25px;
             color: #edc544;
+            display: -webkit-box; /* Silk Fallback */
+            display: -webkit-flex; /* Silk Fallback */
             display: flex;
+            -webkit-box-align: center; /* Silk Fallback */
+            -webkit-align-items: center; /* Silk Fallback */
             align-items: center;
+            -webkit-box-pack: center; /* Silk Fallback */
+            -webkit-justify-content: center; /* Silk Fallback */
             justify-content: center;
-            gap: 15px;
+        }
+
+        .event-time-big .icon {
+            margin-right: 15px;
         }
 
         .event-location-big {
-            font-size: 26px; /* Größer */
+            font-size: 26px;
             margin-bottom: 25px;
             opacity: 0.9;
+            display: -webkit-box; /* Silk Fallback */
+            display: -webkit-flex; /* Silk Fallback */
             display: flex;
+            -webkit-box-align: center; /* Silk Fallback */
+            -webkit-align-items: center; /* Silk Fallback */
             align-items: center;
+            -webkit-box-pack: center; /* Silk Fallback */
+            -webkit-justify-content: center; /* Silk Fallback */
             justify-content: center;
-            gap: 15px;
             color: #abd075;
         }
 
+        .event-location-big .icon {
+            margin-right: 15px;
+        }
+
         .event-description-big {
-            font-size: 22px; /* Größer */
+            font-size: 22px;
             line-height: 1.4;
             opacity: 0.8;
             max-width: 100%;
@@ -181,9 +235,12 @@
         }
 
         .icon {
-            width: 32px; /* Größere Icons */
+            width: 32px;
             height: 32px;
             fill: currentColor;
+            /* Inline-block für bessere Silk Unterstützung */
+            display: inline-block;
+            vertical-align: middle;
         }
 
         .progress-bar {
@@ -193,6 +250,7 @@
             height: 6px;
             background: #edc544;
             border-radius: 3px;
+            -webkit-transition: width linear; /* Silk Fallback */
             transition: width linear;
             box-shadow: 0 2px 10px rgba(237, 197, 68, 0.5);
         }
@@ -200,8 +258,14 @@
         .tv-footer {
             background: rgba(0, 0, 0, 0.3);
             padding: 12px 40px;
+            display: -webkit-box; /* Silk Fallback */
+            display: -webkit-flex; /* Silk Fallback */
             display: flex;
+            -webkit-box-pack: justify; /* Silk Fallback */
+            -webkit-justify-content: space-between; /* Silk Fallback */
             justify-content: space-between;
+            -webkit-box-align: center; /* Silk Fallback */
+            -webkit-align-items: center; /* Silk Fallback */
             align-items: center;
             font-size: 16px;
             opacity: 0.8;
@@ -209,14 +273,14 @@
 
         .no-events {
             text-align: center;
-            font-size: 48px; /* Größer für Single-Display */
+            font-size: 48px;
             opacity: 0.7;
             color: #f4dc8f;
         }
 
         .loading {
             text-align: center;
-            font-size: 48px; /* Größer für Single-Display */
+            font-size: 48px;
             opacity: 0.7;
             color: #f4dc8f;
         }
@@ -229,16 +293,18 @@
         .sonstige { background-color: #27ae60; }
 
         .slide-container {
-            display: -webkit-flex;
+            display: -webkit-box; /* Silk Fallback */
+            display: -webkit-flex; /* Silk Fallback */
             display: flex;
-            -webkit-align-items: center;
+            -webkit-box-align: center; /* Silk Fallback */
+            -webkit-align-items: center; /* Silk Fallback */
             align-items: center;
-            -webkit-justify-content: center;
+            -webkit-box-pack: center; /* Silk Fallback */
+            -webkit-justify-content: center; /* Silk Fallback */
             justify-content: center;
             width: 100%;
             height: 100%;
             padding: 0;
-            box-sizing: border-box;
         }
 
         .slide-image {
@@ -246,13 +312,13 @@
             max-height: 100%;
             width: auto;
             height: auto;
-            object-fit: contain;
+            /* object-fit kann in Silk problematisch sein */
             border-radius: 8px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
         }
 
-        /* Responsive für kleinere TV-Displays */
-        @media (max-width: 1366px) {
+        /* Responsive - vereinfacht für Silk */
+        @media screen and (max-width: 1366px) {
             .church-title { font-size: 28px; }
             .current-time { font-size: 20px; }
             .event-date-big { font-size: 64px; }
@@ -265,9 +331,36 @@
             .icon { width: 28px; height: 28px; }
             .no-events, .loading { font-size: 36px; }
         }
+
+        /* Fire TV spezifische Anpassungen */
+        @media screen and (min-width: 1920px) {
+            .church-title { font-size: 42px; }
+            .current-time { font-size: 28px; }
+            .event-date-big { font-size: 96px; }
+            .event-weekday { font-size: 32px; }
+            .event-title-big { font-size: 42px; }
+            .event-time-big { font-size: 36px; }
+            .event-location-big { font-size: 30px; }
+            .event-description-big { font-size: 26px; }
+        }
+
+        /* Silk Browser spezifische Fixes */
+        .silk-fix {
+            /* Verhindert Rendering-Probleme in Silk */
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            -webkit-perspective: 1000px;
+            perspective: 1000px;
+        }
+
+        /* Touch-optimiert für Fire TV Remote */
+        .focusable:focus {
+            outline: 3px solid #edc544;
+            outline-offset: 2px;
+        }
     </style>
 </head>
-<body>
+<body class="silk-fix">
     <div class="tv-header">
         <div class="church-title">
             Gemeindekalender
@@ -277,7 +370,7 @@
 
     <div class="tv-content">
         <div class="events-container" id="events-container">
-            <div class="event-card" id="event-card-1">
+            <div class="event-card silk-fix" id="event-card-1">
                 <div class="loading">Lade Termine...</div>
             </div>
         </div>
@@ -289,8 +382,105 @@
         <div>🏠 Gemeinde in der Konkordia</div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/ical.js@1.5.0/build/ical.min.js"></script>
     <script>
+        // Silk Browser Kompatibilität
+        (function() {
+            // Polyfill für ältere Silk Versionen
+            if (!Array.prototype.forEach) {
+                Array.prototype.forEach = function(callback, thisArg) {
+                    for (var i = 0; i < this.length; i++) {
+                        callback.call(thisArg, this[i], i, this);
+                    }
+                };
+            }
+
+            // Promise Polyfill für ältere Silk Versionen
+            if (typeof Promise === 'undefined') {
+                window.Promise = function(executor) {
+                    var self = this;
+                    this.state = 'pending';
+                    this.value = undefined;
+                    this.handlers = [];
+
+                    function resolve(result) {
+                        if (self.state === 'pending') {
+                            self.state = 'fulfilled';
+                            self.value = result;
+                            self.handlers.forEach(handle);
+                            self.handlers = null;
+                        }
+                    }
+
+                    function reject(error) {
+                        if (self.state === 'pending') {
+                            self.state = 'rejected';
+                            self.value = error;
+                            self.handlers.forEach(handle);
+                            self.handlers = null;
+                        }
+                    }
+
+                    function handle(handler) {
+                        if (self.state === 'pending') {
+                            self.handlers.push(handler);
+                        } else {
+                            if (self.state === 'fulfilled' && typeof handler.onFulfilled === 'function') {
+                                handler.onFulfilled(self.value);
+                            }
+                            if (self.state === 'rejected' && typeof handler.onRejected === 'function') {
+                                handler.onRejected(self.value);
+                            }
+                        }
+                    }
+
+                    this.then = function(onFulfilled, onRejected) {
+                        return new Promise(function(resolve, reject) {
+                            handle({
+                                onFulfilled: function(result) {
+                                    try {
+                                        resolve(onFulfilled ? onFulfilled(result) : result);
+                                    } catch (ex) {
+                                        reject(ex);
+                                    }
+                                },
+                                onRejected: function(error) {
+                                    try {
+                                        resolve(onRejected ? onRejected(error) : error);
+                                    } catch (ex) {
+                                        reject(ex);
+                                    }
+                                }
+                            });
+                        });
+                    };
+
+                    executor(resolve, reject);
+                };
+
+                Promise.all = function(promises) {
+                    return new Promise(function(resolve, reject) {
+                        var results = [];
+                        var completed = 0;
+                        
+                        if (promises.length === 0) {
+                            resolve(results);
+                            return;
+                        }
+                        
+                        promises.forEach(function(promise, index) {
+                            promise.then(function(value) {
+                                results[index] = value;
+                                completed++;
+                                if (completed === promises.length) {
+                                    resolve(results);
+                                }
+                            }).catch(reject);
+                        });
+                    });
+                };
+            }
+        })();
+
         const calendars = [
             { file: 'gottesdienst.ics', color: '#f39c12', category: 'gottesdienst', name: 'Gottesdienst' },
             { file: 'kinder.ics', color: '#3498db', category: 'kinder', name: 'Kinder' },
@@ -308,36 +498,48 @@
         const ROTATION_TIME = 15000;
         const SLIDE_TIME = 10000;
 
-        // Uhrzeit aktualisieren
+        // Silk-kompatible Uhrzeit-Aktualisierung
         function updateClock() {
-            const now = new Date();
-            const timeString = now.toLocaleString('de-DE', {
+            var now = new Date();
+            var options = {
                 weekday: 'long',
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric',
                 hour: '2-digit',
                 minute: '2-digit'
-            });
-            document.getElementById('current-time').textContent = timeString;
+            };
+            
+            // Fallback für ältere Silk Versionen
+            var timeString;
+            try {
+                timeString = now.toLocaleString('de-DE', options);
+            } catch (e) {
+                timeString = now.toLocaleDateString('de-DE') + ' ' + now.toLocaleTimeString('de-DE');
+            }
+            
+            var timeElement = document.getElementById('current-time');
+            if (timeElement) {
+                timeElement.textContent = timeString;
+            }
         }
 
-        // Events verarbeiten
-        const processIcalData = (icalData, color, category, name) => {
-            const now = new Date();
-            const twoWeeksFromNow = new Date();
+        // Silk-kompatible Event-Verarbeitung
+        const processIcalData = function(icalData, color, category, name) {
+            var now = new Date();
+            var twoWeeksFromNow = new Date();
             twoWeeksFromNow.setDate(now.getDate() + 14);
 
-            const events = [];
+            var events = [];
             try {
-                const jcalData = ICAL.parse(icalData);
-                const vcalendar = new ICAL.Component(jcalData);
-                const vevents = vcalendar.getAllSubcomponents('vevent');
+                var jcalData = ICAL.parse(icalData);
+                var vcalendar = new ICAL.Component(jcalData);
+                var vevents = vcalendar.getAllSubcomponents('vevent');
                 
-                vevents.forEach(vevent => {
-                    const event = new ICAL.Event(vevent);
-                    const addEvent = (e) => {
-                        const eventStart = e.startDate.toJSDate();
+                vevents.forEach(function(vevent) {
+                    var event = new ICAL.Event(vevent);
+                    var addEvent = function(e) {
+                        var eventStart = e.startDate.toJSDate();
                         if (eventStart >= now && eventStart <= twoWeeksFromNow) {
                             e.color = color;
                             e.category = category;
@@ -347,10 +549,10 @@
                     };
                     
                     if (event.isRecurring()) {
-                        const iterator = event.iterator();
-                        let next;
+                        var iterator = event.iterator();
+                        var next;
                         while ((next = iterator.next()) && next.toJSDate() <= twoWeeksFromNow) {
-                            const occ = event.getOccurrenceDetails(next);
+                            var occ = event.getOccurrenceDetails(next);
                             addEvent(occ);
                         }
                     } else {
@@ -363,103 +565,136 @@
             return events;
         };
 
-        // Event anzeigen
+        // Event anzeigen - Silk-kompatibel
         function displayEvent(event, cardId) {
-            const card = document.getElementById(cardId);
-            card.classList.remove('slide-mode');
+            var card = document.getElementById(cardId);
+            if (!card) return;
             
-            const item = event.item || event;
-            const startDate = event.startDate.toJSDate();
-            const endDate = event.endDate.toJSDate();
+            card.className = card.className.replace('slide-mode', '').trim();
+            
+            var item = event.item || event;
+            var startDate = event.startDate.toJSDate();
+            var endDate = event.endDate.toJSDate();
 
-            const dayName = startDate.toLocaleDateString('de-DE', { weekday: 'long' });
-            const dayNumber = startDate.getDate();
-            const monthYear = startDate.toLocaleDateString('de-DE', { month: 'long', year: 'numeric' });
+            var dayName = startDate.toLocaleDateString('de-DE', { weekday: 'long' });
+            var dayNumber = startDate.getDate();
+            var monthYear = startDate.toLocaleDateString('de-DE', { month: 'long', year: 'numeric' });
 
-            let timeHTML = '';
+            var timeHTML = '';
             if (!event.startDate.isDate) {
-                const startTime = startDate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
-                const endTime = endDate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+                var startTime = startDate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+                var endTime = endDate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
                 timeHTML = '<div class="event-time-big"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg><div>' + startTime + ' - ' + endTime + ' Uhr</div></div>';
             }
 
-            let locationHTML = '';
+            var locationHTML = '';
             if (item.location) {
                 locationHTML = '<div class="event-location-big"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5-2.5z"/></svg><div>' + item.location + '</div></div>';
             }
 
-            let descriptionHTML = '';
+            var descriptionHTML = '';
             if (item.description) {
-                const shortDescription = item.description.length > 150 
+                var shortDescription = item.description.length > 150 
                     ? item.description.substring(0, 150) + '...' 
                     : item.description;
                 descriptionHTML = '<div class="event-description-big">' + shortDescription + '</div>';
             }
 
-            const dateHTML = '<div class="event-date-big">' + dayNumber + '</div>';
-            const weekdayHTML = '<div class="event-weekday">' + dayName + ', ' + monthYear + '</div>';
-            const titleHTML = '<div class="event-title-big">' + item.summary + '</div>';
+            var dateHTML = '<div class="event-date-big">' + dayNumber + '</div>';
+            var weekdayHTML = '<div class="event-weekday">' + dayName + ', ' + monthYear + '</div>';
+            var titleHTML = '<div class="event-title-big">' + item.summary + '</div>';
 
             card.innerHTML = dateHTML + weekdayHTML + titleHTML + timeHTML + locationHTML + descriptionHTML;
-            card.classList.add('active');
+            
+            // Silk-kompatible Klassen-Manipulation
+            if (card.className.indexOf('active') === -1) {
+                card.className += ' active';
+            }
         }
 
         // Leere Karte anzeigen
         function displayEmptyCard(cardId) {
-            const card = document.getElementById(cardId);
-            card.classList.remove('slide-mode');
+            var card = document.getElementById(cardId);
+            if (!card) return;
+            
+            card.className = card.className.replace('slide-mode', '').trim();
             card.innerHTML = '<div class="empty-card"><div class="empty-message">Keine anstehenden Termine</div></div>';
-            card.classList.add('active');
+            
+            if (card.className.indexOf('active') === -1) {
+                card.className += ' active';
+            }
         }
 
         // Slide anzeigen
         function displaySlide(slideUrl) {
-            const card1 = document.getElementById('event-card-1');
+            var card1 = document.getElementById('event-card-1');
+            if (!card1) return;
             
-            card1.classList.add('slide-mode');
+            if (card1.className.indexOf('slide-mode') === -1) {
+                card1.className += ' slide-mode';
+            }
+            
             card1.innerHTML = '<div class="slide-container"><img src="' + slideUrl + '" alt="Info-Slide" class="slide-image" /></div>';
-            card1.classList.add('active');
+            
+            if (card1.className.indexOf('active') === -1) {
+                card1.className += ' active';
+            }
         }
 
-        // Slides automatisch laden
-        async function loadSlides() {
-            try {
-                const possibleSlides = [
-                    'slide1.jpg', 'slide2.jpg', 'slide3.jpg',
-                    'folie1.jpg', 'folie2.jpg', 'folie3.jpg',
-                    'info1.jpg', 'info2.jpg', 'info3.jpg'
-                ];
-                
-                allSlides = [];
-                
-                for (const fileName of possibleSlides) {
-                    try {
-                        const response = await fetch('slides/' + fileName, { method: 'HEAD' });
-                        if (response.ok) {
-                            allSlides.push('slides/' + fileName);
-                            console.log('✅ Slide gefunden: ' + fileName);
-                        }
-                    } catch (e) {
-                        // Datei existiert nicht - stumm ignorieren
-                    }
+        // Slides laden - mit Silk-kompatiblem Fetch
+        function loadSlides() {
+            return new Promise(function(resolve, reject) {
+                try {
+                    var possibleSlides = [
+                        'slide1.jpg', 'slide2.jpg', 'slide3.jpg',
+                        'folie1.jpg', 'folie2.jpg', 'folie3.jpg',
+                        'info1.jpg', 'info2.jpg', 'info3.jpg'
+                    ];
+                    
+                    allSlides = [];
+                    var checkCount = 0;
+                    
+                    possibleSlides.forEach(function(fileName) {
+                        var xhr = new XMLHttpRequest();
+                        xhr.open('HEAD', 'slides/' + fileName, true);
+                        xhr.onreadystatechange = function() {
+                            if (xhr.readyState === 4) {
+                                checkCount++;
+                                if (xhr.status === 200) {
+                                    allSlides.push('slides/' + fileName);
+                                    console.log('✅ Slide gefunden: ' + fileName);
+                                }
+                                
+                                if (checkCount === possibleSlides.length) {
+                                    console.log('📸 Insgesamt ' + allSlides.length + ' Slides geladen:', allSlides);
+                                    resolve(allSlides.length > 0);
+                                }
+                            }
+                        };
+                        xhr.onerror = function() {
+                            checkCount++;
+                            if (checkCount === possibleSlides.length) {
+                                resolve(allSlides.length > 0);
+                            }
+                        };
+                        xhr.send();
+                    });
+                } catch (error) {
+                    console.error('Fehler beim Laden der Slides:', error);
+                    resolve(false);
                 }
-                
-                console.log('📸 Insgesamt ' + allSlides.length + ' Slides geladen:', allSlides);
-                return allSlides.length > 0;
-            } catch (error) {
-                console.error('Fehler beim Laden der Slides:', error);
-                return false;
-            }
+            });
         }
 
         // Progress Bar animieren
         function animateProgressBar(duration) {
-            const progressBar = document.getElementById('progress-bar');
+            var progressBar = document.getElementById('progress-bar');
+            if (!progressBar) return;
             
             progressBar.style.transition = 'none';
             progressBar.style.width = '0%';
             
-            setTimeout(() => {
+            setTimeout(function() {
                 progressBar.style.transition = 'width ' + duration + 'ms linear';
                 progressBar.style.width = '100%';
             }, 100);
@@ -467,18 +702,19 @@
 
         // Nächsten Content anzeigen
         function showNextContent() {
-            const card1 = document.getElementById('event-card-1');
+            var card1 = document.getElementById('event-card-1');
+            if (!card1) return;
             
-            card1.classList.remove('active');
+            card1.className = card1.className.replace('active', '').trim();
 
-            setTimeout(() => {
+            setTimeout(function() {
                 if (showSlides && allSlides.length > 0 && allEvents.length > 0) {
                     displaySlide(allSlides[currentSlideIndex]);
                     currentSlideIndex = (currentSlideIndex + 1) % allSlides.length;
                     showSlides = false;
                     updateEventCounter('slide');
                     
-                    setTimeout(() => {
+                    setTimeout(function() {
                         animateProgressBar(SLIDE_TIME);
                     }, 200);
                     
@@ -488,7 +724,7 @@
                 } else if (allEvents.length > 0) {
                     console.log('Zeige Event. CurrentIndex:', currentEventIndex, 'Total Events:', allEvents.length);
                     
-                    const event = allEvents[currentEventIndex];
+                    var event = allEvents[currentEventIndex];
                     console.log('Event:', event ? event.summary : 'null');
                     
                     if (event) {
@@ -503,7 +739,7 @@
                     showSlides = allSlides.length > 0;
                     updateEventCounter('event');
                     
-                    setTimeout(() => {
+                    setTimeout(function() {
                         animateProgressBar(ROTATION_TIME);
                     }, 200);
                     
@@ -516,7 +752,7 @@
                         currentSlideIndex = (currentSlideIndex + 1) % allSlides.length;
                         updateEventCounter('slide');
                         
-                        setTimeout(() => {
+                        setTimeout(function() {
                             animateProgressBar(SLIDE_TIME);
                         }, 200);
                         
@@ -529,12 +765,13 @@
 
         // Event-Zähler aktualisieren
         function updateEventCounter(type) {
-            const counter = document.getElementById('event-counter');
+            var counter = document.getElementById('event-counter');
+            if (!counter) return;
             
             if (type === 'slide') {
                 counter.textContent = 'Info-Folie ' + (currentSlideIndex === 0 ? allSlides.length : currentSlideIndex) + ' von ' + allSlides.length;
             } else if (allEvents.length > 0) {
-                const displayIndex = currentEventIndex === 0 ? allEvents.length : currentEventIndex;
+                var displayIndex = currentEventIndex === 0 ? allEvents.length : currentEventIndex;
                 counter.textContent = 'Termin ' + displayIndex + ' von ' + allEvents.length;
                 console.log('Counter: Event', displayIndex, 'von', allEvents.length, 'Index:', currentEventIndex);
             } else {
@@ -557,78 +794,135 @@
             }
         }
 
-        // Kalender und Slides laden
-        async function loadCalendar() {
-            const card1 = document.getElementById('event-card-1');
+        // Silk-kompatible Fetch-Alternative
+        function fetchCalendarFile(url) {
+            return new Promise(function(resolve, reject) {
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', url, true);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status === 200) {
+                            resolve({ ok: true, text: function() { return Promise.resolve(xhr.responseText); } });
+                        } else {
+                            resolve({ ok: false });
+                        }
+                    }
+                };
+                xhr.onerror = function() {
+                    resolve({ ok: false });
+                };
+                xhr.send();
+            });
+        }
+
+        // Kalender und Slides laden - Silk-kompatibel
+        function loadCalendar() {
+            var card1 = document.getElementById('event-card-1');
+            if (!card1) return;
             
-            try {
-                console.log('📅 Lade Slides...');
-                await loadSlides();
-                
+            console.log('📅 Lade Slides...');
+            loadSlides().then(function() {
                 console.log('📅 Lade Kalender...');
-                const responses = await Promise.all(calendars.map(cal => 
-                    fetch(cal.file, { cache: 'no-store' }).catch(() => ({ ok: false }))
-                ));
                 
-                const textPromises = responses.map(res => res.ok ? res.text() : '');
-                const icalDatas = await Promise.all(textPromises);
+                var fetchPromises = [];
+                calendars.forEach(function(cal) {
+                    fetchPromises.push(fetchCalendarFile(cal.file));
+                });
                 
-                allEvents = [];
-                icalDatas.forEach((data, index) => {
-                    if (data) {
-                        const cal = calendars[index];
-                        const events = processIcalData(data, cal.color, cal.category, cal.name);
-                        allEvents = allEvents.concat(events);
+                Promise.all(fetchPromises).then(function(responses) {
+                    var textPromises = [];
+                    responses.forEach(function(res) {
+                        if (res.ok) {
+                            textPromises.push(res.text());
+                        } else {
+                            textPromises.push(Promise.resolve(''));
+                        }
+                    });
+                    
+                    Promise.all(textPromises).then(function(icalDatas) {
+                        allEvents = [];
+                        
+                        icalDatas.forEach(function(data, index) {
+                            if (data) {
+                                var cal = calendars[index];
+                                var events = processIcalData(data, cal.color, cal.category, cal.name);
+                                allEvents = allEvents.concat(events);
+                            }
+                        });
+
+                        // Silk-kompatible Sortierung
+                        allEvents.sort(function(a, b) {
+                            return a.startDate.toJSDate().getTime() - b.startDate.toJSDate().getTime();
+                        });
+                        
+                        console.log('📊 Alle Events sortiert. Anzahl:', allEvents.length);
+                        allEvents.forEach(function(event, index) {
+                            var item = event.item || event;
+                            console.log('Event ' + (index + 1) + ':', item.summary);
+                        });
+
+                        if (allEvents.length > 0 || allSlides.length > 0) {
+                            currentEventIndex = 0;
+                            currentSlideIndex = 0;
+                            
+                            if (allEvents.length > 0) {
+                                console.log('Zeige ersten Termin. Gesamte Events:', allEvents.length);
+                                
+                                var event1 = allEvents[0];
+                                displayEvent(event1, 'event-card-1');
+                                
+                                currentEventIndex = 1;
+                                showSlides = allSlides.length > 0;
+                                updateEventCounter('event');
+                                
+                            } else if (allSlides.length > 0) {
+                                displaySlide(allSlides[0]);
+                                updateEventCounter('slide');
+                            }
+                            
+                            startRotation();
+                        } else {
+                            card1.innerHTML = '<div class="no-events">📅<br><br>Keine Termine und keine Info-Folien gefunden</div>';
+                            if (card1.className.indexOf('active') === -1) {
+                                card1.className += ' active';
+                            }
+                            updateEventCounter('event');
+                        }
+                    });
+                }).catch(function(error) {
+                    console.error('Fehler beim Laden:', error);
+                    card1.innerHTML = '<div class="no-events">❌<br><br>Fehler beim Laden der Inhalte</div>';
+                    if (card1.className.indexOf('active') === -1) {
+                        card1.className += ' active';
                     }
                 });
+            });
+        }
 
-                allEvents.sort((a, b) => a.startDate.toJSDate() - b.startDate.toJSDate());
-                
-                console.log('📊 Alle Events sortiert. Anzahl:', allEvents.length);
-                allEvents.forEach((event, index) => {
-                    const item = event.item || event;
-                    console.log('Event ' + (index + 1) + ':', item.summary);
+        // Initialisierung - Silk-kompatibel
+        function init() {
+            // Warte bis DOM geladen ist
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', function() {
+                    updateClock();
+                    setInterval(updateClock, 1000);
+                    loadCalendar();
+                    
+                    // Alle 5 Minuten neu laden
+                    setInterval(loadCalendar, 5 * 60 * 1000);
                 });
-
-                if (allEvents.length > 0 || allSlides.length > 0) {
-                    currentEventIndex = 0;
-                    currentSlideIndex = 0;
-                    
-                    if (allEvents.length > 0) {
-                        console.log('Zeige ersten Termin. Gesamte Events:', allEvents.length);
-                        
-                        const event1 = allEvents[0];
-                        displayEvent(event1, 'event-card-1');
-                        
-                        currentEventIndex = 1; // Nächster Event beim nächsten Durchlauf
-                        showSlides = allSlides.length > 0;
-                        updateEventCounter('event');
-                        
-                    } else if (allSlides.length > 0) {
-                        displaySlide(allSlides[0]);
-                        updateEventCounter('slide');
-                    }
-                    
-                    startRotation();
-                } else {
-                    card1.innerHTML = '<div class="no-events">📅<br><br>Keine Termine und keine Info-Folien gefunden</div>';
-                    card1.classList.add('active');
-                    updateEventCounter('event');
-                }
-            } catch (error) {
-                console.error('Fehler beim Laden:', error);
-                card1.innerHTML = '<div class="no-events">❌<br><br>Fehler beim Laden der Inhalte</div>';
-                card1.classList.add('active');
+            } else {
+                updateClock();
+                setInterval(updateClock, 1000);
+                loadCalendar();
+                
+                // Alle 5 Minuten neu laden
+                setInterval(loadCalendar, 5 * 60 * 1000);
             }
         }
 
-        // Initialisierung
-        updateClock();
-        setInterval(updateClock, 1000);
-        loadCalendar();
-
-        // Alle 5 Minuten neu laden
-        setInterval(loadCalendar, 5 * 60 * 1000);
+        // Starten
+        init();
     </script>
 </body>
 </html>
