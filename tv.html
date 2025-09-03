@@ -53,17 +53,12 @@
         }
 
         .events-container {
-            display: -webkit-grid;
-            display: grid;
-            -webkit-grid-template-columns: 1fr 1fr;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            -webkit-gap: 30px;
             width: 100%;
-            max-width: 1400px;
+            max-width: 1000px; /* Breiter für den einzelnen Termin */
             height: 70%;
-            -webkit-align-items: stretch;
-            align-items: stretch;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .event-card {
@@ -71,7 +66,7 @@
             -webkit-backdrop-filter: blur(20px);
             backdrop-filter: blur(20px);
             border-radius: 20px;
-            padding: 40px;
+            padding: 60px; /* Mehr Padding für größeren Termin */
             text-align: center;
             border: 3px solid #bb2232;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
@@ -86,8 +81,8 @@
             flex-direction: column;
             -webkit-justify-content: center;
             justify-content: center;
-            min-height: 200px;
             width: 100%;
+            max-height: 100%;
             box-sizing: border-box;
         }
 
@@ -102,10 +97,8 @@
             -webkit-backdrop-filter: none;
             backdrop-filter: none;
             border: none;
-            padding: 0; /* Kein Padding - maximale Größe */
+            padding: 0;
             box-shadow: none;
-            -webkit-grid-column: 1 / -1;
-            grid-column: 1 / -1;
             width: 100%;
             height: 100%;
         }
@@ -114,7 +107,7 @@
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
             border-radius: 20px;
-            padding: 40px;
+            padding: 60px;
             text-align: center;
             border: 2px dashed rgba(255, 255, 255, 0.2);
             display: flex;
@@ -124,85 +117,72 @@
         }
 
         .empty-message {
-            font-size: 24px;
+            font-size: 32px; /* Größerer Text für den einzelnen Display */
             color: rgba(255, 255, 255, 0.5);
             font-style: italic;
         }
 
         .event-date-big {
-            font-size: 48px;
+            font-size: 80px; /* Noch größer für Single-Display */
             font-weight: 900;
-            margin-bottom: 15px;
+            margin-bottom: 25px;
             color: #edc544;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
         .event-weekday {
-            font-size: 20px;
+            font-size: 28px; /* Größer */
             font-weight: 600;
-            margin-bottom: 25px;
+            margin-bottom: 40px;
             opacity: 0.9;
             color: #f4dc8f;
         }
 
         .event-title-big {
-            font-size: 28px;
+            font-size: 36px; /* Größer */
             font-weight: 700;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             line-height: 1.2;
             color: #fff;
-            min-height: 60px;
+            min-height: 80px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
         .event-time-big {
-            font-size: 24px;
+            font-size: 32px; /* Größer */
             font-weight: 600;
-            margin-bottom: 15px;
+            margin-bottom: 25px;
             color: #edc544;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 15px;
         }
 
         .event-location-big {
-            font-size: 20px;
-            margin-bottom: 15px;
+            font-size: 26px; /* Größer */
+            margin-bottom: 25px;
             opacity: 0.9;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 15px;
             color: #abd075;
         }
 
         .event-description-big {
-            font-size: 18px;
+            font-size: 22px; /* Größer */
             line-height: 1.4;
             opacity: 0.8;
             max-width: 100%;
             margin: 0 auto;
         }
 
-        .category-badge {
-            display: inline-block;
-            padding: 8px 16px;
-            border-radius: 25px;
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: white;
-            border: 2px solid rgba(255,255,255,0.3);
-        }
-
         .icon {
-            width: 24px;
-            height: 24px;
+            width: 32px; /* Größere Icons */
+            height: 32px;
             fill: currentColor;
         }
 
@@ -229,14 +209,14 @@
 
         .no-events {
             text-align: center;
-            font-size: 36px;
+            font-size: 48px; /* Größer für Single-Display */
             opacity: 0.7;
             color: #f4dc8f;
         }
 
         .loading {
             text-align: center;
-            font-size: 36px;
+            font-size: 48px; /* Größer für Single-Display */
             opacity: 0.7;
             color: #f4dc8f;
         }
@@ -257,43 +237,33 @@
             justify-content: center;
             width: 100%;
             height: 100%;
-            padding: 0; /* Kein Padding für maximale Größe */
+            padding: 0;
             box-sizing: border-box;
         }
 
         .slide-image {
-            /* Maximale Größe - nutzt den kompletten verfügbaren Platz */
             max-width: 100%;
             max-height: 100%;
             width: auto;
             height: auto;
             object-fit: contain;
-            border-radius: 8px; /* Etwas kleinerer Radius für schärferen Look */
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5); /* Stärkerer Schatten für bessere Sichtbarkeit */
+            border-radius: 8px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
         }
 
         /* Responsive für kleinere TV-Displays */
         @media (max-width: 1366px) {
             .church-title { font-size: 28px; }
             .current-time { font-size: 20px; }
-            .event-date-big { font-size: 40px; }
-            .event-weekday { font-size: 18px; }
-            .event-title-big { font-size: 24px; }
-            .event-time-big { font-size: 20px; }
-            .event-location-big { font-size: 18px; }
-            .event-description-big { font-size: 16px; }
-            .event-card { padding: 30px; }
-            
-            /* Slides bleiben auch bei kleineren Displays maximal groß */
-            .slide-container {
-                padding: 0;
-            }
-            
-            .slide-image {
-                max-width: 100%;
-                max-height: 100%;
-                border-radius: 6px;
-            }
+            .event-date-big { font-size: 64px; }
+            .event-weekday { font-size: 24px; }
+            .event-title-big { font-size: 30px; }
+            .event-time-big { font-size: 26px; }
+            .event-location-big { font-size: 22px; }
+            .event-description-big { font-size: 18px; }
+            .event-card { padding: 50px; }
+            .icon { width: 28px; height: 28px; }
+            .no-events, .loading { font-size: 36px; }
         }
     </style>
 </head>
@@ -309,9 +279,6 @@
         <div class="events-container" id="events-container">
             <div class="event-card" id="event-card-1">
                 <div class="loading">Lade Termine...</div>
-            </div>
-            <div class="event-card" id="event-card-2">
-                <div class="loading"></div>
             </div>
         </div>
         <div class="progress-bar" id="progress-bar"></div>
@@ -423,8 +390,8 @@
 
             let descriptionHTML = '';
             if (item.description) {
-                const shortDescription = item.description.length > 100 
-                    ? item.description.substring(0, 100) + '...' 
+                const shortDescription = item.description.length > 150 
+                    ? item.description.substring(0, 150) + '...' 
                     : item.description;
                 descriptionHTML = '<div class="event-description-big">' + shortDescription + '</div>';
             }
@@ -441,18 +408,15 @@
         function displayEmptyCard(cardId) {
             const card = document.getElementById(cardId);
             card.classList.remove('slide-mode');
-            card.innerHTML = '<div class="empty-card"><div class="empty-message">Keine weiteren Termine</div></div>';
+            card.innerHTML = '<div class="empty-card"><div class="empty-message">Keine anstehenden Termine</div></div>';
             card.classList.add('active');
         }
 
         // Slide anzeigen
         function displaySlide(slideUrl) {
             const card1 = document.getElementById('event-card-1');
-            const card2 = document.getElementById('event-card-2');
             
             card1.classList.add('slide-mode');
-            card2.style.display = 'none';
-            
             card1.innerHTML = '<div class="slide-container"><img src="' + slideUrl + '" alt="Info-Slide" class="slide-image" /></div>';
             card1.classList.add('active');
         }
@@ -504,11 +468,8 @@
         // Nächsten Content anzeigen
         function showNextContent() {
             const card1 = document.getElementById('event-card-1');
-            const card2 = document.getElementById('event-card-2');
             
             card1.classList.remove('active');
-            card2.classList.remove('active');
-            card2.style.display = 'block';
 
             setTimeout(() => {
                 if (showSlides && allSlides.length > 0 && allEvents.length > 0) {
@@ -525,30 +486,18 @@
                     rotationInterval = setInterval(showNextContent, SLIDE_TIME);
                     
                 } else if (allEvents.length > 0) {
-                    console.log('Zeige Event-Paar. CurrentIndex:', currentEventIndex, 'Total Events:', allEvents.length);
+                    console.log('Zeige Event. CurrentIndex:', currentEventIndex, 'Total Events:', allEvents.length);
                     
-                    const event1 = allEvents[currentEventIndex];
-                    const event2 = (currentEventIndex + 1 < allEvents.length) ? allEvents[currentEventIndex + 1] : null;
+                    const event = allEvents[currentEventIndex];
+                    console.log('Event:', event ? event.summary : 'null');
                     
-                    console.log('Event1:', event1 ? event1.summary : 'null');
-                    console.log('Event2:', event2 ? event2.summary : 'null');
-                    
-                    if (event1) {
-                        displayEvent(event1, 'event-card-1');
-                    }
-                    
-                    if (event2) {
-                        displayEvent(event2, 'event-card-2');
+                    if (event) {
+                        displayEvent(event, 'event-card-1');
                     } else {
-                        displayEmptyCard('event-card-2');
+                        displayEmptyCard('event-card-1');
                     }
                     
-                    currentEventIndex += 2;
-                    if (currentEventIndex >= allEvents.length) {
-                        currentEventIndex = 0;
-                        console.log('Index zurückgesetzt auf 0');
-                    }
-                    
+                    currentEventIndex = (currentEventIndex + 1) % allEvents.length;
                     console.log('Neuer Index:', currentEventIndex);
                     
                     showSlides = allSlides.length > 0;
@@ -585,11 +534,9 @@
             if (type === 'slide') {
                 counter.textContent = 'Info-Folie ' + (currentSlideIndex === 0 ? allSlides.length : currentSlideIndex) + ' von ' + allSlides.length;
             } else if (allEvents.length > 0) {
-                const currentPair = Math.floor((currentEventIndex - 2) / 2) + 1;
-                const totalPairs = Math.ceil(allEvents.length / 2);
-                const displayPair = currentPair <= 0 ? totalPairs : currentPair;
-                counter.textContent = 'Termin-Paar ' + displayPair + ' von ' + totalPairs + ' (Events: ' + allEvents.length + ')';
-                console.log('Counter: Paar', displayPair, 'von', totalPairs, 'Index:', currentEventIndex);
+                const displayIndex = currentEventIndex === 0 ? allEvents.length : currentEventIndex;
+                counter.textContent = 'Termin ' + displayIndex + ' von ' + allEvents.length;
+                console.log('Counter: Event', displayIndex, 'von', allEvents.length, 'Index:', currentEventIndex);
             } else {
                 counter.textContent = 'Keine anstehenden Termine';
             }
@@ -613,7 +560,6 @@
         // Kalender und Slides laden
         async function loadCalendar() {
             const card1 = document.getElementById('event-card-1');
-            const card2 = document.getElementById('event-card-2');
             
             try {
                 console.log('📅 Lade Slides...');
@@ -649,22 +595,12 @@
                     currentSlideIndex = 0;
                     
                     if (allEvents.length > 0) {
-                        console.log('Zeige erstes Event-Paar. Gesamte Events:', allEvents.length);
+                        console.log('Zeige ersten Termin. Gesamte Events:', allEvents.length);
                         
                         const event1 = allEvents[0];
-                        const event2 = allEvents.length > 1 ? allEvents[1] : null;
-                        
                         displayEvent(event1, 'event-card-1');
                         
-                        if (event2) {
-                            console.log('Zeige Event 1 und 2');
-                            displayEvent(event2, 'event-card-2');
-                        } else {
-                            console.log('Zeige Event 1 und leere Karte');
-                            displayEmptyCard('event-card-2');
-                        }
-                        
-                        currentEventIndex = 2;
+                        currentEventIndex = 1; // Nächster Event beim nächsten Durchlauf
                         showSlides = allSlides.length > 0;
                         updateEventCounter('event');
                         
@@ -676,17 +612,13 @@
                     startRotation();
                 } else {
                     card1.innerHTML = '<div class="no-events">📅<br><br>Keine Termine und keine Info-Folien gefunden</div>';
-                    card2.innerHTML = '<div class="no-events"></div>';
                     card1.classList.add('active');
-                    card2.classList.add('active');
                     updateEventCounter('event');
                 }
             } catch (error) {
                 console.error('Fehler beim Laden:', error);
                 card1.innerHTML = '<div class="no-events">❌<br><br>Fehler beim Laden der Inhalte</div>';
-                card2.innerHTML = '<div class="no-events"></div>';
                 card1.classList.add('active');
-                card2.classList.add('active');
             }
         }
 
