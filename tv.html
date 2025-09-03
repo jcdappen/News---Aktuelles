@@ -12,31 +12,20 @@
         }
 
         body {
-            font-family: Arial, sans-serif; /* Silk-kompatible Schrift */
+            font-family: Arial, sans-serif;
             background: linear-gradient(135deg, #4d4d4d 0%, #999999 100%);
             color: white;
             height: 100vh;
             overflow: hidden;
-            display: -webkit-box; /* Silk Fallback */
-            display: -webkit-flex; /* Silk Fallback */
             display: flex;
-            -webkit-box-orient: vertical; /* Silk Fallback */
-            -webkit-box-direction: normal; /* Silk Fallback */
-            -webkit-flex-direction: column; /* Silk Fallback */
             flex-direction: column;
         }
 
         .tv-header {
             background: rgba(0, 0, 0, 0.3);
             padding: 16px 40px;
-            display: -webkit-box; /* Silk Fallback */
-            display: -webkit-flex; /* Silk Fallback */
             display: flex;
-            -webkit-box-pack: justify; /* Silk Fallback */
-            -webkit-justify-content: space-between; /* Silk Fallback */
             justify-content: space-between;
-            -webkit-box-align: center; /* Silk Fallback */
-            -webkit-align-items: center; /* Silk Fallback */
             align-items: center;
             border-bottom: 2px solid rgba(255, 255, 255, 0.2);
         }
@@ -54,17 +43,9 @@
         }
 
         .tv-content {
-            -webkit-box-flex: 1; /* Silk Fallback */
-            -webkit-flex: 1; /* Silk Fallback */
             flex: 1;
-            display: -webkit-box; /* Silk Fallback */
-            display: -webkit-flex; /* Silk Fallback */
             display: flex;
-            -webkit-box-align: center; /* Silk Fallback */
-            -webkit-align-items: center; /* Silk Fallback */
             align-items: center;
-            -webkit-box-pack: center; /* Silk Fallback */
-            -webkit-justify-content: center; /* Silk Fallback */
             justify-content: center;
             padding: 20px;
             position: relative;
@@ -75,39 +56,23 @@
             width: 100%;
             max-width: 1000px;
             height: 70%;
-            display: -webkit-box; /* Silk Fallback */
-            display: -webkit-flex; /* Silk Fallback */
             display: flex;
-            -webkit-box-align: center; /* Silk Fallback */
-            -webkit-align-items: center; /* Silk Fallback */
             align-items: center;
-            -webkit-box-pack: center; /* Silk Fallback */
-            -webkit-justify-content: center; /* Silk Fallback */
             justify-content: center;
         }
 
         .event-card {
             background: rgba(255, 255, 255, 0.15);
-            /* Kein backdrop-filter für Silk */
             border-radius: 20px;
             padding: 60px;
             text-align: center;
             border: 3px solid #bb2232;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
             opacity: 0;
-            -webkit-transform: translateY(30px); /* Silk Fallback */
             transform: translateY(30px);
-            -webkit-transition: all 0.8s ease-in-out; /* Silk vereinfacht */
             transition: all 0.8s ease-in-out;
-            display: -webkit-box; /* Silk Fallback */
-            display: -webkit-flex; /* Silk Fallback */
             display: flex;
-            -webkit-box-orient: vertical; /* Silk Fallback */
-            -webkit-box-direction: normal; /* Silk Fallback */
-            -webkit-flex-direction: column; /* Silk Fallback */
             flex-direction: column;
-            -webkit-box-pack: center; /* Silk Fallback */
-            -webkit-justify-content: center; /* Silk Fallback */
             justify-content: center;
             width: 100%;
             max-height: 100%;
@@ -115,7 +80,6 @@
 
         .event-card.active {
             opacity: 1;
-            -webkit-transform: translateY(0); /* Silk Fallback */
             transform: translateY(0);
         }
 
@@ -134,14 +98,8 @@
             padding: 60px;
             text-align: center;
             border: 2px dashed rgba(255, 255, 255, 0.2);
-            display: -webkit-box; /* Silk Fallback */
-            display: -webkit-flex; /* Silk Fallback */
             display: flex;
-            -webkit-box-align: center; /* Silk Fallback */
-            -webkit-align-items: center; /* Silk Fallback */
             align-items: center;
-            -webkit-box-pack: center; /* Silk Fallback */
-            -webkit-justify-content: center; /* Silk Fallback */
             justify-content: center;
             opacity: 0.6;
         }
@@ -175,14 +133,8 @@
             line-height: 1.2;
             color: #fff;
             min-height: 80px;
-            display: -webkit-box; /* Silk Fallback */
-            display: -webkit-flex; /* Silk Fallback */
             display: flex;
-            -webkit-box-align: center; /* Silk Fallback */
-            -webkit-align-items: center; /* Silk Fallback */
             align-items: center;
-            -webkit-box-pack: center; /* Silk Fallback */
-            -webkit-justify-content: center; /* Silk Fallback */
             justify-content: center;
         }
 
@@ -191,14 +143,8 @@
             font-weight: 600;
             margin-bottom: 25px;
             color: #edc544;
-            display: -webkit-box; /* Silk Fallback */
-            display: -webkit-flex; /* Silk Fallback */
             display: flex;
-            -webkit-box-align: center; /* Silk Fallback */
-            -webkit-align-items: center; /* Silk Fallback */
             align-items: center;
-            -webkit-box-pack: center; /* Silk Fallback */
-            -webkit-justify-content: center; /* Silk Fallback */
             justify-content: center;
         }
 
@@ -210,14 +156,8 @@
             font-size: 26px;
             margin-bottom: 25px;
             opacity: 0.9;
-            display: -webkit-box; /* Silk Fallback */
-            display: -webkit-flex; /* Silk Fallback */
             display: flex;
-            -webkit-box-align: center; /* Silk Fallback */
-            -webkit-align-items: center; /* Silk Fallback */
             align-items: center;
-            -webkit-box-pack: center; /* Silk Fallback */
-            -webkit-justify-content: center; /* Silk Fallback */
             justify-content: center;
             color: #abd075;
         }
@@ -238,7 +178,6 @@
             width: 32px;
             height: 32px;
             fill: currentColor;
-            /* Inline-block für bessere Silk Unterstützung */
             display: inline-block;
             vertical-align: middle;
         }
@@ -250,7 +189,6 @@
             height: 6px;
             background: #edc544;
             border-radius: 3px;
-            -webkit-transition: width linear; /* Silk Fallback */
             transition: width linear;
             box-shadow: 0 2px 10px rgba(237, 197, 68, 0.5);
         }
@@ -258,14 +196,8 @@
         .tv-footer {
             background: rgba(0, 0, 0, 0.3);
             padding: 12px 40px;
-            display: -webkit-box; /* Silk Fallback */
-            display: -webkit-flex; /* Silk Fallback */
             display: flex;
-            -webkit-box-pack: justify; /* Silk Fallback */
-            -webkit-justify-content: space-between; /* Silk Fallback */
             justify-content: space-between;
-            -webkit-box-align: center; /* Silk Fallback */
-            -webkit-align-items: center; /* Silk Fallback */
             align-items: center;
             font-size: 16px;
             opacity: 0.8;
@@ -285,22 +217,9 @@
             color: #f4dc8f;
         }
 
-        /* Kategoriefarben */
-        .gottesdienst { background-color: #f39c12; }
-        .kinder { background-color: #3498db; }
-        .senioren { background-color: #9b59b6; }
-        .jugend { background-color: #e74c3c; }
-        .sonstige { background-color: #27ae60; }
-
         .slide-container {
-            display: -webkit-box; /* Silk Fallback */
-            display: -webkit-flex; /* Silk Fallback */
             display: flex;
-            -webkit-box-align: center; /* Silk Fallback */
-            -webkit-align-items: center; /* Silk Fallback */
             align-items: center;
-            -webkit-box-pack: center; /* Silk Fallback */
-            -webkit-justify-content: center; /* Silk Fallback */
             justify-content: center;
             width: 100%;
             height: 100%;
@@ -312,13 +231,11 @@
             max-height: 100%;
             width: auto;
             height: auto;
-            /* object-fit kann in Silk problematisch sein */
             border-radius: 8px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
         }
 
-        /* Responsive - vereinfacht für Silk */
-        @media screen and (max-width: 1366px) {
+        @media (max-width: 1366px) {
             .church-title { font-size: 28px; }
             .current-time { font-size: 20px; }
             .event-date-big { font-size: 64px; }
@@ -332,8 +249,7 @@
             .no-events, .loading { font-size: 36px; }
         }
 
-        /* Fire TV spezifische Anpassungen */
-        @media screen and (min-width: 1920px) {
+        @media (min-width: 1920px) {
             .church-title { font-size: 42px; }
             .current-time { font-size: 28px; }
             .event-date-big { font-size: 96px; }
@@ -343,24 +259,9 @@
             .event-location-big { font-size: 30px; }
             .event-description-big { font-size: 26px; }
         }
-
-        /* Silk Browser spezifische Fixes */
-        .silk-fix {
-            /* Verhindert Rendering-Probleme in Silk */
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            -webkit-perspective: 1000px;
-            perspective: 1000px;
-        }
-
-        /* Touch-optimiert für Fire TV Remote */
-        .focusable:focus {
-            outline: 3px solid #edc544;
-            outline-offset: 2px;
-        }
     </style>
 </head>
-<body class="silk-fix">
+<body>
     <div class="tv-header">
         <div class="church-title">
             Gemeindekalender
@@ -370,7 +271,7 @@
 
     <div class="tv-content">
         <div class="events-container" id="events-container">
-            <div class="event-card silk-fix" id="event-card-1">
+            <div class="event-card" id="event-card-1">
                 <div class="loading">Lade Termine...</div>
             </div>
         </div>
@@ -383,105 +284,178 @@
     </div>
 
     <script>
-        // Silk Browser Kompatibilität
-        (function() {
-            // Polyfill für ältere Silk Versionen
-            if (!Array.prototype.forEach) {
-                Array.prototype.forEach = function(callback, thisArg) {
-                    for (var i = 0; i < this.length; i++) {
-                        callback.call(thisArg, this[i], i, this);
+        // Promise Polyfill für sehr alte Browser/Silk Versionen
+        if (typeof Promise === 'undefined') {
+            window.Promise = function(executor) {
+                var self = this;
+                this.state = 'pending';
+                this.value = undefined;
+                this.handlers = [];
+
+                function resolve(result) {
+                    if (self.state === 'pending') {
+                        self.state = 'fulfilled';
+                        self.value = result;
+                        self.handlers.forEach(handle);
+                        self.handlers = null;
                     }
-                };
-            }
+                }
 
-            // Promise Polyfill für ältere Silk Versionen
-            if (typeof Promise === 'undefined') {
-                window.Promise = function(executor) {
-                    var self = this;
-                    this.state = 'pending';
-                    this.value = undefined;
-                    this.handlers = [];
+                function reject(error) {
+                    if (self.state === 'pending') {
+                        self.state = 'rejected';
+                        self.value = error;
+                        self.handlers.forEach(handle);
+                        self.handlers = null;
+                    }
+                }
 
-                    function resolve(result) {
-                        if (self.state === 'pending') {
-                            self.state = 'fulfilled';
-                            self.value = result;
-                            self.handlers.forEach(handle);
-                            self.handlers = null;
+                function handle(handler) {
+                    if (self.state === 'pending') {
+                        self.handlers.push(handler);
+                    } else {
+                        if (self.state === 'fulfilled' && typeof handler.onFulfilled === 'function') {
+                            handler.onFulfilled(self.value);
+                        }
+                        if (self.state === 'rejected' && typeof handler.onRejected === 'function') {
+                            handler.onRejected(self.value);
                         }
                     }
+                }
 
-                    function reject(error) {
-                        if (self.state === 'pending') {
-                            self.state = 'rejected';
-                            self.value = error;
-                            self.handlers.forEach(handle);
-                            self.handlers = null;
-                        }
-                    }
-
-                    function handle(handler) {
-                        if (self.state === 'pending') {
-                            self.handlers.push(handler);
-                        } else {
-                            if (self.state === 'fulfilled' && typeof handler.onFulfilled === 'function') {
-                                handler.onFulfilled(self.value);
-                            }
-                            if (self.state === 'rejected' && typeof handler.onRejected === 'function') {
-                                handler.onRejected(self.value);
-                            }
-                        }
-                    }
-
-                    this.then = function(onFulfilled, onRejected) {
-                        return new Promise(function(resolve, reject) {
-                            handle({
-                                onFulfilled: function(result) {
-                                    try {
-                                        resolve(onFulfilled ? onFulfilled(result) : result);
-                                    } catch (ex) {
-                                        reject(ex);
-                                    }
-                                },
-                                onRejected: function(error) {
-                                    try {
-                                        resolve(onRejected ? onRejected(error) : error);
-                                    } catch (ex) {
-                                        reject(ex);
-                                    }
-                                }
-                            });
-                        });
-                    };
-
-                    executor(resolve, reject);
-                };
-
-                Promise.all = function(promises) {
+                this.then = function(onFulfilled, onRejected) {
                     return new Promise(function(resolve, reject) {
-                        var results = [];
-                        var completed = 0;
-                        
-                        if (promises.length === 0) {
-                            resolve(results);
-                            return;
-                        }
-                        
-                        promises.forEach(function(promise, index) {
-                            promise.then(function(value) {
-                                results[index] = value;
-                                completed++;
-                                if (completed === promises.length) {
-                                    resolve(results);
+                        handle({
+                            onFulfilled: function(result) {
+                                try {
+                                    resolve(onFulfilled ? onFulfilled(result) : result);
+                                } catch (ex) {
+                                    reject(ex);
                                 }
-                            }).catch(reject);
+                            },
+                            onRejected: function(error) {
+                                try {
+                                    resolve(onRejected ? onRejected(error) : error);
+                                } catch (ex) {
+                                    reject(ex);
+                                }
+                            }
                         });
                     });
                 };
-            }
-        })();
 
-        const calendars = [
+                executor(resolve, reject);
+            };
+
+            Promise.all = function(promises) {
+                return new Promise(function(resolve, reject) {
+                    var results = [];
+                    var completed = 0;
+                    
+                    if (promises.length === 0) {
+                        resolve(results);
+                        return;
+                    }
+                    
+                    promises.forEach(function(promise, index) {
+                        promise.then(function(value) {
+                            results[index] = value;
+                            completed++;
+                            if (completed === promises.length) {
+                                resolve(results);
+                            }
+                        }).catch ? promise.catch(reject) : reject(promise);
+                    });
+                });
+            };
+        }
+
+        // Array.forEach Polyfill
+        if (!Array.prototype.forEach) {
+            Array.prototype.forEach = function(callback, thisArg) {
+                for (var i = 0; i < this.length; i++) {
+                    callback.call(thisArg, this[i], i, this);
+                }
+            };
+        }
+        function parseSimpleICal(icalData) {
+            console.log('📋 Parse iCal - Daten-Länge:', icalData.length);
+            
+            var events = [];
+            var lines = icalData.split(/\r?\n/);
+            var currentEvent = null;
+            
+            for (var i = 0; i < lines.length; i++) {
+                var line = lines[i].trim();
+                
+                if (line === 'BEGIN:VEVENT') {
+                    currentEvent = {};
+                    console.log('🎫 Neues Event gefunden');
+                } else if (line === 'END:VEVENT' && currentEvent) {
+                    if (currentEvent.summary && currentEvent.dtstart) {
+                        events.push(currentEvent);
+                        console.log('✅ Event hinzugefügt:', currentEvent.summary);
+                    }
+                    currentEvent = null;
+                } else if (currentEvent && line.includes(':')) {
+                    var colonIndex = line.indexOf(':');
+                    var key = line.substring(0, colonIndex);
+                    var value = line.substring(colonIndex + 1);
+                    
+                    // Entferne Parameter aus dem Key
+                    if (key.includes(';')) {
+                        key = key.substring(0, key.indexOf(';'));
+                    }
+                    
+                    key = key.toLowerCase();
+                    
+                    if (key === 'summary') {
+                        currentEvent.summary = value;
+                    } else if (key === 'dtstart') {
+                        currentEvent.dtstart = value;
+                    } else if (key === 'dtend') {
+                        currentEvent.dtend = value;
+                    } else if (key === 'location') {
+                        currentEvent.location = value;
+                    } else if (key === 'description') {
+                        currentEvent.description = value;
+                    }
+                }
+            }
+            
+            console.log('📊 Gefundene Raw-Events:', events.length);
+            return events;
+        }
+        
+        // Datum parsen (vereinfacht)
+        function parseICalDate(dateString) {
+            // Format: YYYYMMDDTHHMMSS oder YYYYMMDD
+            if (!dateString) return null;
+            
+            // Entferne Zeitzone-Info
+            dateString = dateString.replace(/Z$/, '').replace(/T.*$/, '');
+            
+            if (dateString.length >= 8) {
+                var year = parseInt(dateString.substring(0, 4));
+                var month = parseInt(dateString.substring(4, 6)) - 1; // Monate sind 0-basiert
+                var day = parseInt(dateString.substring(6, 8));
+                
+                var hour = 0, minute = 0;
+                if (dateString.length > 8) {
+                    var timeString = dateString.substring(9);
+                    if (timeString.length >= 4) {
+                        hour = parseInt(timeString.substring(0, 2));
+                        minute = parseInt(timeString.substring(2, 4));
+                    }
+                }
+                
+                return new Date(year, month, day, hour, minute);
+            }
+            
+            return null;
+        }
+
+        var calendars = [
             { file: 'gottesdienst.ics', color: '#f39c12', category: 'gottesdienst', name: 'Gottesdienst' },
             { file: 'kinder.ics', color: '#3498db', category: 'kinder', name: 'Kinder' },
             { file: 'senioren.ics', color: '#9b59b6', category: 'senioren', name: 'Senioren' },
@@ -489,16 +463,15 @@
             { file: 'sonstige.ics', color: '#27ae60', category: 'sonstige', name: 'Sonstige' }
         ];
 
-        let currentEventIndex = 0;
-        let currentSlideIndex = 0;
-        let allEvents = [];
-        let allSlides = [];
-        let rotationInterval;
-        let showSlides = true;
-        const ROTATION_TIME = 15000;
-        const SLIDE_TIME = 10000;
+        var currentEventIndex = 0;
+        var currentSlideIndex = 0;
+        var allEvents = [];
+        var allSlides = [];
+        var rotationInterval;
+        var showSlides = true;
+        var ROTATION_TIME = 15000;
+        var SLIDE_TIME = 10000;
 
-        // Silk-kompatible Uhrzeit-Aktualisierung
         function updateClock() {
             var now = new Date();
             var options = {
@@ -510,7 +483,6 @@
                 minute: '2-digit'
             };
             
-            // Fallback für ältere Silk Versionen
             var timeString;
             try {
                 timeString = now.toLocaleString('de-DE', options);
@@ -524,95 +496,86 @@
             }
         }
 
-        // Silk-kompatible Event-Verarbeitung
-        const processIcalData = function(icalData, color, category, name) {
+        function processIcalData(icalData, color, category, name) {
+            console.log('🔍 Verarbeite iCal für:', name);
+            
             var now = new Date();
             var twoWeeksFromNow = new Date();
             twoWeeksFromNow.setDate(now.getDate() + 14);
-
+            
+            var rawEvents = parseSimpleICal(icalData);
             var events = [];
-            try {
-                var jcalData = ICAL.parse(icalData);
-                var vcalendar = new ICAL.Component(jcalData);
-                var vevents = vcalendar.getAllSubcomponents('vevent');
+            
+            rawEvents.forEach(function(rawEvent) {
+                var startDate = parseICalDate(rawEvent.dtstart);
+                var endDate = parseICalDate(rawEvent.dtend);
                 
-                vevents.forEach(function(vevent) {
-                    var event = new ICAL.Event(vevent);
-                    var addEvent = function(e) {
-                        var eventStart = e.startDate.toJSDate();
-                        if (eventStart >= now && eventStart <= twoWeeksFromNow) {
-                            e.color = color;
-                            e.category = category;
-                            e.categoryName = name;
-                            events.push(e);
-                        }
+                if (startDate && startDate >= now && startDate <= twoWeeksFromNow) {
+                    var event = {
+                        summary: rawEvent.summary,
+                        startDate: startDate,
+                        endDate: endDate || startDate,
+                        location: rawEvent.location,
+                        description: rawEvent.description,
+                        color: color,
+                        category: category,
+                        categoryName: name,
+                        isAllDay: rawEvent.dtstart && rawEvent.dtstart.indexOf('T') === -1
                     };
                     
-                    if (event.isRecurring()) {
-                        var iterator = event.iterator();
-                        var next;
-                        while ((next = iterator.next()) && next.toJSDate() <= twoWeeksFromNow) {
-                            var occ = event.getOccurrenceDetails(next);
-                            addEvent(occ);
-                        }
-                    } else {
-                        addEvent(event);
-                    }
-                });
-            } catch (e) {
-                console.error('Fehler beim Parsen:', e);
-            }
+                    events.push(event);
+                    console.log('✅ Event verarbeitet:', event.summary, 'am', startDate);
+                }
+            });
+            
+            console.log('📊 Events für', name + ':', events.length);
             return events;
-        };
+        }
 
-        // Event anzeigen - Silk-kompatibel
         function displayEvent(event, cardId) {
             var card = document.getElementById(cardId);
             if (!card) return;
             
             card.className = card.className.replace('slide-mode', '').trim();
             
-            var item = event.item || event;
-            var startDate = event.startDate.toJSDate();
-            var endDate = event.endDate.toJSDate();
+            var startDate = event.startDate;
+            var endDate = event.endDate;
 
             var dayName = startDate.toLocaleDateString('de-DE', { weekday: 'long' });
             var dayNumber = startDate.getDate();
             var monthYear = startDate.toLocaleDateString('de-DE', { month: 'long', year: 'numeric' });
 
             var timeHTML = '';
-            if (!event.startDate.isDate) {
+            if (!event.isAllDay) {
                 var startTime = startDate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
                 var endTime = endDate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
                 timeHTML = '<div class="event-time-big"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg><div>' + startTime + ' - ' + endTime + ' Uhr</div></div>';
             }
 
             var locationHTML = '';
-            if (item.location) {
-                locationHTML = '<div class="event-location-big"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5-2.5z"/></svg><div>' + item.location + '</div></div>';
+            if (event.location) {
+                locationHTML = '<div class="event-location-big"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5-2.5z"/></svg><div>' + event.location + '</div></div>';
             }
 
             var descriptionHTML = '';
-            if (item.description) {
-                var shortDescription = item.description.length > 150 
-                    ? item.description.substring(0, 150) + '...' 
-                    : item.description;
+            if (event.description) {
+                var shortDescription = event.description.length > 150 
+                    ? event.description.substring(0, 150) + '...' 
+                    : event.description;
                 descriptionHTML = '<div class="event-description-big">' + shortDescription + '</div>';
             }
 
             var dateHTML = '<div class="event-date-big">' + dayNumber + '</div>';
             var weekdayHTML = '<div class="event-weekday">' + dayName + ', ' + monthYear + '</div>';
-            var titleHTML = '<div class="event-title-big">' + item.summary + '</div>';
+            var titleHTML = '<div class="event-title-big">' + event.summary + '</div>';
 
             card.innerHTML = dateHTML + weekdayHTML + titleHTML + timeHTML + locationHTML + descriptionHTML;
             
-            // Silk-kompatible Klassen-Manipulation
             if (card.className.indexOf('active') === -1) {
                 card.className += ' active';
             }
         }
 
-        // Leere Karte anzeigen
         function displayEmptyCard(cardId) {
             var card = document.getElementById(cardId);
             if (!card) return;
@@ -625,7 +588,6 @@
             }
         }
 
-        // Slide anzeigen
         function displaySlide(slideUrl) {
             var card1 = document.getElementById('event-card-1');
             if (!card1) return;
@@ -641,52 +603,66 @@
             }
         }
 
-        // Slides laden - mit Silk-kompatiblem Fetch
         function loadSlides() {
-            return new Promise(function(resolve, reject) {
-                try {
-                    var possibleSlides = [
-                        'slide1.jpg', 'slide2.jpg', 'slide3.jpg',
-                        'folie1.jpg', 'folie2.jpg', 'folie3.jpg',
-                        'info1.jpg', 'info2.jpg', 'info3.jpg'
-                    ];
-                    
-                    allSlides = [];
-                    var checkCount = 0;
-                    
-                    possibleSlides.forEach(function(fileName) {
-                        var xhr = new XMLHttpRequest();
-                        xhr.open('HEAD', 'slides/' + fileName, true);
-                        xhr.onreadystatechange = function() {
-                            if (xhr.readyState === 4) {
-                                checkCount++;
-                                if (xhr.status === 200) {
-                                    allSlides.push('slides/' + fileName);
-                                    console.log('✅ Slide gefunden: ' + fileName);
-                                }
-                                
-                                if (checkCount === possibleSlides.length) {
-                                    console.log('📸 Insgesamt ' + allSlides.length + ' Slides geladen:', allSlides);
-                                    resolve(allSlides.length > 0);
-                                }
-                            }
-                        };
-                        xhr.onerror = function() {
-                            checkCount++;
-                            if (checkCount === possibleSlides.length) {
-                                resolve(allSlides.length > 0);
-                            }
-                        };
-                        xhr.send();
-                    });
-                } catch (error) {
-                    console.error('Fehler beim Laden der Slides:', error);
-                    resolve(false);
-                }
+            var possibleSlides = [
+                'slide1.jpg', 'slide2.jpg', 'slide3.jpg',
+                'folie1.jpg', 'folie2.jpg', 'folie3.jpg',
+                'info1.jpg', 'info2.jpg', 'info3.jpg'
+            ];
+            
+            allSlides = [];
+            var checkCount = 0;
+            
+            possibleSlides.forEach(function(fileName) {
+                var xhr = new XMLHttpRequest();
+                xhr.open('HEAD', 'slides/' + fileName, true);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        checkCount++;
+                        if (xhr.status === 200) {
+                            allSlides.push('slides/' + fileName);
+                            console.log('✅ Slide gefunden: ' + fileName);
+                        }
+                        
+                        if (checkCount === possibleSlides.length) {
+                            console.log('📸 Insgesamt ' + allSlides.length + ' Slides geladen');
+                        }
+                    }
+                };
+                xhr.onerror = function() {
+                    checkCount++;
+                    if (checkCount === possibleSlides.length) {
+                        console.log('📸 Slide-Check abgeschlossen');
+                    }
+                };
+                xhr.send();
             });
         }
 
-        // Progress Bar animieren
+        function fetchCalendarFile(url) {
+            return new Promise(function(resolve, reject) {
+                console.log('🌐 Lade Kalender:', url);
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', url, true);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status === 200) {
+                            console.log('✅ Kalender geladen:', url);
+                            resolve(xhr.responseText);
+                        } else {
+                            console.warn('❌ Kalender nicht gefunden:', url, '- Status:', xhr.status);
+                            resolve('');
+                        }
+                    }
+                };
+                xhr.onerror = function() {
+                    console.error('❌ Netzwerkfehler beim Laden:', url);
+                    resolve('');
+                };
+                xhr.send();
+            });
+        }
+
         function animateProgressBar(duration) {
             var progressBar = document.getElementById('progress-bar');
             if (!progressBar) return;
@@ -700,7 +676,6 @@
             }, 100);
         }
 
-        // Nächsten Content anzeigen
         function showNextContent() {
             var card1 = document.getElementById('event-card-1');
             if (!card1) return;
@@ -763,7 +738,6 @@
             }, 400);
         }
 
-        // Event-Zähler aktualisieren
         function updateEventCounter(type) {
             var counter = document.getElementById('event-counter');
             if (!counter) return;
@@ -779,165 +753,115 @@
             }
         }
 
-        // Rotation starten
         function startRotation() {
             if (allEvents.length === 0 && allSlides.length === 0) return;
             
             clearInterval(rotationInterval);
             
             if (allEvents.length > 0) {
+                console.log('🎯 Starte Event-Rotation mit', allEvents.length, 'Events');
                 animateProgressBar(ROTATION_TIME);
                 rotationInterval = setInterval(showNextContent, ROTATION_TIME);
-            } else {
+            } else if (allSlides.length > 0) {
+                console.log('📸 Starte Slide-Rotation mit', allSlides.length, 'Slides');
                 animateProgressBar(SLIDE_TIME);
                 rotationInterval = setInterval(showNextContent, SLIDE_TIME);
             }
         }
 
-        // Silk-kompatible Fetch-Alternative
-        function fetchCalendarFile(url) {
-            return new Promise(function(resolve, reject) {
-                var xhr = new XMLHttpRequest();
-                xhr.open('GET', url, true);
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === 4) {
-                        if (xhr.status === 200) {
-                            resolve({ ok: true, text: function() { return Promise.resolve(xhr.responseText); } });
-                        } else {
-                            resolve({ ok: false });
-                        }
-                    }
-                };
-                xhr.onerror = function() {
-                    resolve({ ok: false });
-                };
-                xhr.send();
-            });
-        }
-
-        // Kalender und Slides laden - Silk-kompatibel
         function loadCalendar() {
             var card1 = document.getElementById('event-card-1');
             if (!card1) return;
             
-            console.log('📅 Lade Slides...');
-            loadSlides().then(function() {
-                console.log('📅 Lade Kalender...');
+            console.log('📅 Starte Kalender-Laden (ohne externe Bibliotheken)');
+            loadSlides();
+            
+            var fetchPromises = [];
+            calendars.forEach(function(cal) {
+                fetchPromises.push(fetchCalendarFile(cal.file));
+            });
+            
+            Promise.all(fetchPromises).then(function(icalDatas) {
+                console.log('📋 Alle iCal-Daten erhalten');
                 
-                // Debug: Prüfe ob ICAL.js geladen ist
-                if (typeof ICAL === 'undefined') {
-                    console.error('❌ ICAL.js ist nicht geladen!');
-                    card1.innerHTML = '<div class="no-events">❌<br><br>ICAL.js Bibliothek nicht verfügbar</div>';
-                    if (card1.className.indexOf('active') === -1) {
-                        card1.className += ' active';
-                    }
-                    return;
-                }
+                allEvents = [];
                 
-                console.log('✅ ICAL.js ist verfügbar');
-                console.log('🔄 Lade', calendars.length, 'Kalender-Dateien...');
-                
-                var fetchPromises = [];
-                calendars.forEach(function(cal) {
-                    fetchPromises.push(fetchCalendarFile(cal.file));
-                });
-                
-                Promise.all(fetchPromises).then(function(responses) {
-                    var textPromises = [];
-                    responses.forEach(function(res) {
-                        if (res.ok) {
-                            textPromises.push(res.text());
-                        } else {
-                            textPromises.push(Promise.resolve(''));
-                        }
-                    });
+                icalDatas.forEach(function(data, index) {
+                    var cal = calendars[index];
+                    console.log('🔄 Verarbeite Kalender:', cal.name, '- Hat Daten:', !!data);
                     
-                    Promise.all(textPromises).then(function(icalDatas) {
-                        allEvents = [];
-                        
-                        icalDatas.forEach(function(data, index) {
-                            if (data) {
-                                var cal = calendars[index];
-                                var events = processIcalData(data, cal.color, cal.category, cal.name);
-                                allEvents = allEvents.concat(events);
-                            }
-                        });
+                    if (data && data.trim() !== '') {
+                        var events = processIcalData(data, cal.color, cal.category, cal.name);
+                        allEvents = allEvents.concat(events);
+                    } else {
+                        console.warn('⚠️ Keine Daten für Kalender:', cal.name);
+                    }
+                });
 
-                        // Silk-kompatible Sortierung
-                        allEvents.sort(function(a, b) {
-                            return a.startDate.toJSDate().getTime() - b.startDate.toJSDate().getTime();
-                        });
-                        
-                        console.log('📊 Alle Events sortiert. Anzahl:', allEvents.length);
-                        allEvents.forEach(function(event, index) {
-                            var item = event.item || event;
-                            console.log('Event ' + (index + 1) + ':', item.summary);
-                        });
-
-                        if (allEvents.length > 0 || allSlides.length > 0) {
-                            currentEventIndex = 0;
-                            currentSlideIndex = 0;
-                            
-                            if (allEvents.length > 0) {
-                                console.log('✅ Zeige ersten Termin. Gesamte Events:', allEvents.length);
-                                
-                                var event1 = allEvents[0];
-                                displayEvent(event1, 'event-card-1');
-                                
-                                currentEventIndex = 1;
-                                showSlides = allSlides.length > 0; // Wichtig: wie im funktionierenden Code
-                                updateEventCounter('event');
-                                
-                                console.log('🎯 Events werden priorisiert');
-                                
-                            } else if (allSlides.length > 0) {
-                                console.log('📸 Keine Events - zeige erste Slide');
-                                displaySlide(allSlides[0]);
-                                updateEventCounter('slide');
-                            }
-                            
-                            startRotation();
-                        } else {
-                            card1.innerHTML = '<div class="no-events">📅<br><br>Keine Termine und keine Info-Folien gefunden</div>';
-                            if (card1.className.indexOf('active') === -1) {
-                                card1.className += ' active';
-                            }
-                            updateEventCounter('event');
-                        }
+                allEvents.sort(function(a, b) {
+                    return a.startDate.getTime() - b.startDate.getTime();
+                });
+                
+                console.log('📊 Finale Event-Liste:', allEvents.length, 'Events');
+                
+                if (allEvents.length > 0) {
+                    console.log('🎉 EVENTS GEFUNDEN! Anzahl:', allEvents.length);
+                    allEvents.forEach(function(event, index) {
+                        console.log('Event ' + (index + 1) + ':', event.summary, '- Datum:', event.startDate);
                     });
-                }).catch(function(error) {
-                    console.error('Fehler beim Laden:', error);
-                    card1.innerHTML = '<div class="no-events">❌<br><br>Fehler beim Laden der Inhalte</div>';
+                }
+
+                if (allEvents.length > 0 || allSlides.length > 0) {
+                    currentEventIndex = 0;
+                    currentSlideIndex = 0;
+                    
+                    if (allEvents.length > 0) {
+                        console.log('✅ Zeige ersten Termin');
+                        
+                        displayEvent(allEvents[0], 'event-card-1');
+                        currentEventIndex = 1;
+                        showSlides = allSlides.length > 0;
+                        updateEventCounter('event');
+                        
+                    } else if (allSlides.length > 0) {
+                        console.log('📸 Keine Events - zeige erste Slide');
+                        displaySlide(allSlides[0]);
+                        updateEventCounter('slide');
+                    }
+                    
+                    startRotation();
+                } else {
+                    card1.innerHTML = '<div class="no-events">📅<br><br>Keine Termine und keine Info-Folien gefunden</div>';
                     if (card1.className.indexOf('active') === -1) {
                         card1.className += ' active';
                     }
-                });
+                    updateEventCounter('event');
+                }
+            }).catch(function(error) {
+                console.error('Fehler beim Laden:', error);
+                card1.innerHTML = '<div class="no-events">❌<br><br>Fehler beim Laden der Inhalte</div>';
+                if (card1.className.indexOf('active') === -1) {
+                    card1.className += ' active';
+                }
             });
         }
 
-        // Initialisierung - Silk-kompatibel
         function init() {
-            // Warte bis DOM geladen ist
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', function() {
                     updateClock();
                     setInterval(updateClock, 1000);
                     loadCalendar();
-                    
-                    // Alle 5 Minuten neu laden
                     setInterval(loadCalendar, 5 * 60 * 1000);
                 });
             } else {
                 updateClock();
                 setInterval(updateClock, 1000);
                 loadCalendar();
-                
-                // Alle 5 Minuten neu laden
                 setInterval(loadCalendar, 5 * 60 * 1000);
             }
         }
 
-        // Starten
         init();
     </script>
 </body>
