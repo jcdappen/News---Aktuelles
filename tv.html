@@ -50,58 +50,133 @@
             padding: 20px;
             position: relative;
             overflow: hidden;
+            flex-direction: column; /* Erlaubt zwei Events untereinander */
+            gap: 20px; /* Abstand zwischen den Events */
         }
 
         .events-container {
             width: 100%;
-            max-width: 1000px; /* Breiter für den einzelnen Termin */
-            height: 70%;
+            max-width: 1200px; /* Breiter für die Anzeige */
+            height: 100%;
             display: flex;
+            flex-direction: column; /* Für zwei Events untereinander */
+            justify-content: center;
             align-items: center;
-            justify-content: center;
+            gap: 20px; /* Abstand zwischen den Event-Items */
         }
 
-        .event-card {
-            /* Hintergrund, Blur, Rahmen und Schatten entfernt */
-            background: transparent;
-            -webkit-backdrop-filter: none;
-            backdrop-filter: none;
-            border-radius: 0; /* Keine Rundung */
-            padding: 60px; /* Mehr Padding für größeren Termin */
-            text-align: center;
-            border: none; /* Kein Rahmen */
-            box-shadow: none; /* Kein Schatten */
-            opacity: 0;
-            -webkit-transform: translateY(30px);
-            transform: translateY(30px);
-            -webkit-transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            display: -webkit-flex;
-            display: flex;
-            -webkit-flex-direction: column;
-            flex-direction: column;
-            -webkit-justify-content: center;
-            justify-content: center;
+        .event-card-wrapper { /* Wrapper für ein Paar von Event-Items */
             width: 100%;
-            max-height: 100%;
-            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .event-card.active {
+        .event-card-wrapper.active {
             opacity: 1;
-            -webkit-transform: translateY(0);
             transform: translateY(0);
         }
 
-        .event-card.slide-mode {
+        .event-item {
+            background: rgba(255, 255, 255, 0.1); /* Leichter Hintergrund für bessere Lesbarkeit */
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 30px;
+            display: flex;
+            align-items: flex-start; /* Datum und Details oben ausrichten */
+            width: 100%;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .event-date-box {
+            flex-shrink: 0;
+            width: 120px; /* Feste Breite für das Datum */
+            text-align: center;
+            padding-right: 30px;
+            border-right: 2px solid #5895E2; /* Blaue Linie wie im Beispiel */
+            position: relative;
+            margin-right: 30px;
+        }
+
+        .event-date-box::before { /* Vertikale Linie links vom Datum */
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 6px; /* Dicke der Linie */
+            background-color: #5895E2; /* Farbe der Linie */
+            border-top-left-radius: 6px;
+            border-bottom-left-radius: 6px;
+        }
+
+
+        .event-day-number {
+            font-size: 64px;
+            font-weight: 900;
+            color: #5895E2; /* Blau für den Tag */
+            line-height: 1;
+        }
+
+        .event-month-short {
+            font-size: 20px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #ffffff;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        .event-details {
+            flex-grow: 1;
+            padding-left: 0; /* Abstand wird durch margin-right in date-box gegeben */
+        }
+
+        .event-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .event-detail-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 22px;
+            margin-bottom: 12px;
+            color: #e0e0e0;
+        }
+
+        .event-detail-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .event-detail-row svg {
+            flex-shrink: 0;
+            width: 28px;
+            height: 28px;
+            fill: #a0a0a0; /* Icon-Farbe */
+        }
+
+        /* Override for Slide mode */
+        .slide-mode .event-item {
             background: transparent;
-            -webkit-backdrop-filter: none;
             backdrop-filter: none;
-            border: none;
+            border-radius: 0;
             padding: 0;
             box-shadow: none;
-            width: 100%;
+            display: block;
+            text-align: center;
             height: 100%;
+        }
+        .slide-mode .event-date-box, .slide-mode .event-details {
+            display: none;
         }
 
         .empty-card {
@@ -115,74 +190,18 @@
             align-items: center;
             justify-content: center;
             opacity: 0.6;
+            width: 100%;
+            height: 100%;
         }
 
         .empty-message {
-            font-size: 32px; /* Größerer Text für den einzelnen Display */
+            font-size: 32px;
             color: rgba(255, 255, 255, 0.5);
             font-style: italic;
         }
 
-        .event-date-big {
-            font-size: 80px; /* Noch größer für Single-Display */
-            font-weight: 900;
-            margin-bottom: 25px;
-            color: #edc544;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .event-weekday {
-            font-size: 28px; /* Größer */
-            font-weight: 600;
-            margin-bottom: 40px;
-            opacity: 0.9;
-            color: #f4dc8f;
-        }
-
-        .event-title-big {
-            font-size: 36px; /* Größer */
-            font-weight: 700;
-            margin-bottom: 30px;
-            line-height: 1.2;
-            color: #fff;
-            min-height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .event-time-big {
-            font-size: 32px; /* Größer */
-            font-weight: 600;
-            margin-bottom: 25px;
-            color: #edc544;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-        }
-
-        .event-location-big {
-            font-size: 26px; /* Größer */
-            margin-bottom: 25px;
-            opacity: 0.9;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            color: #abd075;
-        }
-
-        .event-description-big {
-            font-size: 22px; /* Größer */
-            line-height: 1.4;
-            opacity: 0.8;
-            max-width: 100%;
-            margin: 0 auto;
-        }
-
         .icon {
-            width: 32px; /* Größere Icons */
+            width: 32px;
             height: 32px;
             fill: currentColor;
         }
@@ -192,10 +211,10 @@
             bottom: 0;
             left: 0;
             height: 6px;
-            background: #edc544;
+            background: #5895E2; /* Blau für Fortschrittsbalken */
             border-radius: 3px;
             transition: width linear;
-            box-shadow: 0 2px 10px rgba(237, 197, 68, 0.5);
+            box-shadow: 0 2px 10px rgba(88, 149, 226, 0.5);
         }
 
         .tv-footer {
@@ -208,33 +227,21 @@
             opacity: 0.8;
         }
 
-        .no-events {
+        .no-events, .loading {
             text-align: center;
-            font-size: 48px; /* Größer für Single-Display */
+            font-size: 48px;
             opacity: 0.7;
             color: #f4dc8f;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-
-        .loading {
-            text-align: center;
-            font-size: 48px; /* Größer für Single-Display */
-            opacity: 0.7;
-            color: #f4dc8f;
-        }
-
-        /* Kategoriefarben (können bei transparentem Hintergrund weniger auffallen) */
-        .gottesdienst { color: #f39c12; }
-        .kinder { color: #3498db; }
-        .senioren { color: #9b59b6; }
-        .jugend { color: #e74c3c; }
-        .sonstige { color: #27ae60; }
 
         .slide-container {
-            display: -webkit-flex;
             display: flex;
-            -webkit-align-items: center;
             align-items: center;
-            -webkit-justify-content: center;
             justify-content: center;
             width: 100%;
             height: 100%;
@@ -256,14 +263,13 @@
         @media (max-width: 1366px) {
             .church-title { font-size: 28px; }
             .current-time { font-size: 20px; }
-            .event-date-big { font-size: 64px; }
-            .event-weekday { font-size: 24px; }
-            .event-title-big { font-size: 30px; }
-            .event-time-big { font-size: 26px; }
-            .event-location-big { font-size: 22px; }
-            .event-description-big { font-size: 18px; }
-            .event-card { padding: 50px; }
-            .icon { width: 28px; height: 28px; }
+            .event-day-number { font-size: 54px; }
+            .event-month-short { font-size: 18px; }
+            .event-title { font-size: 28px; margin-bottom: 15px; }
+            .event-detail-row { font-size: 20px; margin-bottom: 10px; }
+            .event-detail-row svg { width: 24px; height: 24px; }
+            .event-item { padding: 25px; }
+            .event-date-box { width: 100px; padding-right: 25px; margin-right: 25px; }
             .no-events, .loading { font-size: 36px; }
         }
     </style>
@@ -278,7 +284,7 @@
 
     <div class="tv-content">
         <div class="events-container" id="events-container">
-            <div class="event-card" id="event-card-1">
+            <div class="event-card-wrapper" id="event-card-wrapper-1">
                 <div class="loading">Lade Termine...</div>
             </div>
         </div>
@@ -300,7 +306,7 @@
             { file: 'sonstige.ics', color: '#27ae60', category: 'sonstige', name: 'Sonstige' }
         ];
 
-        let currentEventIndex = 0;
+        let currentEventIndex = 0; // Index für das erste Event des Paares
         let currentSlideIndex = 0;
         let allEvents = [];
         let allSlides = [];
@@ -308,6 +314,7 @@
         let showSlides = true;
         const ROTATION_TIME = 15000;
         const SLIDE_TIME = 10000;
+        const EVENTS_PER_PAGE = 2; // Anzahl der Termine pro Seite
 
         // Uhrzeit aktualisieren
         function updateClock() {
@@ -328,6 +335,7 @@
             const now = new Date();
             const twoWeeksFromNow = new Date();
             twoWeeksFromNow.setDate(now.getDate() + 14);
+            twoWeeksFromNow.setHours(23, 59, 59, 999); // Bis Ende des Tages in 2 Wochen
 
             const events = [];
             try {
@@ -337,25 +345,54 @@
                 
                 vevents.forEach(vevent => {
                     const event = new ICAL.Event(vevent);
-                    const addEvent = (e) => {
-                        const eventStart = e.startDate.toJSDate();
-                        if (eventStart >= now && eventStart <= twoWeeksFromNow) {
-                            e.color = color;
-                            e.category = category;
-                            e.categoryName = name;
-                            events.push(e);
+                    // Standardmäßig auf 00:00:00 setzen, wenn es ein ganztägiger Event ist,
+                    // damit der Vergleich `eventStart >= now` für heutige ganztägige Events funktioniert
+                    const eventStartRaw = event.startDate.toJSDate();
+                    const eventEndRaw = event.endDate.toJSDate();
+
+                    const addEvent = (e, originalEvent) => {
+                        const start = e.startDate.toJSDate();
+                        const end = e.endDate.toJSDate();
+
+                        // Für ganztägige Events: Überprüfen, ob der Tag im Bereich liegt
+                        // Für zeitgebundene Events: Überprüfen, ob die Startzeit im Bereich liegt
+                        const isAllDay = e.startDate.isDate; // Prüft, ob nur Datum, nicht Datum und Zeit
+                        
+                        let relevantStart = isAllDay ? new Date(start.getFullYear(), start.getMonth(), start.getDate()) : start;
+                        
+                        if (relevantStart >= now && relevantStart <= twoWeeksFromNow) {
+                            // Kopiere den Event und füge zusätzliche Eigenschaften hinzu
+                            const eventCopy = { ...originalEvent,
+                                startDate: e.startDate,
+                                endDate: e.endDate,
+                                summary: originalEvent.summary,
+                                location: originalEvent.location,
+                                description: originalEvent.description,
+                                color: color,
+                                category: category,
+                                categoryName: name
+                            };
+                            events.push(eventCopy);
                         }
                     };
                     
                     if (event.isRecurring()) {
                         const iterator = event.iterator();
                         let next;
-                        while ((next = iterator.next()) && next.toJSDate() <= twoWeeksFromNow) {
+                        // Loop durch die Wiederholungen, bis sie außerhalb des Zwei-Wochen-Fensters liegen
+                        while ((next = iterator.next())) {
                             const occ = event.getOccurrenceDetails(next);
-                            addEvent(occ);
+                            const occStart = occ.startDate.toJSDate();
+                            const relevantOccStart = occ.startDate.isDate ? new Date(occStart.getFullYear(), occStart.getMonth(), occStart.getDate()) : occStart;
+
+                            if (relevantOccStart > twoWeeksFromNow) {
+                                break; // Wiederholungen sind zu weit in der Zukunft
+                            }
+                            addEvent(occ, event); // Pass original event to get summary, location, description
                         }
                     } else {
-                        addEvent(event);
+                        // Einmaliges Event
+                        addEvent(event, event);
                     }
                 });
             } catch (e) {
@@ -364,272 +401,12 @@
             return events;
         };
 
-        // Event anzeigen
-        function displayEvent(event, cardId) {
-            const card = document.getElementById(cardId);
-            card.classList.remove('slide-mode');
-            
-            const item = event.item || event;
+        // HTML für ein einzelnes Event generieren
+        function generateEventHtml(event) {
+            if (!event) return '';
+
             const startDate = event.startDate.toJSDate();
             const endDate = event.endDate.toJSDate();
 
-            const dayName = startDate.toLocaleDateString('de-DE', { weekday: 'long' });
             const dayNumber = startDate.getDate();
-            const monthYear = startDate.toLocaleDateString('de-DE', { month: 'long', year: 'numeric' });
-
-            let timeHTML = '';
-            if (!event.startDate.isDate) {
-                const startTime = startDate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
-                const endTime = endDate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
-                timeHTML = '<div class="event-time-big"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg><div>' + startTime + ' - ' + endTime + ' Uhr</div></div>';
-            }
-
-            let locationHTML = '';
-            if (item.location) {
-                locationHTML = '<div class="event-location-big"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5-2.5z"/></svg><div>' + item.location + '</div></div>';
-            }
-
-            let descriptionHTML = '';
-            if (item.description) {
-                const shortDescription = item.description.length > 150 
-                    ? item.description.substring(0, 150) + '...' 
-                    : item.description;
-                descriptionHTML = '<div class="event-description-big">' + shortDescription + '</div>';
-            }
-
-            const dateHTML = '<div class="event-date-big">' + dayNumber + '</div>';
-            const weekdayHTML = '<div class="event-weekday">' + dayName + ', ' + monthYear + '</div>';
-            const titleHTML = '<div class="event-title-big">' + item.summary + '</div>';
-
-            card.innerHTML = dateHTML + weekdayHTML + titleHTML + timeHTML + locationHTML + descriptionHTML;
-            card.classList.add('active');
-        }
-
-        // Leere Karte anzeigen
-        function displayEmptyCard(cardId) {
-            const card = document.getElementById(cardId);
-            card.classList.remove('slide-mode');
-            card.innerHTML = '<div class="empty-card"><div class="empty-message">Keine anstehenden Termine</div></div>';
-            card.classList.add('active');
-        }
-
-        // Slide anzeigen
-        function displaySlide(slideUrl) {
-            const card1 = document.getElementById('event-card-1');
-            
-            card1.classList.add('slide-mode');
-            card1.innerHTML = '<div class="slide-container"><img src="' + slideUrl + '" alt="Info-Slide" class="slide-image" /></div>';
-            card1.classList.add('active');
-        }
-
-        // Slides automatisch laden
-        async function loadSlides() {
-            try {
-                const possibleSlides = [
-                    'slide1.jpg', 'slide2.jpg', 'slide3.jpg',
-                    'folie1.jpg', 'folie2.jpg', 'folie3.jpg',
-                    'info1.jpg', 'info2.jpg', 'info3.jpg'
-                ];
-                
-                allSlides = [];
-                
-                for (const fileName of possibleSlides) {
-                    try {
-                        const response = await fetch('slides/' + fileName, { method: 'HEAD' });
-                        if (response.ok) {
-                            allSlides.push('slides/' + fileName);
-                            console.log('✅ Slide gefunden: ' + fileName);
-                        }
-                    } catch (e) {
-                        // Datei existiert nicht - stumm ignorieren
-                    }
-                }
-                
-                console.log('📸 Insgesamt ' + allSlides.length + ' Slides geladen:', allSlides);
-                return allSlides.length > 0;
-            } catch (error) {
-                console.error('Fehler beim Laden der Slides:', error);
-                return false;
-            }
-        }
-
-        // Progress Bar animieren
-        function animateProgressBar(duration) {
-            const progressBar = document.getElementById('progress-bar');
-            
-            progressBar.style.transition = 'none';
-            progressBar.style.width = '0%';
-            
-            setTimeout(() => {
-                progressBar.style.transition = 'width ' + duration + 'ms linear';
-                progressBar.style.width = '100%';
-            }, 100);
-        }
-
-        // Nächsten Content anzeigen
-        function showNextContent() {
-            const card1 = document.getElementById('event-card-1');
-            
-            card1.classList.remove('active');
-
-            setTimeout(() => {
-                if (showSlides && allSlides.length > 0 && allEvents.length > 0) {
-                    displaySlide(allSlides[currentSlideIndex]);
-                    currentSlideIndex = (currentSlideIndex + 1) % allSlides.length;
-                    showSlides = false;
-                    updateEventCounter('slide');
-                    
-                    setTimeout(() => {
-                        animateProgressBar(SLIDE_TIME);
-                    }, 200);
-                    
-                    clearInterval(rotationInterval);
-                    rotationInterval = setInterval(showNextContent, SLIDE_TIME);
-                    
-                } else if (allEvents.length > 0) {
-                    console.log('Zeige Event. CurrentIndex:', currentEventIndex, 'Total Events:', allEvents.length);
-                    
-                    const event = allEvents[currentEventIndex];
-                    console.log('Event:', event ? event.summary : 'null');
-                    
-                    if (event) {
-                        displayEvent(event, 'event-card-1');
-                    } else {
-                        displayEmptyCard('event-card-1');
-                    }
-                    
-                    currentEventIndex = (currentEventIndex + 1) % allEvents.length;
-                    console.log('Neuer Index:', currentEventIndex);
-                    
-                    showSlides = allSlides.length > 0;
-                    updateEventCounter('event');
-                    
-                    setTimeout(() => {
-                        animateProgressBar(ROTATION_TIME);
-                    }, 200);
-                    
-                    clearInterval(rotationInterval);
-                    rotationInterval = setInterval(showNextContent, ROTATION_TIME);
-                    
-                } else {
-                    if (allSlides.length > 0) {
-                        displaySlide(allSlides[currentSlideIndex]);
-                        currentSlideIndex = (currentSlideIndex + 1) % allSlides.length;
-                        updateEventCounter('slide');
-                        
-                        setTimeout(() => {
-                            animateProgressBar(SLIDE_TIME);
-                        }, 200);
-                        
-                        clearInterval(rotationInterval);
-                        rotationInterval = setInterval(showNextContent, SLIDE_TIME);
-                    }
-                }
-            }, 400);
-        }
-
-        // Event-Zähler aktualisieren
-        function updateEventCounter(type) {
-            const counter = document.getElementById('event-counter');
-            
-            if (type === 'slide') {
-                counter.textContent = 'Info-Folie ' + (currentSlideIndex === 0 ? allSlides.length : currentSlideIndex) + ' von ' + allSlides.length;
-            } else if (allEvents.length > 0) {
-                const displayIndex = currentEventIndex === 0 ? allEvents.length : currentEventIndex;
-                counter.textContent = 'Termin ' + displayIndex + ' von ' + allEvents.length;
-                console.log('Counter: Event', displayIndex, 'von', allEvents.length, 'Index:', currentEventIndex);
-            } else {
-                counter.textContent = 'Keine anstehenden Termine';
-            }
-        }
-
-        // Rotation starten
-        function startRotation() {
-            if (allEvents.length === 0 && allSlides.length === 0) return;
-            
-            clearInterval(rotationInterval);
-            
-            if (allEvents.length > 0) {
-                animateProgressBar(ROTATION_TIME);
-                rotationInterval = setInterval(showNextContent, ROTATION_TIME);
-            } else {
-                animateProgressBar(SLIDE_TIME);
-                rotationInterval = setInterval(showNextContent, SLIDE_TIME);
-            }
-        }
-
-        // Kalender und Slides laden
-        async function loadCalendar() {
-            const card1 = document.getElementById('event-card-1');
-            
-            try {
-                console.log('📅 Lade Slides...');
-                await loadSlides();
-                
-                console.log('📅 Lade Kalender...');
-                const responses = await Promise.all(calendars.map(cal => 
-                    fetch(cal.file, { cache: 'no-store' }).catch(() => ({ ok: false }))
-                ));
-                
-                const textPromises = responses.map(res => res.ok ? res.text() : '');
-                const icalDatas = await Promise.all(textPromises);
-                
-                allEvents = [];
-                icalDatas.forEach((data, index) => {
-                    if (data) {
-                        const cal = calendars[index];
-                        const events = processIcalData(data, cal.color, cal.category, cal.name);
-                        allEvents = allEvents.concat(events);
-                    }
-                });
-
-                allEvents.sort((a, b) => a.startDate.toJSDate() - b.startDate.toJSDate());
-                
-                console.log('📊 Alle Events sortiert. Anzahl:', allEvents.length);
-                allEvents.forEach((event, index) => {
-                    const item = event.item || event;
-                    console.log('Event ' + (index + 1) + ':', item.summary);
-                });
-
-                if (allEvents.length > 0 || allSlides.length > 0) {
-                    currentEventIndex = 0;
-                    currentSlideIndex = 0;
-                    
-                    if (allEvents.length > 0) {
-                        console.log('Zeige ersten Termin. Gesamte Events:', allEvents.length);
-                        
-                        const event1 = allEvents[0];
-                        displayEvent(event1, 'event-card-1');
-                        
-                        currentEventIndex = 1; // Nächster Event beim nächsten Durchlauf
-                        showSlides = allSlides.length > 0;
-                        updateEventCounter('event');
-                        
-                    } else if (allSlides.length > 0) {
-                        displaySlide(allSlides[0]);
-                        updateEventCounter('slide');
-                    }
-                    
-                    startRotation();
-                } else {
-                    card1.innerHTML = '<div class="no-events">📅<br><br>Keine Termine und keine Info-Folien gefunden</div>';
-                    card1.classList.add('active');
-                    updateEventCounter('event');
-                }
-            } catch (error) {
-                console.error('Fehler beim Laden:', error);
-                card1.innerHTML = '<div class="no-events">❌<br><br>Fehler beim Laden der Inhalte</div>';
-                card1.classList.add('active');
-            }
-        }
-
-        // Initialisierung
-        updateClock();
-        setInterval(updateClock, 1000);
-        loadCalendar();
-
-        // Alle 5 Minuten neu laden
-        setInterval(loadCalendar, 5 * 60 * 1000);
-    </script>
-</body>
-</html>
+            const monthShort = startDate.toLocaleDateString('de-
