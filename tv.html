@@ -433,15 +433,23 @@
 
         async function loadSlides() {
             try {
+                // Erweiterte Liste möglicher Slide-Namen
                 const possibleSlides = [
-                    'slide1.jpg', 'slide2.jpg', 'slide3.jpg',
-                    'slide4.jpg', 'slide5.jpg', 'slide6.jpg'
-                    'slide7.jpg', 'slide8.jpg', 'slide9.jpg'
-                    'folie1.jpg', 'folie2.jpg', 'folie3.jpg',
-                    'info1.jpg', 'info2.jpg', 'info3.jpg'
+                    'slide1.jpg', 'slide2.jpg', 'slide3.jpg', 'slide4.jpg', 'slide5.jpg', 'slide6.jpg',
+                    'folie1.jpg', 'folie2.jpg', 'folie3.jpg', 'folie4.jpg', 'folie5.jpg', 'folie6.jpg',
+                    'info1.jpg', 'info2.jpg', 'info3.jpg', 'info4.jpg', 'info5.jpg', 'info6.jpg',
+                    // Weitere mögliche Benennungen
+                    '1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg', '6.jpg',
+                    'slide_1.jpg', 'slide_2.jpg', 'slide_3.jpg', 'slide_4.jpg', 'slide_5.jpg', 'slide_6.jpg',
+                    'bild1.jpg', 'bild2.jpg', 'bild3.jpg', 'bild4.jpg', 'bild5.jpg', 'bild6.jpg',
+                    // PNG-Versionen
+                    'slide1.png', 'slide2.png', 'slide3.png', 'slide4.png', 'slide5.png', 'slide6.png',
+                    'folie1.png', 'folie2.png', 'folie3.png', 'folie4.png', 'folie5.png', 'folie6.png',
+                    '1.png', '2.png', '3.png', '4.png', '5.png', '6.png'
                 ];
                 
                 allSlides = [];
+                let checkedCount = 0;
                 
                 for (const fileName of possibleSlides) {
                     try {
@@ -453,9 +461,12 @@
                     } catch (e) {
                         // Datei existiert nicht - stumm ignorieren
                     }
+                    checkedCount++;
                 }
                 
-                console.log('📸 Insgesamt ' + allSlides.length + ' Slides geladen:', allSlides);
+                console.log('📸 Geprüfte Dateien:', checkedCount, '- Gefundene Slides:', allSlides.length);
+                console.log('📋 Gefundene Slides:', allSlides);
+                
                 return allSlides.length > 0;
             } catch (error) {
                 console.error('Fehler beim Laden der Slides:', error);
