@@ -6,26 +6,7 @@ X-PUBLISHED-TTL:PT1H
 X-WR-CALNAME:Jugend
 BEGIN:VEVENT
 UID:7811af85d7a3951bcc2a66a10edcdf32@gemeindekonkordia.church.tools
-DTSTAMP:20251009T182424Z
-LAST-MODIFIED:20250722T154216Z
-SUMMARY:Jugendabend
-DESCRIPTION:Wir glauben\, dass der Heilige Geist gerade unter jungen Leuten
-  in der Region Mittel Baden viel bewegen will. Wir wollen gemeinsam in die
- ser Generation Einheit und Entschlossenheit demonstrieren.\nUnsere Jugendg
- ottesdienste sind  jung\, wild und von tiefen und prägenden Zeiten gekenn
- zeichnet. Dabei ist sie voll von Gott\, Spaß und Action – und natürlic
- h dürfen deine Freunde\, Klassenkameraden und Kollegen nicht fehlen.
-URL:https://www.gemeinde-konkordia.de/jugend
-LOCATION:Konkordia\, Eisenbahnstraße 31\, 77815\, Bühl
-ORGANIZER:mailto:noreply@churchtools.de
-DTSTART:20250412T163000Z
-DTEND:20250412T190000Z
-SEQUENCE:2
-X-MICROSOFT-CDO-ALLDAYEVENT:FALSE
-END:VEVENT
-BEGIN:VEVENT
-UID:8b64333b28a9cd8b65c077734061442d@gemeindekonkordia.church.tools
-DTSTAMP:20251009T182424Z
+DTSTAMP:20251009T201908Z
 LAST-MODIFIED:20250722T154216Z
 SUMMARY:Jugendabend
 DESCRIPTION:Wir glauben\, dass der Heilige Geist gerade unter jungen Leuten
@@ -43,8 +24,8 @@ SEQUENCE:2
 X-MICROSOFT-CDO-ALLDAYEVENT:FALSE
 END:VEVENT
 BEGIN:VEVENT
-UID:e1b8af99bcbfc5bc7c76fd9466090c26@gemeindekonkordia.church.tools
-DTSTAMP:20251009T182424Z
+UID:8b64333b28a9cd8b65c077734061442d@gemeindekonkordia.church.tools
+DTSTAMP:20251009T201908Z
 LAST-MODIFIED:20250722T154216Z
 SUMMARY:Jugendabend
 DESCRIPTION:Wir glauben\, dass der Heilige Geist gerade unter jungen Leuten
