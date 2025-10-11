@@ -6,570 +6,381 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>iCal Kalender-Widget</title>
     <style>
-        *, *::before, *::after { 
-            box-sizing: border-box; 
-        }
+        *, *::before, *::after { box-sizing: border-box; }
+        :root { --widget-bg: #ffffff; --text-color: #333; --subtle-text: #888; --accent-color: #bb2232; --border-color: #e9e9e9; --header-bg: #f5f5f5; --date-bg: #f0f0f0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: var(--widget-bg); color: var(--text-color); margin: 0; padding: 0; overflow-wrap: break-word; overflow-x: hidden; }
+        #ical-calendar-widget { /* Leerer Container */ }
         
-        :root { 
-            --primary-bg: transparent;
-            --widget-bg: transparent;
-            --card-bg: rgba(255, 255, 255, 0.95);
-            --text-color: #2d3748;
-            --text-light: #4a5568;
-            --accent-color: #3182ce;
-            --border-color: rgba(0, 0, 0, 0.05);
-            --shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.08);
-            --shadow-hover: 0 8px 25px 0 rgba(0, 0, 0, 0.12);
-            --border-radius: 0px;
-            --border-radius-sm: 0px;
-        }
+        /* Sektion für nächste 7 Tage */
+        .next-week-section { margin-bottom: 30px; }
+        .section-header { background-color: var(--header-bg); padding: 12px 20px; font-size: 16px; font-weight: 700; color: var(--text-color); text-transform: uppercase; letter-spacing: 1.5px; border-bottom: 2px solid var(--border-color); border-top: 2px solid var(--border-color); }
         
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif; 
-            background: var(--primary-bg);
-            min-height: 100vh;
-            margin: 0; 
-            padding: 0; 
-            overflow-wrap: break-word;
-            overflow-x: hidden;
-        }
+        /* Grid für Karten */
+        .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 25px; justify-items: center; }
         
-        #ical-widget-container {
-            max-width: 100%;
-            margin: 0;
-            backdrop-filter: none;
-            -webkit-backdrop-filter: none;
-            background: var(--widget-bg);
-            border: none;
-            box-shadow: none;
-            overflow: hidden;
-        }
+        /* Vertikale Karte */
+        .event-card { width: 100%; max-width: 280px; min-height: 320px; border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); transition: all 0.3s ease; cursor: pointer; display: flex; flex-direction: column; }
+        .event-card:hover { transform: translateY(-4px); box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15); }
         
-        #ical-calendar-widget { 
-            padding: 0;
-        }
+        /* Farbiger Header der Karte */
+        .card-header { padding: 15px; text-align: center; color: white; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
         
-        .month-header { 
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            padding: 16px 24px; 
-            font-size: 18px; 
-            font-weight: 700; 
-            color: var(--text-color); 
-            text-align: center;
-            border-bottom: 1px solid var(--border-color);
-            letter-spacing: 0.5px;
-        }
+        /* Datum in der Karte */
+        .card-date { padding: 25px 20px; text-align: center; background-color: #fafafa; }
+        .card-day { font-size: 56px; font-weight: 700; line-height: 1; color: var(--text-color); }
+        .card-month { font-size: 16px; font-weight: 600; color: var(--subtle-text); text-transform: uppercase; margin-top: 5px; letter-spacing: 1px; }
         
-        #calendar-list {
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
+        /* Titel in der Karte */
+        .card-body { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
+        .card-title { font-size: 18px; font-weight: 700; line-height: 1.3; text-align: center; color: var(--text-color); margin-bottom: 15px; }
+        .card-time { font-size: 14px; color: var(--subtle-text); text-align: center; }
         
-        .calendar-event { 
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow: hidden;
-        }
+        /* Overlay/Modal */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.6); z-index: 1000; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(4px); animation: fadeIn 0.3s ease; }
+        .modal-overlay.active { display: flex; }
         
-        .calendar-event:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-hover);
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         
-        .event-summary { 
-            display: flex; 
-            align-items: stretch; 
-            cursor: pointer; 
-            transition: all 0.3s ease;
-            min-height: 80px;
-            padding: 0;
-        }
+        .modal-content { background: white; border-radius: 12px; max-width: 600px; width: 100%; max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); animation: slideUp 0.3s ease; position: relative; }
         
-        .event-summary:hover { 
-            background: rgba(255, 255, 255, 0.1);
-        }
+        /* Modal Header */
+        .modal-header { padding: 25px 30px; border-bottom: 2px solid var(--border-color); position: sticky; top: 0; background: white; z-index: 10; }
+        .modal-date-large { font-size: 48px; font-weight: 700; color: var(--text-color); line-height: 1; }
+        .modal-weekday { font-size: 18px; color: var(--subtle-text); font-weight: 600; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 1px; }
+        .modal-title { font-size: 24px; font-weight: 700; margin-top: 15px; color: var(--text-color); line-height: 1.3; }
         
-        .event-summary:active {
-            transform: scale(0.98);
-        }
+        /* Close Button */
+        .modal-close { position: absolute; top: 20px; right: 20px; width: 36px; height: 36px; border: none; background: var(--border-color); border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; font-size: 20px; color: var(--text-color); }
+        .modal-close:hover { background: var(--accent-color); color: white; transform: rotate(90deg); }
         
-        .event-date { 
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            color: var(--text-color); 
-            text-align: center; 
-            width: 90px; 
-            min-width: 90px;
-            padding: 16px 16px; 
-            flex-shrink: 0; 
-            display: flex; 
-            flex-direction: column;
-            align-items: center; 
-            justify-content: center; 
-            border-right: 1px solid var(--border-color);
-        }
+        /* Modal Body */
+        .modal-body { padding: 30px; }
+        .modal-detail-item { display: flex; align-items: flex-start; margin-bottom: 20px; font-size: 16px; line-height: 1.6; }
+        .modal-detail-item svg { width: 24px; height: 24px; margin-right: 15px; fill: var(--accent-color); flex-shrink: 0; margin-top: 2px; }
+        .modal-detail-item strong { display: block; font-weight: 600; margin-bottom: 5px; color: var(--text-color); }
+        .modal-link { display: inline-block; background-color: var(--accent-color); color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 600; transition: all 0.2s ease; margin-top: 10px; }
+        .modal-link:hover { background-color: #a01f2b; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(187, 34, 50, 0.3); }
         
-        .date-day {
-            font-size: 32px; 
-            font-weight: 700; 
-            letter-spacing: -1px;
-            line-height: 1;
-        }
+        /* Normale Listen-Ansicht */
+        .month-header { background-color: var(--header-bg); padding: 8px 20px; font-size: 14px; font-weight: 600; color: var(--subtle-text); text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border-color); border-top: 1px solid var(--border-color); margin-top: -1px; }
+        .calendar-event { border-bottom: 1px solid var(--border-color); }
+        .event-summary { display: flex; align-items: stretch; cursor: pointer; transition: background-color 0.2s ease; padding-left: 15px; }
+        .event-summary:hover { background-color: #f9f9f9; }
+        .event-date { background-color: var(--date-bg); color: var(--text-color); text-align: center; width: 80px; padding: 15px 10px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 500; letter-spacing: -1px; }
+        .event-info { flex-grow: 1; padding: 20px; display: flex; align-items: center; border-left-width: 5px; border-left-style: solid; }
+        .event-title { font-size: 18px; font-weight: 600; }
+        .event-details { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out, padding 0.4s ease-out, border-top 0.4s ease-out; padding: 0 15px; border-top: 0px solid var(--border-color); }
+        .calendar-event.active .event-details { max-height: 500px; padding: 20px 15px 25px 15px; border-top: 1px solid var(--border-color); }
         
-        .date-month {
-            font-size: 14px;
-            font-weight: 400;
-            margin-top: 2px;
-            opacity: 0.8;
-        }
-        
-        .event-info { 
-            flex-grow: 1; 
-            padding: 24px 28px; 
-            display: flex; 
-            align-items: center; 
-            border-left-width: 4px; 
-            border-left-style: solid;
-            position: relative;
-        }
-        
-        .event-title { 
-            font-size: 18px; 
-            font-weight: 600;
-            color: var(--text-color);
-            line-height: 1.4;
-        }
-        
-        .event-details { 
-            max-height: 0; 
-            overflow: hidden; 
-            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
-                       padding 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
-            padding: 0 32px;
-            background: rgba(255, 255, 255, 0.05);
-        }
-        
-        .calendar-event.active .event-details { 
-            max-height: 600px; 
-            padding: 28px 32px 32px 32px;
-        }
-        
-        .detail-item { 
-            display: flex; 
-            align-items: flex-start; 
-            font-size: 16px;
-            margin-bottom: 20px;
-            color: var(--text-light);
-            line-height: 1.5;
-        }
-        
-        .detail-item:last-child { 
-            margin-bottom: 0; 
-        }
-        
-        .detail-item svg { 
-            width: 22px; 
-            height: 22px; 
-            margin-right: 18px; 
-            fill: var(--accent-color); 
-            flex-shrink: 0; 
-            margin-top: 2px;
-            opacity: 0.8;
-        }
-        
-        .detail-link a { 
-            display: inline-block; 
-            background: var(--accent-color);
-            color: white; 
-            padding: 14px 24px; 
-            border-radius: 6px; 
-            text-decoration: none; 
-            font-weight: 600; 
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px 0 rgba(49, 130, 206, 0.3);
-        }
-        
-        .detail-link a:hover { 
-            background: #2c5aa0;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px 0 rgba(49, 130, 206, 0.4);
-        }
-        
-        .detail-link a:active {
-            transform: translateY(0);
-        }
-        
-        #calendar-status { 
-            padding: 40px 24px; 
-            text-align: center; 
-            color: var(--text-light);
-            font-size: 18px;
-            line-height: 1.6;
-        }
+        /* Detail Items */
+        .detail-item { display: flex; align-items: flex-start; font-size: 15px; }
+        .detail-item:not(:last-child) { margin-bottom: 12px; }
+        .detail-item svg { width: 18px; height: 18px; margin-right: 12px; fill: var(--subtle-text); flex-shrink: 0; margin-top: 2px; }
+        .detail-link a { display: inline-block; background-color: var(--accent-color); color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: 600; transition: background-color 0.2s ease; }
+        .detail-link a:hover { background-color: #a01f2b; }
+        #calendar-status { padding: 40px; text-align: center; color: var(--subtle-text); }
         
         /* Mobile Optimierungen */
+        @media (max-width: 1024px) {
+            .cards-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 20px; }
+            .event-card { max-width: 100%; }
+        }
+        
         @media (max-width: 768px) {
-            #ical-widget-container {
-                border-radius: 0px;
-            }
-            
-            .month-header {
-                padding: 12px 16px;
-                font-size: 16px;
-            }
-            
-            #calendar-list {
-                padding: 12px;
-                gap: 12px;
-            }
-            
-            .event-summary {
-                min-height: 70px;
-            }
-            
-            .event-date {
-                width: 70px;
-                min-width: 70px;
-                padding: 14px 12px;
-            }
-            
-            .date-day {
-                font-size: 28px;
-            }
-            
-            .date-month {
-                font-size: 12px;
-            }
-            
-            .event-info {
-                padding: 20px;
-            }
-            
-            .event-title {
-                font-size: 16px;
-            }
-            
-            .event-details {
-                padding: 0 20px;
-            }
-            
-            .calendar-event.active .event-details {
-                padding: 24px 20px 28px 20px;
-            }
-            
-            .detail-item {
-                font-size: 15px;
-                margin-bottom: 16px;
-            }
-            
-            .detail-item svg {
-                width: 20px;
-                height: 20px;
-                margin-right: 16px;
-            }
-            
-            .detail-link a {
-                padding: 12px 20px;
-                font-size: 15px;
-            }
-            
-            #calendar-status {
-                padding: 30px 16px;
-                font-size: 16px;
-            }
+            .cards-grid { grid-template-columns: 1fr; gap: 15px; padding: 15px; }
+            .event-card { max-width: 400px; min-height: 280px; }
+            .card-day { font-size: 48px; }
+            .card-title { font-size: 17px; }
+            .modal-content { max-width: 95%; max-height: 90vh; }
+            .modal-header { padding: 20px; }
+            .modal-date-large { font-size: 38px; }
+            .modal-title { font-size: 20px; }
+            .modal-body { padding: 20px; }
         }
         
         @media (max-width: 480px) {
-            #ical-widget-container {
-                border-radius: 0px;
-            }
-            
-            .month-header {
-                padding: 10px 12px;
-                font-size: 15px;
-            }
-            
-            #calendar-list {
-                padding: 8px;
-                gap: 10px;
-            }
-            
-            .event-summary {
-                min-height: 60px;
-            }
-            
-            .event-date {
-                width: 60px;
-                min-width: 60px;
-                padding: 10px 8px;
-            }
-            
-            .date-day {
-                font-size: 24px;
-            }
-            
-            .date-month {
-                font-size: 11px;
-            }
-            
-            .event-info {
-                padding: 16px;
-            }
-            
-            .event-title {
-                font-size: 15px;
-            }
-            
-            .event-details {
-                padding: 0 16px;
-            }
-            
-            .calendar-event.active .event-details {
-                padding: 20px 16px 24px 16px;
-            }
-            
-            .detail-item {
-                font-size: 14px;
-                margin-bottom: 14px;
-            }
-            
-            .detail-link a {
-                padding: 10px 18px;
-                font-size: 14px;
-            }
-        }
-        
-        /* Touch-optimierte Hover-Effekte */
-        @media (hover: none) and (pointer: coarse) {
-            .event-summary:hover {
-                background: transparent;
-            }
-            
-            .calendar-event:hover {
-                transform: none;
-                box-shadow: var(--shadow);
-            }
-            
-            .detail-link a:hover {
-                transform: none;
-                background: var(--accent-color);
-                box-shadow: 0 2px 8px 0 rgba(49, 130, 206, 0.3);
-            }
-        }
-        
-        /* Verbesserte Touch-Targets */
-        .event-summary {
-            min-height: 44px; /* iOS Empfehlung für Touch-Targets */
-        }
-        
-        .detail-link a {
-            min-height: 44px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        /* Smooth Scrolling */
-        html {
-            scroll-behavior: smooth;
-        }
-        
-        /* Focus-Styles für Accessibility */
-        .event-summary:focus {
-            outline: 2px solid var(--accent-color);
-            outline-offset: 2px;
-        }
-        
-        .detail-link a:focus {
-            outline: 2px solid rgba(255, 255, 255, 0.8);
-            outline-offset: 2px;
+            .event-card { min-height: 260px; }
+            .card-date { padding: 20px 15px; }
+            .card-day { font-size: 42px; }
+            .card-month { font-size: 14px; }
+            .card-title { font-size: 16px; }
+            .section-header { font-size: 14px; padding: 10px 15px; }
+            .modal-date-large { font-size: 32px; }
+            .modal-weekday { font-size: 16px; }
+            .modal-title { font-size: 18px; }
+            .modal-detail-item { font-size: 15px; }
         }
     </style>
 </head>
 <body>
     <div id="ical-widget-container">
         <div id="ical-calendar-widget">
+            <div id="next-week-container"></div>
             <div id="calendar-list"></div>
             <div id="calendar-status"></div>
+        </div>
+    </div>
+    
+    <!-- Modal Overlay -->
+    <div id="modal-overlay" class="modal-overlay">
+        <div class="modal-content" id="modal-content">
+            <div class="modal-header">
+                <button class="modal-close" id="modal-close">×</button>
+                <div id="modal-header-content"></div>
+            </div>
+            <div class="modal-body" id="modal-body-content"></div>
         </div>
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/ical.js@1.5.0/build/ical.min.js"></script>
     <script>
         (function() {
-            // --- HIER IST DIE ZENTRALE KONFIGURATION MIT IHREN WUNSCHFARBEN ---
             const calendars = [
-                { file: 'gottesdienst.ics', color: '#f39c12' }, // Warmes Orange
-                { file: 'kinder.ics',         color: '#3498db' }, // Blau
-                { file: 'senioren.ics',       color: '#9b59b6' }, // Lila
-                { file: 'jugend.ics',         color: '#e74c3c' }, // Rot
-                { file: 'sonstige.ics',       color: '#27ae60' }  // Grün
+                { file: 'gottesdienst.ics', color: '#f1c40f' },
+                { file: 'kinder.ics', color: '#3498db' },
+                { file: 'senioren.ics', color: '#9b59b6' },
+                { file: 'jugend.ics', color: '#e91e63' },
+                { file: 'sonstige.ics', color: '#2ecc71' }
             ];
 
+            const config = { weeksToShow: 4 };
+            const nextWeekContainer = document.getElementById('next-week-container');
             const listContainer = document.getElementById('calendar-list');
             const statusContainer = document.getElementById('calendar-status');
+            const modalOverlay = document.getElementById('modal-overlay');
+            const modalClose = document.getElementById('modal-close');
+            const modalHeaderContent = document.getElementById('modal-header-content');
+            const modalBodyContent = document.getElementById('modal-body-content');
 
-            const processIcalData = (icalData, color) => { 
-                const now = new Date(); 
-                console.log('Aktueller Zeitpunkt:', now);
+            // Modal öffnen/schließen
+            const openModal = (event) => {
+                const startDate = event.startDate.toJSDate();
+                const item = event.item || event;
+                const endDate = event.endDate.toJSDate();
+                const color = event.color;
                 
-                // Prüfe ob wir ab dem 28. sind
-                const currentDay = now.getDate();
-                let monthEnd;
+                // Header
+                const weekday = startDate.toLocaleDateString('de-DE', { weekday: 'long' });
+                const day = startDate.getDate();
+                const monthYear = startDate.toLocaleDateString('de-DE', { month: 'long', year: 'numeric' });
                 
-                if (currentDay >= 28) {
-                    // Ab 28. zeige auch nächsten Monat
-                    monthEnd = new Date(now.getFullYear(), now.getMonth() + 2, 0, 23, 59, 59);
-                    console.log('Ab 28.: Zeige bis Ende nächsten Monats:', monthEnd);
-                } else {
-                    // Bis 27.: Nur aktueller Monat
-                    monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
-                    console.log('Bis 27.: Zeige nur aktuellen Monat:', monthEnd);
+                modalHeaderContent.innerHTML = `
+                    <div class="modal-weekday" style="color: ${color};">${weekday}</div>
+                    <div class="modal-date-large">${day}. ${monthYear}</div>
+                    <div class="modal-title">${item.summary}</div>
+                `;
+                
+                // Body
+                let bodyHTML = '';
+                
+                if (!event.startDate.isDate) {
+                    const options = { hour: '2-digit', minute: '2-digit' };
+                    bodyHTML += `
+                        <div class="modal-detail-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+                            <div>
+                                <strong>Uhrzeit</strong>
+                                ${startDate.toLocaleTimeString('de-DE', options)} - ${endDate.toLocaleTimeString('de-DE', options)} Uhr
+                            </div>
+                        </div>
+                    `;
                 }
                 
-                const events = []; 
-                try { 
-                    const jcalData = ICAL.parse(icalData); 
-                    const vcalendar = new ICAL.Component(jcalData); 
-                    const vevents = vcalendar.getAllSubcomponents('vevent'); 
-                    vevents.forEach(vevent => { 
-                        const event = new ICAL.Event(vevent); 
-                        const addEvent = (e) => { 
-                            const eventStart = e.startDate.toJSDate();
-                            console.log('Prüfe Event:', e.summary, 'Start:', eventStart, 'Jetzt:', now, 'Zukunft?', eventStart >= now);
-                            
-                            if (eventStart >= now && eventStart <= monthEnd) {
-                                e.color = color; 
-                                events.push(e);
-                                console.log('Event hinzugefügt:', e.summary);
-                            } else {
-                                console.log('Event NICHT hinzugefügt:', e.summary, 'Grund: zu alt oder zu weit in der Zukunft');
-                            }
-                        }; 
-                        if (event.isRecurring()) { 
-                            const iterator = event.iterator(); 
-                            let next; 
-                            while ((next = iterator.next()) && next.toJSDate() <= monthEnd) { 
-                                const occ = event.getOccurrenceDetails(next); 
-                                addEvent(occ); 
-                            } 
-                        } else { 
-                            addEvent(event); 
-                        } 
-                    }); 
-                } catch (e) { 
-                    console.error('Fehler beim Parsen von Kalenderdaten:', e); 
-                } 
-                console.log('Finale Event-Liste:', events.length, 'Events');
-                return events; 
-            };
-
-            const renderCalendar = (events) => { 
-                listContainer.innerHTML = ''; 
-                statusContainer.style.display = 'none'; 
-                
-                if (events.length === 0) { 
-                    const now = new Date();
-                    const currentDay = now.getDate();
-                    let monthText;
-                    
-                    if (currentDay >= 28) {
-                        const currentMonth = now.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
-                        const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-                        const nextMonthName = nextMonth.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
-                        monthText = currentMonth + ' und ' + nextMonthName;
-                    } else {
-                        monthText = 'Ende ' + now.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
-                    }
-                    
-                    statusContainer.textContent = 'Keine anstehenden Termine bis ' + monthText + ' gefunden.'; 
-                    statusContainer.style.display = 'block'; 
-                    return; 
-                } 
-                
-                // Header je nach Datum
-                const now = new Date();
-                const currentDay = now.getDate();
-                let headerText;
-                
-                if (currentDay >= 28) {
-                    const currentMonth = now.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
-                    const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-                    const nextMonthName = nextMonth.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
-                    headerText = currentMonth + ' / ' + nextMonthName;
-                } else {
-                    headerText = now.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
+                if (item.location) {
+                    bodyHTML += `
+                        <div class="modal-detail-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5-2.5z"/></svg>
+                            <div>
+                                <strong>Ort</strong>
+                                ${item.location}
+                            </div>
+                        </div>
+                    `;
                 }
                 
-                const monthHeader = document.createElement('div');
-                monthHeader.className = 'month-header';
-                monthHeader.textContent = headerText;
-                listContainer.appendChild(monthHeader);
+                if (item.description) {
+                    bodyHTML += `
+                        <div class="modal-detail-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zM4 6h16v2H4V6zm16 12H4V10h16v8z"/></svg>
+                            <div>
+                                <strong>Beschreibung</strong>
+                                ${item.description.replace(/\n/g, '<br>')}
+                            </div>
+                        </div>
+                    `;
+                }
                 
-                events.forEach(event => { 
-                    const startDate = event.startDate.toJSDate(); 
-                    const eventWrapper = document.createElement('div'); 
-                    eventWrapper.className = 'calendar-event'; 
-                    const item = event.item || event; 
-                    const endDate = event.endDate.toJSDate(); 
-                    const color = event.color; 
-                    
-                    // Datum getrennt in Tag und Monat
-                    const day = String(startDate.getDate()).padStart(2, '0');
-                    const monthShort = startDate.toLocaleString('de-DE', { month: 'short' }).toUpperCase();
-                    
-                    let detailsHTML = ''; 
-                    if (!event.startDate.isDate) { 
-                        const options = { hour: '2-digit', minute: '2-digit' }; 
-                        detailsHTML += '<div class="detail-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg><div>' + startDate.toLocaleTimeString('de-DE', options) + ' - ' + endDate.toLocaleTimeString('de-DE', options) + ' Uhr</div></div>'; 
-                    } 
-                    if (item.location) { 
-                        detailsHTML += '<div class="detail-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5-2.5z"/></svg><div>' + item.location + '</div></div>'; 
-                    } 
-                    if (item.description) { 
-                        detailsHTML += '<div class="detail-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zM4 6h16v2H4V6zm16 12H4V10h16v8z"/></svg><div>' + item.description.replace(/\n/g, '<br>') + '</div></div>'; 
-                    } 
-                    if (item.url) { 
-                        detailsHTML += '<div class="detail-item detail-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg><a href="' + item.url + '" target="_blank" rel="noopener noreferrer">Mehr Infos / Anmeldung</a></div>'; 
-                    } 
-                    eventWrapper.innerHTML = '<div class="event-summary" tabindex="0" role="button" aria-expanded="false"><div class="event-date"><div class="date-day">' + day + '</div><div class="date-month">' + monthShort + '</div></div><div class="event-info" style="border-left-color: ' + color + ';"><span class="event-title">' + item.summary + '</span></div></div><div class="event-details">' + (detailsHTML || '<div class="detail-item">Keine weiteren Informationen vorhanden.</div>') + '</div>'; 
-                    listContainer.appendChild(eventWrapper); 
-                }); 
-                addEventListeners(); 
+                if (item.url) {
+                    bodyHTML += `
+                        <div class="modal-detail-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
+                            <div>
+                                <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="modal-link">Mehr Infos / Anmeldung</a>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                if (!bodyHTML) {
+                    bodyHTML = '<div class="modal-detail-item">Keine weiteren Informationen vorhanden.</div>';
+                }
+                
+                modalBodyContent.innerHTML = bodyHTML;
+                modalOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
             };
             
-            const addEventListeners = () => { 
-                listContainer.querySelectorAll('.event-summary').forEach(summary => { 
-                    const toggleEvent = () => {
-                        const eventWrapper = summary.closest('.calendar-event'); 
-                        listContainer.querySelectorAll('.calendar-event.active').forEach(activeEvent => { 
-                            if (activeEvent !== eventWrapper) { 
-                                activeEvent.classList.remove('active');
-                                activeEvent.querySelector('.event-summary').setAttribute('aria-expanded', 'false');
-                            } 
-                        }); 
-                        const isActive = eventWrapper.classList.toggle('active');
-                        summary.setAttribute('aria-expanded', isActive);
-                    };
+            const closeModal = () => {
+                modalOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            };
+            
+            modalClose.addEventListener('click', closeModal);
+            modalOverlay.addEventListener('click', (e) => {
+                if (e.target === modalOverlay) closeModal();
+            });
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+                    closeModal();
+                }
+            });
+
+            const processIcalData = (icalData, color) => { const now = new Date(); const endDateLimit = new Date(); endDateLimit.setDate(now.getDate() + config.weeksToShow * 7); const events = []; try { const jcalData = ICAL.parse(icalData); const vcalendar = new ICAL.Component(jcalData); const vevents = vcalendar.getAllSubcomponents('vevent'); vevents.forEach(vevent => { const event = new ICAL.Event(vevent); const addEvent = (e) => { e.color = color; events.push(e); }; if (event.isRecurring()) { const iterator = event.iterator(); let next; while ((next = iterator.next()) && next.toJSDate() < endDateLimit) { const occ = event.getOccurrenceDetails(next); if (occ.startDate.toJSDate() >= now) addEvent(occ); } } else { if (event.startDate.toJSDate() >= now && event.startDate.toJSDate() < endDateLimit) addEvent(event); } }); } catch (e) { console.error(`Fehler beim Parsen von Kalenderdaten:`, e); } return events; };
+
+            const renderNextWeekCards = (events) => {
+                if (events.length === 0) return;
+                
+                const section = document.createElement('div');
+                section.className = 'next-week-section';
+                
+                const header = document.createElement('div');
+                header.className = 'section-header';
+                header.textContent = 'Nächste 7 Tage';
+                section.appendChild(header);
+                
+                const grid = document.createElement('div');
+                grid.className = 'cards-grid';
+                
+                events.forEach(event => {
+                    const startDate = event.startDate.toJSDate();
+                    const item = event.item || event;
+                    const color = event.color;
                     
-                    summary.addEventListener('click', toggleEvent);
-                    summary.addEventListener('keydown', (e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                            e.preventDefault();
-                            toggleEvent();
+                    const card = document.createElement('div');
+                    card.className = 'event-card';
+                    
+                    const cardHeader = document.createElement('div');
+                    cardHeader.className = 'card-header';
+                    cardHeader.style.backgroundColor = color;
+                    cardHeader.textContent = startDate.toLocaleDateString('de-DE', { weekday: 'long' });
+                    
+                    const cardDate = document.createElement('div');
+                    cardDate.className = 'card-date';
+                    cardDate.innerHTML = `<div class="card-day">${startDate.getDate()}</div><div class="card-month">${startDate.toLocaleDateString('de-DE', { month: 'short' }).toUpperCase()}</div>`;
+                    
+                    const cardBody = document.createElement('div');
+                    cardBody.className = 'card-body';
+                    
+                    let timeHTML = '';
+                    if (!event.startDate.isDate) {
+                        const options = { hour: '2-digit', minute: '2-digit' };
+                        timeHTML = `<div class="card-time">${startDate.toLocaleTimeString('de-DE', options)} Uhr</div>`;
+                    }
+                    
+                    cardBody.innerHTML = `<div class="card-title">${item.summary}</div>${timeHTML}`;
+                    
+                    card.appendChild(cardHeader);
+                    card.appendChild(cardDate);
+                    card.appendChild(cardBody);
+                    
+                    card.addEventListener('click', () => openModal(event));
+                    
+                    grid.appendChild(card);
+                });
+                
+                section.appendChild(grid);
+                nextWeekContainer.appendChild(section);
+            };
+
+            const renderCalendar = (allEvents) => {
+                nextWeekContainer.innerHTML = '';
+                listContainer.innerHTML = '';
+                statusContainer.style.display = 'none';
+                
+                if (allEvents.length === 0) {
+                    statusContainer.textContent = `Keine anstehenden Termine gefunden.`;
+                    statusContainer.style.display = 'block';
+                    return;
+                }
+                
+                const now = new Date();
+                const sevenDaysFromNow = new Date();
+                sevenDaysFromNow.setDate(now.getDate() + 7);
+                
+                const next7Days = [];
+                const laterEvents = [];
+                
+                allEvents.forEach(event => {
+                    const startDate = event.startDate.toJSDate();
+                    if (startDate >= now && startDate < sevenDaysFromNow) {
+                        next7Days.push(event);
+                    } else {
+                        laterEvents.push(event);
+                    }
+                });
+                
+                renderNextWeekCards(next7Days);
+                
+                if (laterEvents.length > 0) {
+                    const laterHeader = document.createElement('div');
+                    laterHeader.className = 'section-header';
+                    laterHeader.textContent = 'Weitere Termine';
+                    listContainer.appendChild(laterHeader);
+                    
+                    let currentMonth = null;
+                    laterEvents.forEach(event => {
+                        const startDate = event.startDate.toJSDate();
+                        const eventMonth = startDate.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
+                        
+                        if (eventMonth !== currentMonth) {
+                            const monthHeader = document.createElement('div');
+                            monthHeader.className = 'month-header';
+                            monthHeader.textContent = eventMonth;
+                            listContainer.appendChild(monthHeader);
+                            currentMonth = eventMonth;
                         }
+                        
+                        const eventWrapper = document.createElement('div');
+                        eventWrapper.className = 'calendar-event';
+                        const item = event.item || event;
+                        const endDate = event.endDate.toJSDate();
+                        const color = event.color;
+                        
+                        let detailsHTML = '';
+                        if (!event.startDate.isDate) {
+                            const options = { hour: '2-digit', minute: '2-digit' };
+                            detailsHTML += `<div class="detail-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg><div>${startDate.toLocaleTimeString('de-DE', options)} - ${endDate.toLocaleTimeString('de-DE', options)} Uhr</div></div>`;
+                        }
+                        if (item.location) {
+                            detailsHTML += `<div class="detail-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5-2.5z"/></svg><div>${item.location}</div></div>`;
+                        }
+                        if (item.description) {
+                            detailsHTML += `<div class="detail-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zM4 6h16v2H4V6zm16 12H4V10h16v8z"/></svg><div>${item.description.replace(/\n/g, '<br>')}</div></div>`;
+                        }
+                        if (item.url) {
+                            detailsHTML += `<div class="detail-item detail-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg><a href="${item.url}" target="_blank" rel="noopener noreferrer">Mehr Infos / Anmeldung</a></div>`;
+                        }
+                        
+                        eventWrapper.innerHTML = `<div class="event-summary"><div class="event-date">${startDate.getDate()}</div><div class="event-info" style="border-left-color: ${color};"><span class="event-title">${item.summary}</span></div></div><div class="event-details">${detailsHTML || '<div class="detail-item">Keine weiteren Informationen vorhanden.</div>'}</div>`;
+                        listContainer.appendChild(eventWrapper);
+                        
+                        eventWrapper.querySelector('.event-summary').addEventListener('click', () => {
+                            eventWrapper.classList.toggle('active');
+                        });
                     });
-                }); 
+                }
             };
             
             async function initCalendar() {
@@ -580,13 +391,7 @@
                     const textPromises = responses.map(res => res.ok ? res.text() : '');
                     const icalDatas = await Promise.all(textPromises);
                     let allEvents = [];
-                    icalDatas.forEach((data, index) => { 
-                        if (data) { 
-                            const color = calendars[index].color; 
-                            const events = processIcalData(data, color); 
-                            allEvents = allEvents.concat(events); 
-                        } 
-                    });
+                    icalDatas.forEach((data, index) => { if (data) { const color = calendars[index].color; const events = processIcalData(data, color); allEvents = allEvents.concat(events); } });
                     allEvents.sort((a, b) => a.startDate.toJSDate() - b.startDate.toJSDate());
                     renderCalendar(allEvents);
                 } catch (error) {
