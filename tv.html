@@ -23,7 +23,7 @@
 
         .tv-header {
             background: rgba(0, 0, 0, 0.3);
-            padding: 16px 40px;
+            padding: 20px 50px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -31,13 +31,13 @@
         }
 
         .church-title {
-            font-size: 36px;
+            font-size: 42px;
             font-weight: 700;
             color: #fff;
         }
 
         .current-time {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 500;
             opacity: 0.9;
         }
@@ -47,29 +47,29 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 30px;
+            padding: 40px;
             position: relative;
             overflow: hidden;
         }
 
         .events-container {
             width: 100%;
-            max-width: 1200px;
+            max-width: 1400px;
             height: 100%;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 30px;
             align-items: center;
             justify-content: center;
         }
 
         .event-card {
             background: rgba(255, 255, 255, 0.95);
-            border-radius: 12px;
+            border-radius: 16px;
             width: 100%;
-            max-width: 1000px;
+            max-width: 1300px;
             padding: 0;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
             opacity: 0;
             transform: translateY(20px);
             transition: all 0.8s ease;
@@ -92,18 +92,18 @@
             max-width: none;
         }
 
-        /* Horizontales Layout wie im Foto */
+        /* Horizontales Layout - DEUTLICH GRÖSSER */
         .event-content {
             display: flex;
             align-items: stretch;
-            min-height: 120px;
+            min-height: 180px; /* Von 120px auf 180px erhöht */
         }
 
         .event-date-section {
             background: #f8f9fa;
-            border-right: 3px solid #28a745;
-            padding: 20px;
-            min-width: 120px;
+            border-right: 4px solid #28a745;
+            padding: 30px;
+            min-width: 160px; /* Von 120px auf 160px erhöht */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -111,33 +111,33 @@
         }
 
         .event-date-day {
-            font-size: 36px;
+            font-size: 56px; /* Von 36px auf 56px erhöht */
             font-weight: 900;
             color: #333;
             line-height: 1;
         }
 
         .event-date-month {
-            font-size: 14px;
+            font-size: 20px; /* Von 14px auf 20px erhöht */
             font-weight: 600;
             color: #666;
             text-transform: uppercase;
-            margin-top: 2px;
+            margin-top: 4px;
         }
 
         .event-info-section {
             flex: 1;
-            padding: 20px 24px;
+            padding: 30px 40px; /* Von 20px 24px auf 30px 40px erhöht */
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
 
         .event-title {
-            font-size: 24px;
+            font-size: 34px; /* Von 24px auf 34px erhöht */
             font-weight: 700;
             color: #333;
-            margin-bottom: 12px;
+            margin-bottom: 16px; /* Von 12px auf 16px erhöht */
             line-height: 1.2;
         }
 
@@ -145,14 +145,14 @@
             display: flex;
             align-items: center;
             color: #666;
-            font-size: 16px;
-            margin-bottom: 8px;
+            font-size: 22px; /* Von 16px auf 22px erhöht */
+            margin-bottom: 12px; /* Von 8px auf 12px erhöht */
         }
 
         .event-time .icon {
-            width: 18px;
-            height: 18px;
-            margin-right: 8px;
+            width: 26px; /* Von 18px auf 26px erhöht */
+            height: 26px;
+            margin-right: 12px; /* Von 8px auf 12px erhöht */
             fill: #666;
         }
 
@@ -160,27 +160,27 @@
             display: flex;
             align-items: center;
             color: #666;
-            font-size: 16px;
+            font-size: 22px; /* Von 16px auf 22px erhöht */
         }
 
         .event-location .icon {
-            width: 18px;
-            height: 18px;
-            margin-right: 8px;
+            width: 26px; /* Von 18px auf 26px erhöht */
+            height: 26px;
+            margin-right: 12px; /* Von 8px auf 12px erhöht */
             fill: #666;
         }
 
         .empty-card {
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 40px;
+            border-radius: 16px;
+            padding: 60px;
             text-align: center;
             border: 2px dashed rgba(255, 255, 255, 0.3);
             color: rgba(255, 255, 255, 0.7);
         }
 
         .empty-message {
-            font-size: 24px;
+            font-size: 32px;
             font-style: italic;
         }
 
@@ -207,56 +207,67 @@
             position: absolute;
             bottom: 0;
             left: 0;
-            height: 6px;
+            height: 8px; /* Von 6px auf 8px erhöht */
             background: #edc544;
-            border-radius: 3px;
+            border-radius: 4px;
             transition: width linear;
             box-shadow: 0 2px 10px rgba(237, 197, 68, 0.5);
         }
 
         .tv-footer {
             background: rgba(0, 0, 0, 0.3);
-            padding: 12px 40px;
+            padding: 16px 50px; /* Von 12px 40px auf 16px 50px erhöht */
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 16px;
+            font-size: 20px; /* Von 16px auf 20px erhöht */
             opacity: 0.8;
         }
 
         .no-events {
             text-align: center;
-            font-size: 36px;
+            font-size: 42px;
             opacity: 0.7;
             color: #f4dc8f;
         }
 
         .loading {
             text-align: center;
-            font-size: 36px;
+            font-size: 42px;
             opacity: 0.7;
             color: #f4dc8f;
         }
 
-        /* Responsive */
+        /* Responsive für kleinere Displays */
         @media (max-width: 1366px) {
-            .church-title { font-size: 28px; }
-            .current-time { font-size: 20px; }
-            .event-date-day { font-size: 28px; }
-            .event-title { font-size: 20px; }
-            .event-time, .event-location { font-size: 14px; }
-            .event-content { min-height: 100px; }
-            .event-date-section { min-width: 100px; padding: 16px; }
-            .event-info-section { padding: 16px 20px; }
+            .church-title { font-size: 32px; }
+            .current-time { font-size: 22px; }
+            .event-date-day { font-size: 44px; }
+            .event-date-month { font-size: 16px; }
+            .event-title { font-size: 26px; }
+            .event-time, .event-location { font-size: 18px; }
+            .event-content { min-height: 150px; }
+            .event-date-section { min-width: 130px; padding: 24px; }
+            .event-info-section { padding: 24px 32px; }
+            .tv-footer { font-size: 16px; }
         }
 
+        /* Optimierung für sehr große Displays */
         @media (min-width: 1920px) {
-            .church-title { font-size: 42px; }
-            .current-time { font-size: 28px; }
-            .event-date-day { font-size: 44px; }
-            .event-title { font-size: 28px; }
-            .event-time, .event-location { font-size: 18px; }
-            .event-content { min-height: 140px; }
+            .church-title { font-size: 52px; }
+            .current-time { font-size: 32px; }
+            .event-date-day { font-size: 68px; }
+            .event-date-month { font-size: 24px; }
+            .event-title { font-size: 40px; }
+            .event-time, .event-location { font-size: 26px; }
+            .event-content { min-height: 200px; }
+            .event-date-section { min-width: 180px; padding: 36px; }
+            .event-info-section { padding: 36px 48px; }
+            .tv-footer { font-size: 22px; }
+            .event-time .icon, .event-location .icon {
+                width: 30px;
+                height: 30px;
+            }
         }
     </style>
 </head>
@@ -433,23 +444,19 @@
 
         async function loadSlides() {
             try {
-                // Erweiterte Liste möglicher Slide-Namen
                 const possibleSlides = [
                     'slide1.jpg', 'slide2.jpg', 'slide3.jpg', 'slide4.jpg', 'slide5.jpg', 'slide6.jpg',
                     'folie1.jpg', 'folie2.jpg', 'folie3.jpg', 'folie4.jpg', 'folie5.jpg', 'folie6.jpg',
                     'info1.jpg', 'info2.jpg', 'info3.jpg', 'info4.jpg', 'info5.jpg', 'info6.jpg',
-                    // Weitere mögliche Benennungen
                     '1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg', '6.jpg',
                     'slide_1.jpg', 'slide_2.jpg', 'slide_3.jpg', 'slide_4.jpg', 'slide_5.jpg', 'slide_6.jpg',
                     'bild1.jpg', 'bild2.jpg', 'bild3.jpg', 'bild4.jpg', 'bild5.jpg', 'bild6.jpg',
-                    // PNG-Versionen
                     'slide1.png', 'slide2.png', 'slide3.png', 'slide4.png', 'slide5.png', 'slide6.png',
                     'folie1.png', 'folie2.png', 'folie3.png', 'folie4.png', 'folie5.png', 'folie6.png',
                     '1.png', '2.png', '3.png', '4.png', '5.png', '6.png'
                 ];
                 
                 allSlides = [];
-                let checkedCount = 0;
                 
                 for (const fileName of possibleSlides) {
                     try {
@@ -461,12 +468,9 @@
                     } catch (e) {
                         // Datei existiert nicht - stumm ignorieren
                     }
-                    checkedCount++;
                 }
                 
-                console.log('📸 Geprüfte Dateien:', checkedCount, '- Gefundene Slides:', allSlides.length);
-                console.log('📋 Gefundene Slides:', allSlides);
-                
+                console.log('📸 Insgesamt ' + allSlides.length + ' Slides geladen');
                 return allSlides.length > 0;
             } catch (error) {
                 console.error('Fehler beim Laden der Slides:', error);
@@ -487,7 +491,6 @@
         }
 
         function showNextContent() {
-            // Fade out current content
             const container = document.getElementById('events-container');
             const cards = container.querySelectorAll('.event-card');
             cards.forEach(card => card.classList.remove('active'));
