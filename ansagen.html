@@ -13,7 +13,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-            background: linear-gradient(135deg, #4d4d4d 0%, #999999 100%);
+            background: linear-gradient(135deg, #666666 0%, #999999 100%);
             color: white;
             width: 1920px;
             height: 1080px;
@@ -32,7 +32,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 80px;
+            padding: 100px;
             position: absolute;
             top: 0;
             left: 0;
@@ -71,7 +71,7 @@
             margin-top: 80px;
         }
 
-        /* Event-Slide - WIE IM SCREENSHOT */
+        /* Event-Slide - GENAU WIE IM SCREENSHOT */
         .event-slide {
             text-align: center;
             width: 100%;
@@ -79,42 +79,32 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            gap: 80px;
         }
 
-        /* VERANSTALTUNGSNAME - RIESIG, WEIß */
+        /* VERANSTALTUNGSNAME - RIESIG WEIß OBEN */
         .event-title {
-            font-size: 160px;
+            font-size: 170px;
             font-weight: 900;
-            line-height: 1;
+            line-height: 0.95;
             color: #ffffff;
-            text-shadow: 4px 4px 12px rgba(0, 0, 0, 0.8);
-            margin-bottom: 100px;
-            letter-spacing: -3px;
-            max-width: 90%;
+            text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.7);
+            letter-spacing: -4px;
+            max-width: 95%;
         }
 
-        /* Info-Box unten (halbtransparent wie im Screenshot) */
-        .event-info {
-            background: rgba(100, 100, 100, 0.4);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 30px;
-            padding: 70px 100px;
-            min-width: 800px;
-        }
-
-        /* DATUM - GELB/GOLD */
+        /* DATUM - GELB/GOLD - GROß */
         .event-date-big {
-            font-size: 110px;
+            font-size: 120px;
             font-weight: 900;
             color: #d4af37;
-            margin-bottom: 20px;
             line-height: 1;
+            margin-bottom: 20px;
         }
 
         /* WOCHENTAG - GELB/GOLD */
         .event-weekday {
-            font-size: 56px;
+            font-size: 70px;
             font-weight: 700;
             color: #d4af37;
             margin-bottom: 50px;
@@ -125,24 +115,24 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 52px;
-            gap: 20px;
+            font-size: 62px;
+            gap: 25px;
             color: #ffffff;
             font-weight: 600;
         }
 
         .event-time svg {
-            width: 52px;
-            height: 52px;
-            fill: #d4af37;
+            width: 60px;
+            height: 60px;
+            fill: #ffffff;
         }
 
-        /* ORT */
+        /* ORT - WEIß */
         .event-location {
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 48px;
+            font-size: 52px;
             gap: 20px;
             color: #ffffff;
             margin-top: 30px;
@@ -150,20 +140,19 @@
         }
 
         .event-location svg {
-            width: 48px;
-            height: 48px;
-            fill: #d4af37;
+            width: 52px;
+            height: 52px;
+            fill: #ffffff;
         }
 
-        /* BESCHREIBUNG */
+        /* BESCHREIBUNG - WEIß */
         .event-description {
-            font-size: 42px;
+            font-size: 44px;
             line-height: 1.5;
             color: #ffffff;
             margin-top: 40px;
-            max-width: 1400px;
+            max-width: 1500px;
             font-weight: 400;
-            opacity: 0.95;
         }
 
         /* Info-Slide (Bilder) */
@@ -188,7 +177,7 @@
             bottom: 40px;
             right: 60px;
             font-size: 32px;
-            opacity: 0.4;
+            opacity: 0.3;
         }
 
         /* Ladebildschirm */
@@ -204,8 +193,8 @@
 
         /* Animations */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         .slide.active .event-slide {
@@ -330,8 +319,8 @@
                 timeHTML = `
                     <div class="event-time">
                         <svg viewBox="0 0 24 24">
-                            <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
-                            <path d="M12 6v6l4 2" fill="none" stroke="currentColor" stroke-width="2"/>
+                            <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/>
+                            <path d="M12 7v5l3.5 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                         </svg>
                         <div>${startTime} - ${endTime} Uhr</div>
                     </div>
@@ -362,26 +351,23 @@
             return `
                 <div class="slide">
                     <div class="event-slide">
-                        <!-- VERANSTALTUNGSNAME - RIESIG WEIß OBEN -->
+                        <!-- VERANSTALTUNGSNAME - RIESIG WEIß GANZ OBEN -->
                         <div class="event-title">${item.summary}</div>
                         
-                        <!-- INFO-BOX UNTEN -->
-                        <div class="event-info">
-                            <!-- DATUM GELB -->
-                            <div class="event-date-big">${dateString}</div>
-                            
-                            <!-- WOCHENTAG GELB -->
-                            <div class="event-weekday">${weekday}</div>
-                            
-                            <!-- UHRZEIT WEIß -->
-                            ${timeHTML}
-                            
-                            <!-- ORT WEIß -->
-                            ${locationHTML}
-                            
-                            <!-- BESCHREIBUNG -->
-                            ${descriptionHTML}
-                        </div>
+                        <!-- DATUM GOLD -->
+                        <div class="event-date-big">${dateString}</div>
+                        
+                        <!-- WOCHENTAG GOLD -->
+                        <div class="event-weekday">${weekday}</div>
+                        
+                        <!-- UHRZEIT WEIß -->
+                        ${timeHTML}
+                        
+                        <!-- ORT WEIß -->
+                        ${locationHTML}
+                        
+                        <!-- BESCHREIBUNG WEIß -->
+                        ${descriptionHTML}
                     </div>
                     <div class="slide-footer">${index} / ${total}</div>
                 </div>
