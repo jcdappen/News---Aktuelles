@@ -24,7 +24,7 @@
             justify-content: center;
         }
 
-        /* Einzelne Folie - ZENTRIERT */
+        /* Einzelne Folie */
         .slide {
             width: 100%;
             height: 100%;
@@ -32,7 +32,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 100px;
+            padding: 80px;
             position: absolute;
             top: 0;
             left: 0;
@@ -71,109 +71,99 @@
             margin-top: 80px;
         }
 
-        /* Event-Slide - NEU: FOKUS AUF VERANSTALTUNG */
+        /* Event-Slide - WIE IM SCREENSHOT */
         .event-slide {
             text-align: center;
-            max-width: 1600px;
             width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* VERANSTALTUNG - GROSS UND IM FOKUS */
+        /* VERANSTALTUNGSNAME - RIESIG, WEIß */
         .event-title {
-            font-size: 140px;
+            font-size: 160px;
             font-weight: 900;
-            margin-bottom: 80px;
-            line-height: 1.1;
+            line-height: 1;
             color: #ffffff;
-            text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.6);
-            letter-spacing: -2px;
+            text-shadow: 4px 4px 12px rgba(0, 0, 0, 0.8);
+            margin-bottom: 100px;
+            letter-spacing: -3px;
+            max-width: 90%;
         }
 
-        /* Kategorie-Badge oben */
-        .event-category {
-            display: inline-block;
-            padding: 20px 50px;
-            border-radius: 40px;
-            font-size: 42px;
-            font-weight: 700;
-            margin-bottom: 60px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-        }
-
-        .category-gottesdienst { background: #f39c12; color: white; }
-        .category-kinder { background: #3498db; color: white; }
-        .category-senioren { background: #9b59b6; color: white; }
-        .category-jugend { background: #e74c3c; color: white; }
-        .category-sonstige { background: #27ae60; color: white; }
-
-        /* Datum und Details Container */
+        /* Info-Box unten (halbtransparent wie im Screenshot) */
         .event-info {
-            background: rgba(255, 255, 255, 0.12);
+            background: rgba(100, 100, 100, 0.4);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-radius: 30px;
-            padding: 60px 80px;
-            margin-top: 40px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            padding: 70px 100px;
+            min-width: 800px;
         }
 
-        /* DATUM */
-        .event-date-section {
-            margin-bottom: 50px;
-        }
-
+        /* DATUM - GELB/GOLD */
         .event-date-big {
-            font-size: 90px;
+            font-size: 110px;
             font-weight: 900;
-            color: #edc544;
-            margin-bottom: 15px;
-            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+            color: #d4af37;
+            margin-bottom: 20px;
+            line-height: 1;
         }
 
+        /* WOCHENTAG - GELB/GOLD */
         .event-weekday {
-            font-size: 48px;
-            font-weight: 600;
-            color: #f4dc8f;
-            opacity: 0.95;
-        }
-
-        /* DETAILS (Zeit, Ort) */
-        .event-details {
-            display: flex;
-            justify-content: center;
-            gap: 80px;
+            font-size: 56px;
+            font-weight: 700;
+            color: #d4af37;
             margin-bottom: 50px;
-            flex-wrap: wrap;
         }
 
-        .event-detail-item {
+        /* UHRZEIT - WEIß MIT ICON */
+        .event-time {
             display: flex;
             align-items: center;
-            font-size: 44px;
+            justify-content: center;
+            font-size: 52px;
             gap: 20px;
             color: #ffffff;
+            font-weight: 600;
         }
 
-        .event-detail-item svg {
+        .event-time svg {
+            width: 52px;
+            height: 52px;
+            fill: #d4af37;
+        }
+
+        /* ORT */
+        .event-location {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            gap: 20px;
+            color: #ffffff;
+            margin-top: 30px;
+            font-weight: 500;
+        }
+
+        .event-location svg {
             width: 48px;
             height: 48px;
-            fill: #edc544;
-            flex-shrink: 0;
+            fill: #d4af37;
         }
 
         /* BESCHREIBUNG */
         .event-description {
-            font-size: 38px;
-            line-height: 1.6;
-            opacity: 0.9;
+            font-size: 42px;
+            line-height: 1.5;
             color: #ffffff;
-            margin-top: 30px;
-            max-width: 1200px;
-            margin-left: auto;
-            margin-right: auto;
+            margin-top: 40px;
+            max-width: 1400px;
+            font-weight: 400;
+            opacity: 0.95;
         }
 
         /* Info-Slide (Bilder) */
@@ -192,13 +182,13 @@
             box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
         }
 
-        /* Footer mit Seitenzahl */
+        /* Footer */
         .slide-footer {
             position: absolute;
             bottom: 40px;
             right: 60px;
             font-size: 32px;
-            opacity: 0.5;
+            opacity: 0.4;
         }
 
         /* Ladebildschirm */
@@ -209,13 +199,13 @@
 
         .loading-text {
             font-size: 72px;
-            color: #edc544;
+            color: #d4af37;
         }
 
         /* Animations */
         @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .slide.active .event-slide {
@@ -228,15 +218,14 @@
             bottom: 0;
             left: 0;
             height: 8px;
-            background: #edc544;
+            background: #d4af37;
             transition: width linear;
-            box-shadow: 0 0 20px rgba(237, 197, 68, 0.6);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
             z-index: 1000;
         }
     </style>
 </head>
 <body>
-    <!-- Slides werden hier dynamisch eingefügt -->
     <div id="slides-container">
         <div class="slide loading-slide active">
             <div class="loading-text">Lade Termine...</div>
@@ -259,9 +248,9 @@
         let allSlides = [];
         let slideElements = [];
         let rotationInterval;
-        const EVENT_SLIDE_TIME = 10000; // 10 Sekunden pro Termin (mehr Zeit zum Lesen)
-        const INFO_SLIDE_TIME = 6000; // 6 Sekunden pro Bild
-        const TITLE_SLIDE_TIME = 5000; // 5 Sekunden für Titelfolie
+        const EVENT_SLIDE_TIME = 10000;
+        const INFO_SLIDE_TIME = 6000;
+        const TITLE_SLIDE_TIME = 5000;
 
         const processIcalData = (icalData, color, category, name) => {
             const now = new Date();
@@ -330,16 +319,19 @@
             const monthYear = startDate.toLocaleDateString('de-DE', { month: 'long', year: 'numeric' });
             const weekday = startDate.toLocaleDateString('de-DE', { weekday: 'long' });
 
-            let detailsHTML = '';
-            
+            // Datum formatieren: "11. November 2025"
+            const dateString = `${dayNumber}. ${monthYear}`;
+
             // Zeit
+            let timeHTML = '';
             if (!event.startDate.isDate) {
                 const startTime = startDate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
                 const endTime = endDate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
-                detailsHTML += `
-                    <div class="event-detail-item">
+                timeHTML = `
+                    <div class="event-time">
                         <svg viewBox="0 0 24 24">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                            <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
+                            <path d="M12 6v6l4 2" fill="none" stroke="currentColor" stroke-width="2"/>
                         </svg>
                         <div>${startTime} - ${endTime} Uhr</div>
                     </div>
@@ -347,9 +339,10 @@
             }
 
             // Ort
+            let locationHTML = '';
             if (item.location) {
-                detailsHTML += `
-                    <div class="event-detail-item">
+                locationHTML = `
+                    <div class="event-location">
                         <svg viewBox="0 0 24 24">
                             <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5-2.5z"/>
                         </svg>
@@ -358,10 +351,9 @@
                 `;
             }
 
-            // Beschreibung (aus iCal)
+            // Beschreibung
             let descriptionHTML = '';
             if (item.description) {
-                // Volle Beschreibung anzeigen (kein Kürzen mehr)
                 descriptionHTML = `
                     <div class="event-description">${item.description.replace(/\n/g, '<br>')}</div>
                 `;
@@ -370,21 +362,22 @@
             return `
                 <div class="slide">
                     <div class="event-slide">
-                        <div class="event-category category-${event.category}">${event.categoryName}</div>
-                        
-                        <!-- VERANSTALTUNG - GROSS IM FOKUS -->
+                        <!-- VERANSTALTUNGSNAME - RIESIG WEIß OBEN -->
                         <div class="event-title">${item.summary}</div>
                         
-                        <!-- INFO-BOX MIT DATUM UND DETAILS -->
+                        <!-- INFO-BOX UNTEN -->
                         <div class="event-info">
-                            <!-- DATUM -->
-                            <div class="event-date-section">
-                                <div class="event-date-big">${dayNumber}. ${monthYear}</div>
-                                <div class="event-weekday">${weekday}</div>
-                            </div>
+                            <!-- DATUM GELB -->
+                            <div class="event-date-big">${dateString}</div>
                             
-                            <!-- ZEIT & ORT -->
-                            ${detailsHTML ? '<div class="event-details">' + detailsHTML + '</div>' : ''}
+                            <!-- WOCHENTAG GELB -->
+                            <div class="event-weekday">${weekday}</div>
+                            
+                            <!-- UHRZEIT WEIß -->
+                            ${timeHTML}
+                            
+                            <!-- ORT WEIß -->
+                            ${locationHTML}
                             
                             <!-- BESCHREIBUNG -->
                             ${descriptionHTML}
@@ -452,7 +445,6 @@
                 }
             });
 
-            // Bestimme die Dauer basierend auf dem Slide-Typ
             const currentSlide = slideElements[index];
             let duration = EVENT_SLIDE_TIME;
             
@@ -495,33 +487,24 @@
                 
                 console.log('✅ ' + allEvents.length + ' Termine geladen');
 
-                // Info-Slides laden
-                console.log('📸 Lade Info-Slides...');
                 const infoSlides = await loadInfoSlides();
                 console.log('✅ ' + infoSlides.length + ' Info-Slides geladen');
 
-                // Slides erstellen
                 let slidesHTML = '';
-                
-                // 1. Titelfolie
                 slidesHTML += createTitleSlide();
                 
-                // 2. Event-Slides
                 const totalSlides = 1 + allEvents.length + infoSlides.length;
                 allEvents.forEach((event, index) => {
                     slidesHTML += createEventSlide(event, index + 2, totalSlides);
                 });
                 
-                // 3. Info-Slides
                 infoSlides.forEach((imageUrl, index) => {
                     slidesHTML += createInfoSlide(imageUrl, 2 + allEvents.length + index, totalSlides);
                 });
 
-                // Slides in DOM einfügen
                 const container = document.getElementById('slides-container');
                 container.innerHTML = slidesHTML;
 
-                // Slide-Elemente sammeln
                 slideElements = Array.from(container.querySelectorAll('.slide'));
 
                 if (slideElements.length > 0) {
@@ -548,10 +531,7 @@
             }
         }
 
-        // Initialisierung
         initPresentation();
-
-        // Alle 5 Minuten neu laden
         setInterval(initPresentation, 5 * 60 * 1000);
     </script>
 </body>
