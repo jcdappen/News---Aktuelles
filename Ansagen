@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <title>Gottesdienst Ansagen - 16:9</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #4d4d4d 0%, #999999 100%);
+            color: white;
+            width: 1920px;
+            height: 1080px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Einzelne Folie */
+        .slide {
+            width: 1920px;
+            height: 1080px;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 80px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Titel-Slide */
+        .title-slide {
+            text-align: center;
+        }
+
+        .title-slide h1 {
+            font-size: 120px;
+            font-weight: 900;
+            margin-bottom: 40px;
+            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
+            color: #edc544;
+        }
+
+        .title-slide .subtitle {
+            font-size: 64px;
+            font-weight: 600;
+            opacity: 0.9;
+            margin-bottom: 60px;
+        }
+
+        .title-slide .church-name {
+            font-size: 48px;
+            opacity: 0.8;
+            margin-top: 80px;
+        }
+
+        /* Event-Slide */
+        .event-slide {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border-radius: 40px;
+            padding: 100px 120px;
+            width: 90%;
+            max-width: 1600px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .event-category {
+            display: inline-block;
+            padding: 16px 36px;
+            border-radius: 30px;
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 50px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .category-gottesdienst { background: #f39c12; color: white; }
+        .category-kinder { background: #3498db; color: white; }
+        .category-senioren { background: #9b59b6; color: white; }
+        .category-jugend { background: #e74c3c; color: white; }
+        .category-sonstige { background: #27ae60; color: white; }
+
+        .event-date-big {
+            font-size: 140px;
+            font-weight: 900;
+            color: #edc544;
+            margin-bottom: 30px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+            line-height: 1;
+        }
+
+        .event-weekday {
+            font-size: 52px;
+            font-weight: 600;
+            color: #f4dc8f;
+            margin-bottom: 60px;
+        }
+
+        .event-title {
+            font-size: 80px;
+            font-weight: 700;
+            margin-bottom: 70px;
+            line-height: 1.2;
+            text-align: center;
+        }
+
+        .event-details {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            width: 100%;
+        }
+
+        .event-detail-item {
+            display: flex;
+            align-items: center;
+            font-size: 48px;
+            gap: 30px;
+            padding: 20px 0;
+        }
+
+        .event-detail-item svg {
+            width: 56px;
+            height: 56px;
+            fill: #edc544;
+            flex-shrink: 0;
+        }
+
+        .event-description {
+            font-size: 42px;
+            line-height: 1.6;
+            opacity: 0.9;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        /* Info-Slide (Bilder) */
+        .info-slide {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+        }
+
+        .info-slide img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 20px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Footer mit Seitenzahl */
+        .slide-footer {
+            position: absolute;
+            bottom: 40px;
+            right: 60px;
+            font-size: 32px;
+            opacity: 0.6;
+        }
+
+        /* Ladebildschirm */
+        .loading-slide {
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loading-text {
+            font-size: 72px;
+            color: #edc544;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide.active .event-slide {
+            animation: fadeIn 0.8s ease;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 10px;
+            background: #edc544;
+            transition: width linear;
+            box-shadow: 0 0 20px rgba(237, 197, 68, 0.6);
+        }
+    </style>
+</head>
+<body>
+    <!-- Slides werden hier dynamisch eingefügt -->
+    <div id="slides-container">
+        <div class="slide loading-slide active">
+            <div class="loading-text">Lade Termine...</div>
+        </div>
+    </div>
+
+    <div class="progress-bar" id="progress-bar"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/ical.js@1.5.0/build/ical.min.js"></script>
+    <script>
+        const calendars = [
+            { file: 'gottesdienst.ics', color: '#f39c12', category: 'gottesdienst', name: 'Gottesdienst' },
+            { file: 'kinder.ics', color: '#3498db', category: 'kinder', name: 'Kinder' },
+            { file: 'senioren.ics', color: '#9b59b6', category: 'senioren', name: 'Senioren' },
+            { file: 'jugend.ics', color: '#e74c3c', category: 'jugend', name: 'Jugend' },
+            { file: 'sonstige.ics', color: '#27ae60', category: 'sonstige', name: 'Sonstige' }
+        ];
+
+        let currentSlideIndex = 0;
+        let allSlides = [];
+        let slideElements = [];
+        let rotationInterval;
+        const EVENT_SLIDE_TIME = 8000; // 8 Sekunden pro Termin
+        const INFO_SLIDE_TIME = 6000; // 6 Sekunden pro Bild
+        const TITLE_SLIDE_TIME = 5000; // 5 Sekunden für Titelfolie
+
+        const processIcalData = (icalData, color, category, name) => {
+            const now = new Date();
+            const twoWeeksFromNow = new Date();
+            twoWeeksFromNow.setDate(now.getDate() + 14);
+
+            const events = [];
+            try {
+                const jcalData = ICAL.parse(icalData);
+                const vcalendar = new ICAL.Component(jcalData);
+                const vevents = vcalendar.getAllSubcomponents('vevent');
+                
+                vevents.forEach(vevent => {
+                    const event = new ICAL.Event(vevent);
+                    const addEvent = (e) => {
+                        const eventStart = e.startDate.toJSDate();
+                        if (eventStart >= now && eventStart <= twoWeeksFromNow) {
+                            e.color = color;
+                            e.category = category;
+                            e.categoryName = name;
+                            events.push(e);
+                        }
+                    };
+                    
+                    if (event.isRecurring()) {
+                        const iterator = event.iterator();
+                        let next;
+                        while ((next = iterator.next()) && next.toJSDate() <= twoWeeksFromNow) {
+                            const occ = event.getOccurrenceDetails(next);
+                            addEvent(occ);
+                        }
+                    } else {
+                        addEvent(event);
+                    }
+                });
+            } catch (e) {
+                console.error('Fehler beim Parsen:', e);
+            }
+            return events;
+        };
+
+        function createTitleSlide() {
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('de-DE', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+
+            return `
+                <div class="slide title-slide">
+                    <h1>Termine & Ankündigungen</h1>
+                    <div class="subtitle">${dateStr}</div>
+                    <div class="church-name">🏠 Gemeinde in der Konkordia</div>
+                </div>
+            `;
+        }
+
+        function createEventSlide(event, index, total) {
+            const item = event.item || event;
+            const startDate = event.startDate.toJSDate();
+            const endDate = event.endDate.toJSDate();
+
+            const dayNumber = startDate.getDate();
+            const monthYear = startDate.toLocaleDateString('de-DE', { month: 'long', year: 'numeric' });
+            const weekday = startDate.toLocaleDateString('de-DE', { weekday: 'long' });
+
+            let timeHTML = '';
+            if (!event.startDate.isDate) {
+                const startTime = startDate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+                const endTime = endDate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+                timeHTML = `
+                    <div class="event-detail-item">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                        </svg>
+                        <div>${startTime} - ${endTime} Uhr</div>
+                    </div>
+                `;
+            }
+
+            let locationHTML = '';
+            if (item.location) {
+                locationHTML = `
+                    <div class="event-detail-item">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5-2.5z"/>
+                        </svg>
+                        <div>${item.location}</div>
+                    </div>
+                `;
+            }
+
+            let descriptionHTML = '';
+            if (item.description) {
+                const maxLength = 200;
+                const shortDesc = item.description.length > maxLength 
+                    ? item.description.substring(0, maxLength) + '...' 
+                    : item.description;
+                descriptionHTML = `
+                    <div class="event-description">${shortDesc.replace(/\n/g, '<br>')}</div>
+                `;
+            }
+
+            return `
+                <div class="slide">
+                    <div class="event-slide">
+                        <div class="event-category category-${event.category}">${event.categoryName}</div>
+                        <div class="event-date-big">${dayNumber}. ${monthYear}</div>
+                        <div class="event-weekday">${weekday}</div>
+                        <div class="event-title">${item.summary}</div>
+                        <div class="event-details">
+                            ${timeHTML}
+                            ${locationHTML}
+                        </div>
+                        ${descriptionHTML}
+                    </div>
+                    <div class="slide-footer">${index} / ${total}</div>
+                </div>
+            `;
+        }
+
+        function createInfoSlide(imageUrl, index, total) {
+            return `
+                <div class="slide info-slide">
+                    <img src="${imageUrl}" alt="Info-Folie" />
+                    <div class="slide-footer">${index} / ${total}</div>
+                </div>
+            `;
+        }
+
+        async function loadInfoSlides() {
+            const possibleSlides = [
+                'slide1.jpg', 'slide2.jpg', 'slide3.jpg', 'slide4.jpg', 'slide5.jpg', 'slide6.jpg',
+                'folie1.jpg', 'folie2.jpg', 'folie3.jpg', 'folie4.jpg', 'folie5.jpg', 'folie6.jpg',
+                'info1.jpg', 'info2.jpg', 'info3.jpg', 'info4.jpg', 'info5.jpg', 'info6.jpg',
+                '1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg', '6.jpg',
+                'slide1.png', 'slide2.png', 'slide3.png', 'slide4.png', 'slide5.png', 'slide6.png',
+                '1.png', '2.png', '3.png', '4.png', '5.png', '6.png'
+            ];
+            
+            const infoSlides = [];
+            
+            for (const fileName of possibleSlides) {
+                try {
+                    const response = await fetch('slides/' + fileName, { method: 'HEAD' });
+                    if (response.ok) {
+                        infoSlides.push('slides/' + fileName);
+                        console.log('✅ Info-Slide gefunden: ' + fileName);
+                    }
+                } catch (e) {
+                    // Datei existiert nicht
+                }
+            }
+            
+            return infoSlides;
+        }
+
+        function animateProgressBar(duration) {
+            const progressBar = document.getElementById('progress-bar');
+            
+            progressBar.style.transition = 'none';
+            progressBar.style.width = '0%';
+            
+            setTimeout(() => {
+                progressBar.style.transition = 'width ' + duration + 'ms linear';
+                progressBar.style.width = '100%';
+            }, 100);
+        }
+
+        function showSlide(index) {
+            slideElements.forEach((slide, i) => {
+                if (i === index) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+
+            // Bestimme die Dauer basierend auf dem Slide-Typ
+            const currentSlide = slideElements[index];
+            let duration = EVENT_SLIDE_TIME;
+            
+            if (currentSlide.classList.contains('title-slide')) {
+                duration = TITLE_SLIDE_TIME;
+            } else if (currentSlide.classList.contains('info-slide')) {
+                duration = INFO_SLIDE_TIME;
+            }
+
+            animateProgressBar(duration);
+
+            clearInterval(rotationInterval);
+            rotationInterval = setInterval(() => {
+                currentSlideIndex = (currentSlideIndex + 1) % slideElements.length;
+                showSlide(currentSlideIndex);
+            }, duration);
+        }
+
+        async function initPresentation() {
+            try {
+                console.log('📅 Lade Kalenderdaten...');
+                
+                const responses = await Promise.all(calendars.map(cal => 
+                    fetch(cal.file, { cache: 'no-store' }).catch(() => ({ ok: false }))
+                ));
+                
+                const textPromises = responses.map(res => res.ok ? res.text() : '');
+                const icalDatas = await Promise.all(textPromises);
+                
+                let allEvents = [];
+                icalDatas.forEach((data, index) => {
+                    if (data) {
+                        const cal = calendars[index];
+                        const events = processIcalData(data, cal.color, cal.category, cal.name);
+                        allEvents = allEvents.concat(events);
+                    }
+                });
+
+                allEvents.sort((a, b) => a.startDate.toJSDate() - b.startDate.toJSDate());
+                
+                console.log('✅ ' + allEvents.length + ' Termine geladen');
+
+                // Info-Slides laden
+                console.log('📸 Lade Info-Slides...');
+                const infoSlides = await loadInfoSlides();
+                console.log('✅ ' + infoSlides.length + ' Info-Slides geladen');
+
+                // Slides erstellen
+                let slidesHTML = '';
+                
+                // 1. Titelfolie
+                slidesHTML += createTitleSlide();
+                
+                // 2. Event-Slides
+                const totalSlides = 1 + allEvents.length + infoSlides.length;
+                allEvents.forEach((event, index) => {
+                    slidesHTML += createEventSlide(event, index + 2, totalSlides);
+                });
+                
+                // 3. Info-Slides
+                infoSlides.forEach((imageUrl, index) => {
+                    slidesHTML += createInfoSlide(imageUrl, 2 + allEvents.length + index, totalSlides);
+                });
+
+                // Slides in DOM einfügen
+                const container = document.getElementById('slides-container');
+                container.innerHTML = slidesHTML;
+
+                // Slide-Elemente sammeln
+                slideElements = Array.from(container.querySelectorAll('.slide'));
+
+                if (slideElements.length > 0) {
+                    console.log('✅ Präsentation bereit mit ' + slideElements.length + ' Folien');
+                    currentSlideIndex = 0;
+                    showSlide(0);
+                } else {
+                    container.innerHTML = `
+                        <div class="slide title-slide active">
+                            <h1>Keine Termine</h1>
+                            <div class="subtitle">Aktuell sind keine Termine verfügbar</div>
+                        </div>
+                    `;
+                }
+
+            } catch (error) {
+                console.error('❌ Fehler beim Laden:', error);
+                document.getElementById('slides-container').innerHTML = `
+                    <div class="slide title-slide active">
+                        <h1>Fehler</h1>
+                        <div class="subtitle">Termine konnten nicht geladen werden</div>
+                    </div>
+                `;
+            }
+        }
+
+        // Initialisierung
+        initPresentation();
+
+        // Alle 5 Minuten neu laden
+        setInterval(initPresentation, 5 * 60 * 1000);
+    </script>
+</body>
+</html>
