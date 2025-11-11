@@ -131,15 +131,44 @@
             text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);
             font-weight: 400;
             word-wrap: break-word;
+            /* Beschränkung auf 4 Zeilen */
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        /* WEIßER BEREICH - RESPONSIVE */
+        /* WEIßER BEREICH - RESPONSIVE MIT QR-CODE */
         .event-footer {
             background: #f5f5f5;
             padding: clamp(25px, 3vh, 40px) clamp(40px, 5vw, 80px);
             color: #000000;
-            text-align: center;
             width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: clamp(20px, 3vw, 60px);
+        }
+
+        /* Text-Container links */
+        .event-footer-text {
+            flex: 1;
+            text-align: center;
+        }
+
+        /* QR-Code Container rechts */
+        .event-footer-qr {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .event-footer-qr img {
+            width: clamp(80px, 12vw, 180px);
+            height: clamp(80px, 12vw, 180px);
+            object-fit: contain;
         }
 
         .event-weekday {
@@ -192,6 +221,24 @@
         .event-location svg {
             width: clamp(20px, 2.5vw, 44px);
             height: clamp(20px, 2.5vw, 44px);
+            fill: #000000;
+            flex-shrink: 0;
+        }
+
+        /* ADRESSE - NEU */
+        .event-address {
+            display: flex;
+            align-items: center;
+            font-size: clamp(16px, 2.2vw, 42px);
+            gap: clamp(10px, 1vw, 15px);
+            color: #000000;
+            font-weight: 400;
+            opacity: 0.8;
+        }
+
+        .event-address svg {
+            width: clamp(18px, 2.3vw, 42px);
+            height: clamp(18px, 2.3vw, 42px);
             fill: #000000;
             flex-shrink: 0;
         }
@@ -265,6 +312,17 @@
             
             .event-footer {
                 padding: 20px 30px;
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .event-footer-text {
+                text-align: center;
+            }
+            
+            .event-footer-qr img {
+                width: 100px;
+                height: 100px;
             }
             
             .event-content {
@@ -408,14 +466,33 @@
 
             let locationHTML = '';
             if (item.location) {
-                locationHTML = `
-                    <div class="event-location">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5-2.5z"/>
-                        </svg>
-                        <div>${item.location}</div>
-                    </div>
-                `;
+                // Prüfe ob die Location eine Adresse enthält (mit Komma oder Straße)
+                const hasAddress = item.location.includes(',') || 
+                                  /\d/.test(item.location) || 
+                                  item.location.toLowerCase().includes('straße') ||
+                                  item.location.toLowerCase().includes('strasse');
+                
+                if (hasAddress) {
+                    // Location ist eine Adresse - zeige sie als Adresse an
+                    locationHTML = `
+                        <div class="event-address">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5-2.5z"/>
+                            </svg>
+                            <div>${item.location}</div>
+                        </div>
+                    `;
+                } else {
+                    // Location ist nur ein Ortsname
+                    locationHTML = `
+                        <div class="event-location">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5-2.5z"/>
+                            </svg>
+                            <div>${item.location}</div>
+                        </div>
+                    `;
+                }
             }
 
             let descriptionHTML = '';
@@ -438,11 +515,16 @@
                             ${descriptionHTML}
                             
                             <div class="event-footer">
-                                <div class="event-weekday">${weekday}</div>
-                                <div class="event-date-big">${dateString}</div>
-                                <div class="event-details">
-                                    ${timeHTML}
-                                    ${locationHTML}
+                                <div class="event-footer-text">
+                                    <div class="event-weekday">${weekday}</div>
+                                    <div class="event-date-big">${dateString}</div>
+                                    <div class="event-details">
+                                        ${timeHTML}
+                                        ${locationHTML}
+                                    </div>
+                                </div>
+                                <div class="event-footer-qr">
+                                    <img src="https://storage2.snappages.site/S74RKH/assets/files/QR_news.png" alt="QR Code">
                                 </div>
                             </div>
                         </div>
