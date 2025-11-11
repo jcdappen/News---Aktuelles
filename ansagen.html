@@ -19,17 +19,20 @@
             height: 1080px;
             overflow: hidden;
             position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* Einzelne Folie */
+        /* Einzelne Folie - ZENTRIERT */
         .slide {
-            width: 1920px;
-            height: 1080px;
+            width: 100%;
+            height: 100%;
             display: none;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 80px;
+            padding: 100px;
             position: absolute;
             top: 0;
             left: 0;
@@ -68,28 +71,35 @@
             margin-top: 80px;
         }
 
-        /* Event-Slide */
+        /* Event-Slide - NEU: FOKUS AUF VERANSTALTUNG */
         .event-slide {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border-radius: 40px;
-            padding: 100px 120px;
-            width: 90%;
+            text-align: center;
             max-width: 1600px;
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 100%;
         }
 
+        /* VERANSTALTUNG - GROSS UND IM FOKUS */
+        .event-title {
+            font-size: 140px;
+            font-weight: 900;
+            margin-bottom: 80px;
+            line-height: 1.1;
+            color: #ffffff;
+            text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.6);
+            letter-spacing: -2px;
+        }
+
+        /* Kategorie-Badge oben */
         .event-category {
             display: inline-block;
-            padding: 16px 36px;
-            border-radius: 30px;
-            font-size: 36px;
+            padding: 20px 50px;
+            border-radius: 40px;
+            font-size: 42px;
             font-weight: 700;
-            margin-bottom: 50px;
+            margin-bottom: 60px;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
         }
 
         .category-gottesdienst { background: #f39c12; color: white; }
@@ -98,58 +108,72 @@
         .category-jugend { background: #e74c3c; color: white; }
         .category-sonstige { background: #27ae60; color: white; }
 
+        /* Datum und Details Container */
+        .event-info {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 60px 80px;
+            margin-top: 40px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        /* DATUM */
+        .event-date-section {
+            margin-bottom: 50px;
+        }
+
         .event-date-big {
-            font-size: 140px;
+            font-size: 90px;
             font-weight: 900;
             color: #edc544;
-            margin-bottom: 30px;
-            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
-            line-height: 1;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
         }
 
         .event-weekday {
-            font-size: 52px;
+            font-size: 48px;
             font-weight: 600;
             color: #f4dc8f;
-            margin-bottom: 60px;
+            opacity: 0.95;
         }
 
-        .event-title {
-            font-size: 80px;
-            font-weight: 700;
-            margin-bottom: 70px;
-            line-height: 1.2;
-            text-align: center;
-        }
-
+        /* DETAILS (Zeit, Ort) */
         .event-details {
             display: flex;
-            flex-direction: column;
-            gap: 40px;
-            width: 100%;
+            justify-content: center;
+            gap: 80px;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
         }
 
         .event-detail-item {
             display: flex;
             align-items: center;
-            font-size: 48px;
-            gap: 30px;
-            padding: 20px 0;
+            font-size: 44px;
+            gap: 20px;
+            color: #ffffff;
         }
 
         .event-detail-item svg {
-            width: 56px;
-            height: 56px;
+            width: 48px;
+            height: 48px;
             fill: #edc544;
             flex-shrink: 0;
         }
 
+        /* BESCHREIBUNG */
         .event-description {
-            font-size: 42px;
+            font-size: 38px;
             line-height: 1.6;
             opacity: 0.9;
-            margin-top: 20px;
-            text-align: center;
+            color: #ffffff;
+            margin-top: 30px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         /* Info-Slide (Bilder) */
@@ -161,8 +185,8 @@
         }
 
         .info-slide img {
-            max-width: 100%;
-            max-height: 100%;
+            max-width: 90%;
+            max-height: 90%;
             object-fit: contain;
             border-radius: 20px;
             box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
@@ -174,7 +198,7 @@
             bottom: 40px;
             right: 60px;
             font-size: 32px;
-            opacity: 0.6;
+            opacity: 0.5;
         }
 
         /* Ladebildschirm */
@@ -190,8 +214,8 @@
 
         /* Animations */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         .slide.active .event-slide {
@@ -203,10 +227,11 @@
             position: absolute;
             bottom: 0;
             left: 0;
-            height: 10px;
+            height: 8px;
             background: #edc544;
             transition: width linear;
             box-shadow: 0 0 20px rgba(237, 197, 68, 0.6);
+            z-index: 1000;
         }
     </style>
 </head>
@@ -234,7 +259,7 @@
         let allSlides = [];
         let slideElements = [];
         let rotationInterval;
-        const EVENT_SLIDE_TIME = 8000; // 8 Sekunden pro Termin
+        const EVENT_SLIDE_TIME = 10000; // 10 Sekunden pro Termin (mehr Zeit zum Lesen)
         const INFO_SLIDE_TIME = 6000; // 6 Sekunden pro Bild
         const TITLE_SLIDE_TIME = 5000; // 5 Sekunden für Titelfolie
 
@@ -305,11 +330,13 @@
             const monthYear = startDate.toLocaleDateString('de-DE', { month: 'long', year: 'numeric' });
             const weekday = startDate.toLocaleDateString('de-DE', { weekday: 'long' });
 
-            let timeHTML = '';
+            let detailsHTML = '';
+            
+            // Zeit
             if (!event.startDate.isDate) {
                 const startTime = startDate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
                 const endTime = endDate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
-                timeHTML = `
+                detailsHTML += `
                     <div class="event-detail-item">
                         <svg viewBox="0 0 24 24">
                             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
@@ -319,9 +346,9 @@
                 `;
             }
 
-            let locationHTML = '';
+            // Ort
             if (item.location) {
-                locationHTML = `
+                detailsHTML += `
                     <div class="event-detail-item">
                         <svg viewBox="0 0 24 24">
                             <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5-2.5z"/>
@@ -331,14 +358,12 @@
                 `;
             }
 
+            // Beschreibung (aus iCal)
             let descriptionHTML = '';
             if (item.description) {
-                const maxLength = 200;
-                const shortDesc = item.description.length > maxLength 
-                    ? item.description.substring(0, maxLength) + '...' 
-                    : item.description;
+                // Volle Beschreibung anzeigen (kein Kürzen mehr)
                 descriptionHTML = `
-                    <div class="event-description">${shortDesc.replace(/\n/g, '<br>')}</div>
+                    <div class="event-description">${item.description.replace(/\n/g, '<br>')}</div>
                 `;
             }
 
@@ -346,14 +371,24 @@
                 <div class="slide">
                     <div class="event-slide">
                         <div class="event-category category-${event.category}">${event.categoryName}</div>
-                        <div class="event-date-big">${dayNumber}. ${monthYear}</div>
-                        <div class="event-weekday">${weekday}</div>
+                        
+                        <!-- VERANSTALTUNG - GROSS IM FOKUS -->
                         <div class="event-title">${item.summary}</div>
-                        <div class="event-details">
-                            ${timeHTML}
-                            ${locationHTML}
+                        
+                        <!-- INFO-BOX MIT DATUM UND DETAILS -->
+                        <div class="event-info">
+                            <!-- DATUM -->
+                            <div class="event-date-section">
+                                <div class="event-date-big">${dayNumber}. ${monthYear}</div>
+                                <div class="event-weekday">${weekday}</div>
+                            </div>
+                            
+                            <!-- ZEIT & ORT -->
+                            ${detailsHTML ? '<div class="event-details">' + detailsHTML + '</div>' : ''}
+                            
+                            <!-- BESCHREIBUNG -->
+                            ${descriptionHTML}
                         </div>
-                        ${descriptionHTML}
                     </div>
                     <div class="slide-footer">${index} / ${total}</div>
                 </div>
