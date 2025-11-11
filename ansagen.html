@@ -633,14 +633,29 @@
                 let slidesHTML = '';
                 slidesHTML += createTitleSlide();
                 
-                const totalSlides = 1 + allEvents.length + infoSlides.length;
-                allEvents.forEach((event, index) => {
-                    slidesHTML += createEventSlide(event, index + 2, totalSlides);
-                });
+                // Slides mit Rhythmus: 3 Termine -> 1 Folie -> 3 Termine -> 1 Folie
+                let slideIndex = 2; // Start bei 2 (nach Titelfolie)
+                let eventIndex = 0;
+                let slideImageIndex = 0;
                 
-                infoSlides.forEach((imageUrl, index) => {
-                    slidesHTML += createInfoSlide(imageUrl, 2 + allEvents.length + index, totalSlides);
-                });
+                while (eventIndex < allEvents.length || slideImageIndex < infoSlides.length) {
+                    // Füge bis zu 3 Events hinzu
+                    for (let i = 0; i < 3 && eventIndex < allEvents.length; i++) {
+                        const event = allEvents[eventIndex];
+                        const totalSlides = 1 + allEvents.length + infoSlides.length;
+                        slidesHTML += createEventSlide(event, slideIndex, totalSlides);
+                        slideIndex++;
+                        eventIndex++;
+                    }
+                    
+                    // Füge eine Info-Folie hinzu (falls vorhanden)
+                    if (slideImageIndex < infoSlides.length) {
+                        const totalSlides = 1 + allEvents.length + infoSlides.length;
+                        slidesHTML += createInfoSlide(infoSlides[slideImageIndex], slideIndex, totalSlides);
+                        slideIndex++;
+                        slideImageIndex++;
+                    }
+                }
 
                 const container = document.getElementById('slides-container');
                 container.innerHTML = slidesHTML;
