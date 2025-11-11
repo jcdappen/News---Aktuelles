@@ -21,14 +21,11 @@
             position: relative;
         }
 
-        /* Einzelne Folie */
+        /* Einzelne Folie - PERFEKT ZENTRIERT */
         .slide {
             width: 100%;
             height: 100%;
             display: none;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 0;
             position: absolute;
             top: 0;
             left: 0;
@@ -72,40 +69,55 @@
             text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);
         }
 
-        /* Event-Slide - NACH VORLAGE */
+        /* Event-Slide - KOMPLETT ZENTRIERT */
         .event-slide {
             width: 100%;
             height: 100%;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: center;
+            align-items: center;
+            padding: 0 150px;
         }
 
-        /* ROTER BANNER OBEN */
+        /* Container für alles - zentriert */
+        .event-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 1600px;
+        }
+
+        /* ROTER BANNER */
         .event-header {
             background: #bb2232;
-            padding: 80px 120px;
+            padding: 60px 100px;
             text-align: center;
-            margin: 120px 220px 0 220px;
+            width: 100%;
+            margin-bottom: 60px;
         }
 
         .event-title {
-            font-size: 140px;
+            font-size: 120px;
             font-weight: 900;
             line-height: 1;
             color: #ffffff;
-            letter-spacing: 8px;
+            letter-spacing: 6px;
             text-transform: uppercase;
         }
 
         /* BESCHREIBUNG IN DER MITTE */
         .event-description-middle {
-            padding: 60px 280px;
+            padding: 40px 80px;
             text-align: center;
+            width: 100%;
+            margin-bottom: 60px;
         }
 
         .event-description-middle .description-text {
-            font-size: 52px;
+            font-size: 48px;
             line-height: 1.5;
             color: #ffffff;
             text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);
@@ -115,53 +127,61 @@
         /* WEIßER BEREICH UNTEN */
         .event-footer {
             background: #f5f5f5;
-            padding: 50px 100px 60px 100px;
+            padding: 40px 80px;
             color: #000000;
+            text-align: center;
+            width: 100%;
         }
 
         .event-weekday {
-            font-size: 56px;
+            font-size: 48px;
             font-weight: 400;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             color: #333333;
         }
 
         .event-date-big {
-            font-size: 80px;
+            font-size: 70px;
             font-weight: 900;
             margin-bottom: 25px;
             color: #000000;
         }
 
+        /* Container für Zeit und Ort - zentriert */
+        .event-details {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .event-time {
+            display: flex;
+            align-items: center;
+            font-size: 46px;
+            gap: 15px;
+            color: #000000;
+            font-weight: 500;
+        }
+
+        .event-time svg {
+            width: 44px;
+            height: 44px;
+            fill: #000000;
+        }
+
         .event-location {
             display: flex;
             align-items: center;
-            font-size: 52px;
-            gap: 20px;
+            font-size: 46px;
+            gap: 15px;
             color: #000000;
             font-weight: 500;
         }
 
         .event-location svg {
-            width: 50px;
-            height: 50px;
-            fill: #000000;
-        }
-
-        /* ZEIT IM WEIßEN BEREICH */
-        .event-time {
-            display: flex;
-            align-items: center;
-            font-size: 52px;
-            gap: 20px;
-            color: #000000;
-            font-weight: 500;
-            margin-bottom: 15px;
-        }
-
-        .event-time svg {
-            width: 50px;
-            height: 50px;
+            width: 44px;
+            height: 44px;
             fill: #000000;
         }
 
@@ -206,11 +226,11 @@
 
         /* Animations */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
         }
 
-        .slide.active .event-slide {
+        .slide.active .event-content {
             animation: fadeIn 0.8s ease;
         }
 
@@ -366,20 +386,24 @@
             return `
                 <div class="slide">
                     <div class="event-slide">
-                        <!-- ROTER BANNER MIT VERANSTALTUNGSNAME -->
-                        <div class="event-header">
-                            <div class="event-title">${item.summary}</div>
-                        </div>
-                        
-                        <!-- BESCHREIBUNG IN DER MITTE -->
-                        ${descriptionHTML}
-                        
-                        <!-- WEIßER BEREICH UNTEN MIT DATUM, ORT, ZEIT -->
-                        <div class="event-footer">
-                            <div class="event-weekday">${weekday}</div>
-                            <div class="event-date-big">${dateString}</div>
-                            ${timeHTML}
-                            ${locationHTML}
+                        <div class="event-content">
+                            <!-- ROTER BANNER MIT VERANSTALTUNGSNAME -->
+                            <div class="event-header">
+                                <div class="event-title">${item.summary}</div>
+                            </div>
+                            
+                            <!-- BESCHREIBUNG IN DER MITTE -->
+                            ${descriptionHTML}
+                            
+                            <!-- WEIßER BEREICH UNTEN MIT DATUM, ORT, ZEIT -->
+                            <div class="event-footer">
+                                <div class="event-weekday">${weekday}</div>
+                                <div class="event-date-big">${dateString}</div>
+                                <div class="event-details">
+                                    ${timeHTML}
+                                    ${locationHTML}
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="slide-footer">${index} / ${total}</div>
