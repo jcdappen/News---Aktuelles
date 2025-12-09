@@ -117,6 +117,24 @@
             hyphens: auto;
         }
 
+        /* Anpassungen für lange Titel */
+        .event-title.long-title {
+            font-size: clamp(28px, 5vw, 90px);
+            letter-spacing: clamp(1px, 0.2vw, 4px);
+        }
+
+        .event-title.very-long-title {
+            font-size: clamp(24px, 4vw, 70px);
+            letter-spacing: clamp(1px, 0.15vw, 3px);
+            line-height: 1.2;
+        }
+
+        .event-title.extremely-long-title {
+            font-size: clamp(20px, 3.5vw, 55px);
+            letter-spacing: clamp(0.5px, 0.1vw, 2px);
+            line-height: 1.3;
+        }
+
         /* BESCHREIBUNG - RESPONSIVE */
         .event-description-middle {
             padding: clamp(20px, 3vh, 40px) clamp(30px, 4vw, 80px);
@@ -449,6 +467,17 @@
 
             const dateString = `${dayNumber}. ${monthYear}`;
 
+            // Bestimme die Titelklasse basierend auf der Länge
+            let titleClass = 'event-title';
+            const titleLength = item.summary.length;
+            if (titleLength > 80) {
+                titleClass += ' extremely-long-title';
+            } else if (titleLength > 60) {
+                titleClass += ' very-long-title';
+            } else if (titleLength > 40) {
+                titleClass += ' long-title';
+            }
+
             let timeHTML = '';
             if (!event.startDate.isDate) {
                 const startTime = startDate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
@@ -509,11 +538,11 @@
                     <div class="event-slide">
                         <div class="event-content">
                             <div class="event-header">
-                                <div class="event-title">${item.summary}</div>
+                                <div class="${titleClass}">${item.summary}</div>
                             </div>
-                            
+
                             ${descriptionHTML}
-                            
+
                             <div class="event-footer">
                                 <div class="event-footer-text">
                                     <div class="event-weekday">${weekday}</div>
