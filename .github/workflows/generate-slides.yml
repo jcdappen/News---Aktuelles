@@ -14,19 +14,16 @@ on:
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
 
 jobs:
   generate-and-deploy:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Vollständige Historie für gh-pages Branch
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -47,15 +44,18 @@ jobs:
           echo "=== Generierte Folien ==="
           ls -lh slides/slide_*.png 2>/dev/null || echo "Keine generierten Folien gefunden"
 
-      - name: Prepare Viewer Directory
+      - name: Prepare Deployment Directory
         run: |
-          mkdir -p viewer/slides
-          cp -r slides/*.png viewer/slides/ 2>/dev/null || echo "Keine PNG-Folien zum Kopieren"
-          cp -r slides/*.jpg viewer/slides/ 2>/dev/null || echo "Keine JPG-Folien zum Kopieren"
-          echo "Viewer-Verzeichnis vorbereitet:"
-          ls -lh viewer/
+          # Kopiere viewer/ Struktur in temporäres Verzeichnis
+          mkdir -p deploy
+          cp viewer/index.html deploy/
+          mkdir -p deploy/slides
+          cp slides/*.png deploy/slides/ 2>/dev/null || echo "Keine PNG-Folien"
+          cp slides/*.jpg deploy/slides/ 2>/dev/null || echo "Keine JPG-Folien"
+          echo "Deployment-Verzeichnis vorbereitet:"
+          ls -lah deploy/
 
-      - name: Commit Generated Slides
+      - name: Commit Generated Slides to Main Branch
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "🎬 Auto-generate slides from calendar events"
@@ -63,17 +63,17 @@ jobs:
           commit_user_name: 'Slide Generator Bot'
           commit_user_email: 'bot@gemeinde-konkordia.de'
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-
-      - name: Upload Pages Artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Deploy to gh-pages Branch
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          path: './viewer'
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./deploy
+          publish_branch: gh-pages
+          force_orphan: false
+          keep_files: false
+          commit_message: "🎬 Deploy slides viewer"
+          user_name: 'Slide Generator Bot'
+          user_email: 'bot@gemeinde-konkordia.de'
 
   notify:
     needs: generate-and-deploy
