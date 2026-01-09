@@ -20,6 +20,9 @@ permissions:
 jobs:
   generate-and-deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
       - name: Checkout Repository
@@ -46,9 +49,11 @@ jobs:
 
       - name: Prepare Viewer Directory
         run: |
-          mkdir -p viewer
-          cp viewer/index.html viewer/index.html.tmp 2>/dev/null || echo "Viewer existiert noch nicht"
-          cp -r slides viewer/
+          mkdir -p viewer/slides
+          cp -r slides/*.png viewer/slides/ 2>/dev/null || echo "Keine PNG-Folien zum Kopieren"
+          cp -r slides/*.jpg viewer/slides/ 2>/dev/null || echo "Keine JPG-Folien zum Kopieren"
+          echo "Viewer-Verzeichnis vorbereitet:"
+          ls -lh viewer/
 
       - name: Commit Generated Slides
         uses: stefanzweifel/git-auto-commit-action@v5
