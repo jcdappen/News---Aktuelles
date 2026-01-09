@@ -1,0 +1,93 @@
+name: Generate Slides
+
+on:
+  workflow_dispatch:  # Manuell auslösbar
+  schedule:
+    - cron: '0 6 * * *'  # Täglich um 06:00 Uhr morgens
+  push:
+    branches:
+      - main
+    paths:
+      - '*.ics'  # Bei iCal-Änderungen
+      - 'src/**'
+      - '.github/workflows/generate-slides.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  generate-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          pip install -r src/requirements.txt
+
+      - name: Generate PNG Slides
+        run: |
+          python src/generator.py
+
+      - name: List Generated Slides
+        run: |
+          echo "=== Generierte Folien ==="
+          ls -lh slides/slide_*.png 2>/dev/null || echo "Keine generierten Folien gefunden"
+
+      - name: Prepare Deployment Directory
+        run: |
+          mkdir -p deploy
+          cp viewer/index.html deploy/
+          mkdir -p deploy/slides
+          cp slides/*.png deploy/slides/ 2>/dev/null || echo "Keine PNG-Folien"
+          cp slides/*.jpg deploy/slides/ 2>/dev/null || echo "Keine JPG-Folien"
+          echo "Deployment-Verzeichnis vorbereitet:"
+          ls -lah deploy/
+
+      - name: Commit Generated Slides
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "🎬 Auto-generate slides from calendar events"
+          file_pattern: 'slides/slide_*.png'
+          commit_user_name: 'Slide Generator Bot'
+          commit_user_email: 'bot@gemeinde-konkordia.de'
+
+      - name: Deploy to gh-pages Branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./deploy
+          publish_branch: gh-pages
+          force_orphan: false
+          keep_files: false
+          commit_message: "🎬 Deploy slides viewer"
+          user_name: 'Slide Generator Bot'
+          user_email: 'bot@gemeinde-konkordia.de'
+
+  notify:
+    needs: generate-and-deploy
+    runs-on: ubuntu-latest
+    if: always()
+
+    steps:
+      - name: Notify Success
+        if: needs.generate-and-deploy.result == 'success'
+        run: |
+          echo "✅ Folien erfolgreich generiert und deployed!"
+          echo "🌐 URL: https://jcdappen.github.io/gemeinde-folien/"
+
+      - name: Notify Failure
+        if: needs.generate-and-deploy.result == 'failure'
+        run: |
+          echo "❌ Fehler bei der Folien-Generierung!"
+          exit 1

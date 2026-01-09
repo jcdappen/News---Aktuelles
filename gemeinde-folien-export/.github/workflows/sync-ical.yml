@@ -1,0 +1,38 @@
+name: Sync iCal Feeds
+
+on:
+  workflow_dispatch:  # Manuell auslösbar
+  schedule:
+    - cron: '0 */2 * * *'  # Alle 2 Stunden
+
+permissions:
+  contents: write
+
+jobs:
+  sync-ical:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Download iCal from News Repository
+        run: |
+          echo "Lade iCal-Dateien von jcdappen/News---Aktuelles..."
+
+          curl -L -o gottesdienst.ics 'https://raw.githubusercontent.com/jcdappen/News---Aktuelles/main/gottesdienst.ics'
+          curl -L -o kinder.ics 'https://raw.githubusercontent.com/jcdappen/News---Aktuelles/main/kinder.ics'
+          curl -L -o senioren.ics 'https://raw.githubusercontent.com/jcdappen/News---Aktuelles/main/senioren.ics'
+          curl -L -o jugend.ics 'https://raw.githubusercontent.com/jcdappen/News---Aktuelles/main/jugend.ics'
+          curl -L -o sonstige.ics 'https://raw.githubusercontent.com/jcdappen/News---Aktuelles/main/sonstige.ics'
+
+          echo "iCal-Dateien erfolgreich heruntergeladen"
+          ls -lh *.ics
+
+      - name: Commit Updated iCal Files
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "📅 Sync iCal feeds from News repository"
+          file_pattern: '*.ics'
+          commit_user_name: 'iCal Sync Bot'
+          commit_user_email: 'bot@gemeinde-konkordia.de'
