@@ -1,16 +1,17 @@
-name: Generate Slides
+name: Generate Slides (DISABLED)
 
+# This workflow is disabled. Remove the 'if: false' conditions to re-enable.
 on:
   workflow_dispatch:  # Manuell auslösbar
-  schedule:
-    - cron: '0 6 * * *'  # Täglich um 06:00 Uhr morgens
-  push:
-    branches:
-      - main
-    paths:
-      - '*.ics'  # Nur bei iCal-Änderungen
-      - 'src/**'
-      - '.github/workflows/generate-slides.yml'
+  # schedule:
+  #   - cron: '0 6 * * *'  # Täglich um 06:00 Uhr morgens
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - '*.ics'  # Nur bei iCal-Änderungen
+  #     - 'src/**'
+  #     - '.github/workflows/generate-slides.yml'
 
 permissions:
   contents: write
@@ -19,6 +20,7 @@ permissions:
 
 jobs:
   generate-and-deploy:
+    if: false  # Workflow deaktiviert
     runs-on: ubuntu-latest
 
     steps:
@@ -73,7 +75,7 @@ jobs:
   notify:
     needs: generate-and-deploy
     runs-on: ubuntu-latest
-    if: always()
+    if: false  # Workflow deaktiviert
 
     steps:
       - name: Notify Success
